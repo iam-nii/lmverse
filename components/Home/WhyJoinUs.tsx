@@ -9,7 +9,11 @@ const checkpoints = [
     "The Most World Class Instructors",
 ];
 
-export default function WhyJoinUs() {
+type Props = {
+    onBookConsultation?: () => void;
+};
+
+export default function WhyJoinUs({ onBookConsultation }: Props) {
     return (
         <section className="py-16 md:py-20 md:px-40 px-5">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -41,7 +45,10 @@ export default function WhyJoinUs() {
                             </li>
                         ))}
                     </ul>
-                    <Button className="bg-secondary text-white rounded-full px-8 font-semibold text-sm">
+                    <Button
+                        onClick={onBookConsultation}
+                        className="bg-secondary text-white rounded-full px-8 font-semibold text-sm"
+                    >
                         Register for a free trial lesson
                     </Button>
                 </div>
