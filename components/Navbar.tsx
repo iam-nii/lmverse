@@ -8,7 +8,7 @@ import { soure_gummy } from "@/constants/fonts";
 function Navbar() {
   const { resolvedTheme } = useTheme();
   return (
-    <header className="flex justify-between items-center md:px-40 px-10  py-2 ">
+    <header className="flex justify-between items-center md:px-30 px-10  py-2 ">
       <div className="flex items-center justify-between">
         <Image
           src={logo}
@@ -18,9 +18,8 @@ function Navbar() {
           className="w-10 h-10"
         />
         <h1
-          className={`text-3xl ml-2 font-bold ${soure_gummy.className}  ${
-            resolvedTheme === "dark" ? "text-white" : "text-[#1F4163]"
-          } `}
+          className={`text-3xl ml-2 font-bold ${soure_gummy.className}  ${resolvedTheme === "dark" ? "text-white" : "text-[#1F4163]"
+            } `}
         >
           Lmverse
         </h1>

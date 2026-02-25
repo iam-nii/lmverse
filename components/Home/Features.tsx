@@ -37,7 +37,7 @@ const features = [
   },
   {
     title: "Daily live Sessions",
-    number: "5+",
+    number: "10+",
     icon: DailyLiveSessions,
   },
 ];

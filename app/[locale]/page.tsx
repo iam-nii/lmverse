@@ -11,15 +11,17 @@ const Page: NextPageIntlayer = async ({ params }) => {
   return (
     <IntlayerServerProvider locale={locale}>
       <IntlayerClientProvider locale={locale}>
-        <div className="relative h-screen">
-          <Navbar />
-          <HomePage />
+        {/* Background SVG only covers the hero viewport */}
+        <div className="absolute top-0 left-0 w-full h-screen -z-10 pointer-events-none">
           <Image
             src={background}
-            alt="background"
-            className="opacity-50 object-cover absolute top-0 left-0 w-full h-full z-[-1]"
+            alt=""
+            aria-hidden
+            className="opacity-50 object-cover w-full h-full"
           />
         </div>
+        <Navbar />
+        <HomePage />
       </IntlayerClientProvider>
     </IntlayerServerProvider>
   );
