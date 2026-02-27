@@ -13,6 +13,11 @@ import BusinessEnglish from "@/public/courses/business_english.svg";
 import TechnicalEnglish from "@/public/courses/technical_english.svg";
 import InternationalExams from "@/public/courses/international_exams.svg";
 import RussianExams from "@/public/courses/russian_exams.svg";
+import AtLmverse from "@/public/atlmverse.png";
+import Beginners from "@/public/language_levels/beginner.webp";
+import Starter from "@/public/language_levels/starter.webp";
+import Intermediate from "@/public/language_levels/intermediate.webp";
+import Advanced from "@/public/language_levels/advanced.webp";
 
 export {
   logo,
@@ -21,6 +26,11 @@ export {
   rus,
   fr,
   Hero,
+  Beginners,
+  Starter,
+  Intermediate,
+  Advanced,
+  AtLmverse,
   OnlineCourses,
   ExpertTutors,
   CertifiedCourses,
