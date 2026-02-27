@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import BookConsultationModal from "@/components/BookConsultationModal";
 import { Starter, Beginners, Intermediate, Advanced } from "@/constants/images";
+import { Presentation } from "lucide-react";
 
 const levels = [
   {
@@ -52,71 +53,93 @@ export default function FeaturedLevels() {
 
   return (
     <>
-      <section className="py-16 md:py-20 md:px-40 px-5">
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <p className="text-secondary font-semibold text-sm mb-1">
-              What&apos;s New
-            </p>
-            <h2 className="text-2xl md:text-3xl font-bold">Featured Levels</h2>
-          </div>
-          <Button
-            variant="ghost"
-            className="text-secondary bg-secondary/10 rounded-full font-semibold"
-          >
-            View all Courses
-          </Button>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-          {levels.map((level) => (
-            <div
-              key={level.id}
-              className="rounded-2xl border border-border bg-card overflow-hidden flex flex-col w-[401px]"
+      <section className="py-16 md:py-24 px-5 bg-[#F4F9F6] dark:bg-slate-900/40 transition-colors">
+        <div className="max-w-6xl mx-auto">
+          {/* Header Section */}
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4">
+            <div>
+              <p className="text-[#3A9E49] font-bold text-sm mb-2">
+                What&apos;s New
+              </p>
+              <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white">
+                Featured Levels
+              </h2>
+            </div>
+            <Button
+              className="bg-[#3A9E49] hover:bg-[#2C8038] text-white rounded-full font-medium px-6 py-2.5 shadow-sm transition-colors cursor-pointer"
             >
-              {/* Image area */}
-              <div className="relative h-44 bg-muted flex items-center justify-center ">
-                {level.image ? (
-                  <Image
-                    src={level.image}
-                    alt={level.title ?? level.tag}
-                    fill
-                    className="object-contain"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-green-50 to-teal-100 dark:from-slate-700 dark:to-slate-600" />
-                )}
-              </div>
+              View all Courses
+            </Button>
+          </div>
 
-              {/* Content */}
-              <div className="p-5 flex flex-col flex-1">
-                <p className="text-secondary font-bold text-sm mb-1">
-                  {level.tag}
-                </p>
-                {/* Instructor row placeholder */}
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-9 h-9 rounded-full bg-muted border border-border flex-shrink-0" />
-                  <div>
-                    <p className="text-sm font-semibold">Nicole Brown</p>
-                    <p className="text-xs text-muted-foreground">Instructor</p>
+          {/* Grid Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
+            {levels.map((level) => (
+              <div
+                key={level.id}
+                className="rounded-3xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-950 p-4 md:p-5 flex flex-col shadow-sm hover:shadow-md transition-shadow"
+              >
+                {/* Image Area */}
+                <div className="relative h-60 md:h-[280px] w-full rounded-2xl overflow-hidden mb-6 bg-slate-100 dark:bg-slate-800">
+                  {level.image && (
+                    <Image
+                      src={level.image}
+                      alt={level.title ?? level.tag}
+                      fill
+                      className="object-cover"
+                    />
+                  )}
+                  {/* Badge */}
+                  <div className="absolute bottom-4 right-4 bg-white dark:bg-slate-900 px-3.5 py-1.5 rounded-lg text-sm font-extrabold text-[#3A9E49] shadow-md tracking-tight">
+                    {level.tag}
                   </div>
                 </div>
-                {level.title && (
-                  <h3 className="font-bold text-base mb-2">{level.title}</h3>
-                )}
-                <p className="text-sm text-muted-foreground flex-1">
-                  {level.description}
-                </p>
-                <div className="mt-4 pt-4 border-t border-border">
-                  <Button
-                    onClick={() => openModal(level.tag)}
-                    className="bg-primary text-white rounded-full text-sm px-6"
-                  >
-                    🛒 Book a consultation
-                  </Button>
+
+                {/* Content Area */}
+                <div className="flex flex-col flex-1 px-1">
+
+                  {/* Instructor row */}
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-full overflow-hidden relative border border-slate-200 dark:border-slate-700 bg-slate-200">
+                      <Image
+                        src="https://i.pravatar.cc/150?u=nicole"
+                        alt="Nicole Brown"
+                        fill
+                        className="object-cover"
+                        unoptimized
+                      />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight">Nicole Brown</p>
+                      <p className="text-xs text-slate-500 font-medium tracking-wide">Instructor</p>
+                    </div>
+                  </div>
+
+                  {/* Title & Description */}
+                  {level.title && (
+                    <h3 className="font-extrabold text-lg text-slate-900 dark:text-white mb-2 leading-tight">
+                      {level.title}
+                    </h3>
+                  )}
+                  <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed flex-1">
+                    {level.description}
+                  </p>
+
+                  {/* Divider & Action Button */}
+                  <div className="mt-8 pt-5 border-t border-slate-100 dark:border-slate-800 flex justify-center md:justify-end">
+                    <Button
+                      onClick={() => openModal(level.tag)}
+                      className="bg-[#1D4760] hover:bg-[#15364A] text-white rounded-full text-sm px-6 h-11 flex items-center gap-2 w-full md:w-auto transition-colors"
+                    >
+                      <Presentation className="w-4 h-4" />
+                      Book a consultation
+                    </Button>
+                  </div>
+
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
