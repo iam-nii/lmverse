@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { MenuCloseIcon } from "@/components/ui/animated-state-icons";
 import {
   Sheet,
   SheetContent,
@@ -47,7 +47,7 @@ function NavMenuSheet() {
             aria-label={open ? "Close menu" : "Open menu"}
             className="p-2 rounded-lg hover:bg-muted transition-colors"
           >
-            {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            <MenuCloseIcon isOpen={open} size={24} className="text-slate-800 dark:text-white" />
           </button>
         </SheetTrigger>
 
@@ -92,18 +92,16 @@ function NavMenuSheet() {
           {/* Bottom actions */}
           <div className="mt-auto border-t border-border pt-4 flex flex-col gap-3">
             <LocaleSwitcher />
-            <Button
-              className="w-full bg-primary text-white rounded-full font-semibold"
-              onClick={close}
-            >
-              {buttons.signIn}
-            </Button>
-            <Button
-              className="w-full bg-secondary text-white rounded-full font-semibold"
-              onClick={close}
-            >
-              {buttons.register}
-            </Button>
+            <Link href="/auth/login" className="w-full" onClick={close}>
+              <Button className="w-full bg-primary hover:bg-primary/90 text-white rounded-full font-semibold">
+                {buttons.signIn}
+              </Button>
+            </Link>
+            <Link href="/auth/signup" className="w-full" onClick={close}>
+              <Button className="w-full bg-secondary hover:bg-secondary/90 text-white rounded-full font-semibold">
+                {buttons.register}
+              </Button>
+            </Link>
           </div>
         </SheetContent>
       </Sheet>

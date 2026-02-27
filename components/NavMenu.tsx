@@ -110,12 +110,16 @@ function NavMenu() {
       <div className="flex gap-2">
         <ThemeSwitch />
         <LocaleSwitcher />
-        <Button className="bg-primary text-white rounded-full">
-          <p>{buttons.signIn}</p>
-        </Button>
-        <Button className="bg-secondary text-white rounded-full">
-          {buttons.register}
-        </Button>
+        <Link href="/auth/login">
+          <Button className="bg-primary hover:bg-primary/90 transition-colors text-white rounded-full">
+            <p>{buttons.signIn}</p>
+          </Button>
+        </Link>
+        <Link href="/auth/signup">
+          <Button className="bg-secondary hover:bg-secondary/90 transition-colors text-white rounded-full">
+            {buttons.register}
+          </Button>
+        </Link>
       </div>
     </nav>
   );
