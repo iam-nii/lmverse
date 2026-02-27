@@ -2,56 +2,64 @@
 
 import Image from "next/image";
 import { AtLmverse } from "@/constants/images";
+import { motion } from "framer-motion";
 
-const bullets = [
-  {
-    icon: "🏆",
-    title: "Stay motivated with highly qualified instructors",
-    color: "bg-rose-100",
-  },
-  {
-    icon: "📚",
-    title: "Keep up with an effective approach to learning",
-    color: "bg-green-100",
-  },
-  {
-    icon: "🎯",
-    title: "Build confidence through flexibility in learning",
-    color: "bg-rose-100",
-  },
-  {
-    icon: "👑",
-    title: "Get certified with 100+ certification courses",
-    color: "bg-purple-100",
-  },
-];
+import { useIntlayer } from "next-intlayer";
 
 export default function SpeakingSection() {
+  const { speakingSection } = useIntlayer("home");
+
+  const bullets = [
+    {
+      icon: "🏆",
+      title: speakingSection.bullets[0],
+      color: "bg-rose-100",
+    },
+    {
+      icon: "📚",
+      title: speakingSection.bullets[1],
+      color: "bg-green-100",
+    },
+    {
+      icon: "🎯",
+      title: speakingSection.bullets[2],
+      color: "bg-rose-100",
+    },
+    {
+      icon: "👑",
+      title: speakingSection.bullets[3],
+      color: "bg-purple-100",
+    },
+  ];
   return (
     <section className="py-16 md:py-24 md:px-40 px-5">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center justify-center">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center justify-center overflow-hidden">
         {/* Left */}
-        <div>
+        <motion.div
+          initial={{ opacity: 0, x: -50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
           <p className="text-secondary font-semibold text-sm mb-2">
-            at LmVerse
+            {speakingSection.subtitle}
           </p>
           <h2 className="text-2xl md:text-3xl font-bold leading-snug mb-4">
-            Immediately start speaking effectively in English
+            {speakingSection.title}
           </h2>
           <p className="text-muted-foreground text-sm mb-8 leading-relaxed">
-            Native speakers and highly qualified, experienced teachers provide
-            high-quality instruction while helping students develop natural
-            language proficiency. Our approach to language learning is centered
-            on practical, real-life communication, making it the core component
-            of every lesson. Classes are flexible and adapt to your schedule,
-            allowing you to study whenever it is convenient — without stress or
-            unnecessary pressure.
+            {speakingSection.description}
           </p>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {bullets.map((b, i) => (
-              <div
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.1 + 0.3 }}
+                whileHover={{ scale: 1.05 }}
                 key={i}
-                className="flex items-start gap-3 bg-card rounded-xl border border-border p-4"
+                className="flex items-start gap-3 bg-card rounded-xl border border-border p-4 shadow-sm cursor-default"
               >
                 <span
                   className={`w-9 h-9 rounded-full flex items-center justify-center text-lg flex-shrink-0 ${b.color}`}
@@ -59,14 +67,20 @@ export default function SpeakingSection() {
                   {b.icon}
                 </span>
                 <p className="text-sm font-medium leading-snug">{b.title}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
         {/* Right — placeholder for UI mockup */}
-        <div className="flex items-center justify-center">
-          <Image src={AtLmverse} alt="At Lmverse" className="w-[700px]" />
-        </div>
+        <motion.div
+          initial={{ opacity: 0, x: 50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="flex items-center justify-center"
+        >
+          <Image src={AtLmverse} alt="At Lmverse" className="w-full max-w-[700px] h-auto object-contain hover:scale-105 transition-transform duration-700" />
+        </motion.div>
       </div>
     </section>
   );

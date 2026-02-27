@@ -5,8 +5,10 @@ import Link from 'next/link';
 import { Lock } from 'lucide-react';
 import { EyeToggleIcon } from "@/components/ui/animated-state-icons";
 import { useRouter } from 'next/navigation';
+import { useIntlayer } from "next-intlayer";
 
 export default function PasswordReset() {
+  const { resetPassword } = useIntlayer("auth");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
@@ -21,9 +23,9 @@ export default function PasswordReset() {
 
       {/* Title */}
       <div>
-        <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white leading-tight">Create new password</h2>
+        <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white leading-tight">{resetPassword.title}</h2>
         <p className="mt-3 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-          Your new password must be different from previous used passwords.
+          {resetPassword.subtitle}
         </p>
       </div>
 
@@ -32,7 +34,7 @@ export default function PasswordReset() {
 
         <div className="space-y-1.5">
           <label className="text-sm font-semibold text-slate-800 dark:text-slate-200">
-            New Password <span className="text-red-500">*</span>
+            {resetPassword.newPasswordLabel} <span className="text-red-500">*</span>
           </label>
           <div className="relative">
             <input
@@ -52,7 +54,7 @@ export default function PasswordReset() {
 
         <div className="space-y-1.5">
           <label className="text-sm font-semibold text-slate-800 dark:text-slate-200">
-            Confirm New Password <span className="text-red-500">*</span>
+            {resetPassword.confirmPasswordLabel} <span className="text-red-500">*</span>
           </label>
           <div className="relative">
             <input
@@ -75,7 +77,7 @@ export default function PasswordReset() {
           className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-full flex items-center justify-center transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
           <Lock className="w-4 h-4 mr-2" />
-          <span>Reset Password</span>
+          <span>{resetPassword.resetButton}</span>
         </button>
       </form>
     </div>

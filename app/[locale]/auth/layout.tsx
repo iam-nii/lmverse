@@ -7,31 +7,18 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { logo } from "@/constants/images";
 import { nunito } from "@/constants/fonts";
 import { motion, AnimatePresence } from "framer-motion";
-
-const QUOTES = [
-  {
-    text: "To have another language is to possess a second soul.",
-    author: "Charlemagne"
-  },
-  {
-    text: "Language is the road map of a culture. It tells you where its people come from and where they are going.",
-    author: "Rita Mae Brown"
-  },
-  {
-    text: "One language sets you in a corridor for life. Two languages open every door along the way.",
-    author: "Frank Smith"
-  }
-];
+import { useIntlayer } from "next-intlayer";
 
 export default function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { quotes } = useIntlayer("auth");
   const [currentQuote, setCurrentQuote] = useState(0);
 
-  const nextQuote = () => setCurrentQuote((prev) => (prev + 1) % QUOTES.length);
-  const prevQuote = () => setCurrentQuote((prev) => (prev - 1 + QUOTES.length) % QUOTES.length);
+  const nextQuote = () => setCurrentQuote((prev) => (prev + 1) % quotes.length);
+  const prevQuote = () => setCurrentQuote((prev) => (prev - 1 + quotes.length) % quotes.length);
 
   return (
     <div className="flex min-h-screen w-full bg-[#f0f4f8] dark:bg-black p-0 sm:p-4 md:p-6 lg:p-8 font-sans items-center justify-center">
@@ -70,9 +57,9 @@ export default function AuthLayout({
                     className="absolute inset-0 flex flex-col items-center justify-center"
                   >
                     <h3 className="text-lg lg:text-xl font-medium leading-snug mb-4 text-center">
-                      "{QUOTES[currentQuote].text}"
+                      "{quotes[currentQuote].text}"
                     </h3>
-                    <p className="text-xs lg:text-sm font-medium text-white/80 text-center">- {QUOTES[currentQuote].author}</p>
+                    <p className="text-xs lg:text-sm font-medium text-white/80 text-center">- {quotes[currentQuote].author}</p>
                   </motion.div>
                 </AnimatePresence>
               </div>
@@ -80,7 +67,7 @@ export default function AuthLayout({
               {/* Controls */}
               <div className="flex items-center justify-between mt-8 relative z-10">
                 <div className="flex gap-2">
-                  {QUOTES.map((_, idx) => (
+                  {quotes.map((_, idx) => (
                     <button
                       key={idx}
                       onClick={() => setCurrentQuote(idx)}

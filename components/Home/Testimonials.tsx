@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 
 const testimonials = [
     {
@@ -40,9 +41,15 @@ export default function Testimonials() {
     const t = testimonials[current];
 
     return (
-        <section className="py-16 bg-[#1a1f2e] dark:bg-[#0f1218]">
+        <section className="py-16 bg-[#1a1f2e] dark:bg-[#0f1218] overflow-hidden">
             <div className="md:px-40 px-5 flex justify-center">
-                <div className="w-full max-w-2xl rounded-3xl bg-[#25293a] dark:bg-[#1a1f2e] p-8 md:p-12 relative">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                    whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                    className="w-full max-w-2xl rounded-3xl bg-[#25293a] dark:bg-[#1a1f2e] p-8 md:p-12 relative shadow-xl"
+                >
                     {/* Open quote */}
                     <span className="absolute top-6 left-8 text-6xl text-orange-400 leading-none font-serif select-none">
                         &ldquo;
@@ -94,7 +101,7 @@ export default function Testimonials() {
                         <p className="text-white font-semibold">{t.name}</p>
                         <p className="text-white/60 text-sm">{t.role}</p>
                     </div>
-                </div>
+                </motion.div>
             </div>
         </section>
     );

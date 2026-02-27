@@ -4,17 +4,19 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { Mail, User, Phone } from 'lucide-react';
 import { EyeToggleIcon } from "@/components/ui/animated-state-icons";
+import { useIntlayer } from "next-intlayer";
 
 export default function Signup() {
+  const { signup } = useIntlayer("auth");
   const [showPassword, setShowPassword] = useState(false);
 
   return (
     <div className="w-full space-y-6 animate-in fade-in duration-500">
       {/* Title */}
       <div>
-        <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">Create your account</h2>
+        <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">{signup.title}</h2>
         <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-          Hello there! Let's create your account.
+          {signup.subtitle}
         </p>
       </div>
 
@@ -26,7 +28,7 @@ export default function Signup() {
           <div className="space-y-1.5 flex-1 p-2 border border-slate-200 dark:border-slate-800 rounded-lg focus-within:ring-1 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all bg-white dark:bg-slate-900">
             <input
               type="text"
-              placeholder="First name"
+              placeholder={signup.firstName as string}
               required
               className="w-full h-8 px-2 outline-none text-sm bg-transparent dark:text-white"
             />
@@ -34,14 +36,14 @@ export default function Signup() {
           <div className="space-y-1.5 flex-1 p-2 border border-slate-200 dark:border-slate-800 rounded-lg focus-within:ring-1 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all bg-white dark:bg-slate-900">
             <input
               type="text"
-              placeholder="Middle name"
+              placeholder={signup.middleName as string}
               className="w-full h-8 px-2 outline-none text-sm bg-transparent dark:text-white"
             />
           </div>
           <div className="space-y-1.5 flex-1 p-2 border border-blue-400 bg-blue-50/20 dark:bg-blue-900/10 rounded-lg focus-within:ring-1 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all">
             <input
               type="text"
-              placeholder="Last name"
+              placeholder={signup.lastName as string}
               required
               className="w-full h-8 px-2 outline-none text-sm bg-transparent dark:text-white"
             />
@@ -53,7 +55,7 @@ export default function Signup() {
           <div className="relative p-2 border border-slate-200 dark:border-slate-800 rounded-lg focus-within:ring-1 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all bg-white dark:bg-slate-900">
             <input
               type="email"
-              placeholder="Email address"
+              placeholder={signup.emailPlaceholder as string}
               required
               className="w-full h-8 pl-2 pr-10 outline-none text-sm bg-transparent dark:text-white"
             />
@@ -84,7 +86,7 @@ export default function Signup() {
           <div className="relative p-2 border border-slate-200 dark:border-slate-800 rounded-lg focus-within:ring-1 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all bg-white dark:bg-slate-900">
             <input
               type={showPassword ? "text" : "password"}
-              placeholder="Password"
+              placeholder={signup.passwordPlaceholder as string}
               required
               className="w-full h-8 pl-2 pr-10 outline-none text-sm bg-transparent dark:text-white"
             />
@@ -98,31 +100,44 @@ export default function Signup() {
           </div>
         </div>
 
-        {/* Agreement */}
-        <div className="flex items-start pt-1">
-          <label className="flex items-start space-x-3 cursor-pointer group">
-            <div className={`mt-0.5 w-4 h-4 rounded border flex items-center justify-center transition-colors border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 group-hover:border-blue-500`}></div>
-            <span className="text-xs font-medium text-slate-500 dark:text-slate-400 leading-snug">
-              I agree to Platform <Link href="#" className="font-semibold text-blue-600 hover:text-blue-500">Terms of Service</Link> and <Link href="#" className="font-semibold text-blue-600 hover:text-blue-500">Privacy Policy</Link>
-            </span>
-          </label>
+        {/* Terms Agreement */}
+        <div className="flex items-start">
+          <div className="flex items-center h-5">
+            <input
+              id="terms"
+              type="checkbox"
+              required
+              className="w-4 h-4 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 text-blue-600 cursor-pointer"
+            />
+          </div>
+          <div className="ml-3 text-sm">
+            <label htmlFor="terms" className="text-slate-600 dark:text-slate-400">
+              {signup.agreement1}{' '}
+              <a href="#" className="font-medium text-blue-600 dark:text-blue-400 hover:underline">{signup.terms}</a>{' '}
+              {signup.and}{' '}
+              <a href="#" className="font-medium text-blue-600 dark:text-blue-400 hover:underline">{signup.privacy}</a>
+            </label>
+          </div>
         </div>
 
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full h-12 mt-4 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg flex items-center justify-center transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm"
+          className="w-full h-12 mt-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-full flex items-center justify-center transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
-          <span>Create my account</span>
+          {signup.createAccountButton}
         </button>
       </form>
 
       {/* Footer Link */}
-      <div className="text-center mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-center items-center gap-2">
-        <span className="text-sm text-slate-500">Joined us before?</span>
-        <Link href="/auth/login" className="text-sm font-bold text-blue-500 hover:text-blue-600">
-          Login
-        </Link>
+      <div className="text-center mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-center items-center">
+        {/* Login Link */}
+        <p className="text-center text-sm text-slate-500 dark:text-slate-400 mt-6">
+          {signup.haveAccount}{' '}
+          <Link href="/auth/login" className="font-semibold text-blue-600 dark:text-blue-400 hover:underline transition-all">
+            {signup.loginLink}
+          </Link>
+        </p>
       </div>
 
     </div>

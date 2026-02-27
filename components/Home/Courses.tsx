@@ -17,6 +17,7 @@ import {
 import Image from "next/image";
 import * as React from "react";
 import Autoplay from "embla-carousel-autoplay";
+import { motion } from "framer-motion";
 
 const courses = [
   { id: 1, title: "General English", description: "40 Instructors", image: GeneralEnglish },
@@ -28,19 +29,23 @@ const courses = [
 
 function CourseCard({ course }: { course: (typeof courses)[0] }) {
   return (
-    <div className="bg-card rounded-xl border border-border shadow-sm overflow-hidden flex flex-col items-center py-5 px-4">
-      <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mb-4 overflow-hidden">
+    <motion.div
+      whileHover={{ scale: 1.05 }}
+      transition={{ type: "spring", stiffness: 300 }}
+      className="bg-card rounded-xl border border-border shadow-sm overflow-hidden flex flex-col items-center py-5 px-4 cursor-pointer hover:shadow-md transition-shadow"
+    >
+      <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mb-4 overflow-hidden group">
         <Image
           src={course.image}
           alt={course.title}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
         />
       </div>
       <p className="font-semibold text-sm text-center">{course.title}</p>
       <p className="text-xs text-muted-foreground text-center mt-1">
         {course.description}
       </p>
-    </div>
+    </motion.div>
   );
 }
 
@@ -50,7 +55,13 @@ function Courses() {
   );
 
   return (
-    <div className="mt-6">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+      className="mt-6"
+    >
       <Carousel
         plugins={[plugin.current]}
         onMouseEnter={plugin.current.stop}
@@ -71,7 +82,7 @@ function Courses() {
         <CarouselPrevious className="hidden md:flex" />
         <CarouselNext className="hidden md:flex" />
       </Carousel>
-    </div>
+    </motion.div>
   );
 }
 

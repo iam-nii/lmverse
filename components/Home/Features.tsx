@@ -16,6 +16,7 @@ import {
   DailyLiveSessions,
 } from "@/constants/images";
 import Autoplay from "embla-carousel-autoplay";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import Card from "../Card";
 
@@ -77,19 +78,27 @@ export default function Features() {
       </div>
       <div className="hidden md:grid grid-cols-4 gap-4 ">
         {features.map((feature, index) => (
-          <div key={index} className="basis-1/2 md:basis-1/4 ">
-            <div
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: index * 0.1 }}
+            key={index}
+            className="basis-1/2 md:basis-1/4 "
+          >
+            <motion.div
+              whileHover={{ y: -5, scale: 1.02 }}
               className="bg-white p-1 flex flex-col 
-              rounded-lg border-[1px] border-gray-200 py-4 px-5 shadow-md
-              items-center justify-center"
+              rounded-lg border-[1px] border-gray-200 py-4 px-5 shadow-sm hover:shadow-md transition-shadow cursor-default
+              items-center justify-center h-full"
             >
               <Image src={feature.icon} alt={feature.title} />
-              <p className="text-lg font-bold">{feature.number}</p>
-              <h3 className="text-sm text-gray-500 uppercase">
+              <p className="text-lg font-bold mt-2">{feature.number}</p>
+              <h3 className="text-sm text-gray-500 uppercase text-center mt-1">
                 {feature.title}
               </h3>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         ))}
       </div>
     </>

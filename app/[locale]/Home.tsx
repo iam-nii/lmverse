@@ -16,8 +16,10 @@ import LessonOptions from "@/components/Home/LessonOptions";
 import Footer from "@/components/Footer";
 import BookConsultationModal from "@/components/BookConsultationModal";
 import { Button } from "@/components/ui/button";
+import { useIntlayer } from "next-intlayer";
 
 export default function Home() {
+  const { hero, featuredLevels } = useIntlayer("home");
   const [modalOpen, setModalOpen] = useState(false);
 
   return (
@@ -29,12 +31,10 @@ export default function Home() {
             {/* Left */}
             <div>
               <p className="text-sm font-semibold text-muted-foreground mb-2">
-                The Leader in Online Language Learning
+                {hero.subtitle}
               </p>
-              <h1 className="text-[32px] md:text-5xl font-bold leading-tight mb-4">
-                Engaging &amp; Accessible
-                <br />
-                Online Courses For All
+              <h1 className="text-[32px] md:text-5xl font-bold leading-tight mb-4 whitespace-pre-line">
+                {hero.title}
               </h1>
               <p className="text-muted-foreground text-sm md:text-base leading-relaxed mb-4 max-w-sm">
                 Our specialized online courses are designed to bring the
@@ -56,7 +56,7 @@ export default function Home() {
                 onClick={() => setModalOpen(true)}
                 className="bg-secondary hover:bg-secondary/90 text-white rounded-full px-8 font-semibold"
               >
-                Sign up for a free online trial session
+                {hero.cta1}
               </Button>
             </div>
 
@@ -90,7 +90,7 @@ export default function Home() {
               variant="ghost"
               className="text-secondary bg-secondary/10 rounded-full font-semibold"
             >
-              View all Courses
+              {featuredLevels.viewAll}
             </Button>
           </div>
           <Courses />
