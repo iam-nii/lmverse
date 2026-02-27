@@ -94,8 +94,8 @@ export default function Login() {
       </div>
 
       {/* Social Login */}
-      <div className="grid grid-cols-2 gap-4">
-        <button type="button" className="flex items-center justify-center h-11 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition-colors rounded-full text-slate-700 dark:text-slate-200 font-semibold text-sm">
+      <div className="w-full">
+        <button type="button" className="w-full flex items-center justify-center h-11 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition-colors rounded-full text-slate-700 dark:text-slate-200 font-semibold text-sm">
           <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.31-1.04 2.41-2.12 3.13v2.6h3.42c2.01-1.85 3.17-4.58 3.17-7.74Z" />
             <path fill="#34A853" d="M12 24c2.97 0 5.46-.98 7.28-2.66l-3.42-2.6c-.98.66-2.23 1.05-3.86 1.05-2.97 0-5.49-2-6.39-4.71H2.03v2.69C3.85 21.4 7.6 24 12 24Z" />
@@ -103,12 +103,6 @@ export default function Login() {
             <path fill="#EA4335" d="M12 4.79c1.61 0 3.06.56 4.21 1.64l3.15-3.15C17.45 1.48 14.97 0 12 0 7.6 0 3.85 2.6 2.03 6.61l3.58 2.69c.9-2.7 3.42-4.71 6.39-4.71Z" />
           </svg>
           Google
-        </button>
-        <button type="button" className="flex items-center justify-center h-11 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition-colors rounded-full text-slate-700 dark:text-slate-200 font-semibold text-sm">
-          <svg className="w-5 h-5 mr-2" fill="#1877F2" viewBox="0 0 24 24">
-            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-          </svg>
-          Facebook
         </button>
       </div>
 

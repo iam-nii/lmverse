@@ -22,12 +22,19 @@ export default function Signup() {
       <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
 
         {/* Name Fields Row */}
-        <div className="flex gap-4">
+        <div className="flex gap-3">
           <div className="space-y-1.5 flex-1 p-2 border border-slate-200 dark:border-slate-800 rounded-lg focus-within:ring-1 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all bg-white dark:bg-slate-900">
             <input
               type="text"
-              placeholder="Joe"
+              placeholder="First name"
               required
+              className="w-full h-8 px-2 outline-none text-sm bg-transparent dark:text-white"
+            />
+          </div>
+          <div className="space-y-1.5 flex-1 p-2 border border-slate-200 dark:border-slate-800 rounded-lg focus-within:ring-1 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all bg-white dark:bg-slate-900">
+            <input
+              type="text"
+              placeholder="Middle name"
               className="w-full h-8 px-2 outline-none text-sm bg-transparent dark:text-white"
             />
           </div>
@@ -56,14 +63,18 @@ export default function Signup() {
         {/* Phone Field */}
         <div className="space-y-1.5 flex gap-2">
           <div className="flex items-center gap-2 p-2 px-3 border border-slate-200 dark:border-slate-800 rounded-lg bg-white dark:bg-slate-900">
-            <span className="text-lg">🇩🇪</span>
+            <span className="text-lg">🇷🇺</span>
             <span className="text-xs text-slate-400">▼</span>
           </div>
           <div className="relative flex-1 p-2 border border-slate-200 dark:border-slate-800 rounded-lg focus-within:ring-1 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all bg-white dark:bg-slate-900">
             <input
               type="tel"
-              placeholder="Phone number"
+              placeholder="+7 (XXX) XXX-XX-XX"
+              maxLength={18}
               className="w-full h-8 px-2 outline-none text-sm bg-transparent dark:text-white"
+              onInput={(e) => {
+                e.currentTarget.value = e.currentTarget.value.replace(/[^\d+()\s-]/g, '');
+              }}
             />
           </div>
         </div>
