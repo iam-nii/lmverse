@@ -50,7 +50,7 @@ export default function Features() {
 
   return (
     <>
-      <div className="p-5 w-full md:hidden">
+      <div className="p-5 w-full md:hidden bg-transparent">
         <Carousel
           plugins={[plugin.current]}
           className="sm:max-w-xs"

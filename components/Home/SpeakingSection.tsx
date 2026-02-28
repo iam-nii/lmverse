@@ -33,7 +33,7 @@ export default function SpeakingSection() {
   ];
   return (
     <section className="py-16 md:py-24 md:px-40 px-5">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center justify-center overflow-hidden">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center justify-center">
         {/* Left */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
@@ -77,9 +77,9 @@ export default function SpeakingSection() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="flex items-center justify-center"
+          className="flex justify-center h-full md:relative"
         >
-          <Image src={AtLmverse} alt="At Lmverse" className="w-full max-w-[700px] h-auto object-contain hover:scale-105 transition-transform duration-700" />
+          <Image src={AtLmverse} alt="At Lmverse" className="md:relative md:top-15 max-w-[1500px] h-full hover:scale-105 transition-transform duration-700" />
         </motion.div>
       </div>
     </section>

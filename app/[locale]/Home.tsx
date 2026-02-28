@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Hero } from "@/constants/images";
+import { Backgound2, Backgound3, Hero } from "@/constants/images";
 
 import Features from "@/components/Home/Features";
 import Courses from "@/components/Home/Courses";
@@ -73,7 +73,21 @@ export default function Home() {
         </section>
 
         {/* ── Features strip ──────────────────────────── */}
-        <section className="md:px-40 px-5 pb-10">
+        <section className="relative md:px-40 px-5 pb-10">
+          <div className="absolute top-0 left-0 w-full h-screen -z-10 pointer-events-none">
+            <Image
+              src={Backgound2}
+              alt=""
+              aria-hidden
+              className=""
+            />
+            <Image
+              src={Backgound3}
+              alt=""
+              aria-hidden
+              className="w-full h-full"
+            />
+          </div>
           <Features />
         </section>
 

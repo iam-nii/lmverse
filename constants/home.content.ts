@@ -98,9 +98,9 @@ const homeContent = {
         },
         programs: {
             title: t({
-                en: "Our Programs have been designed for your convenience.",
-                ru: "Наши программы созданы для вашего удобства.",
-                fr: "Nos programmes ont été conçus pour votre confort.",
+                en: "Our Programs have been designed for your convenience",
+                ru: "Наши программы созданы для вашего удобства",
+                fr: "Nos programmes ont été conçus pour votre confort",
             }),
             individual: t({
                 en: "Individual consultations",

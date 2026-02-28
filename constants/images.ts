@@ -14,14 +14,22 @@ import TechnicalEnglish from "@/public/courses/technical_english.svg";
 import InternationalExams from "@/public/courses/international_exams.svg";
 import RussianExams from "@/public/courses/russian_exams.svg";
 import AtLmverse from "@/public/atlmverse.png";
-import Beginners from "@/public/language_levels/beginner.webp";
-import Starter from "@/public/language_levels/starter.webp";
-import Intermediate from "@/public/language_levels/intermediate.webp";
-import Advanced from "@/public/language_levels/advanced.webp";
+
+// Language Levels
+import Beginners from "@/public/language_levels/toWEBP/beginner.webp";
+import Starter from "@/public/language_levels/toWEBP/starter.webp";
+import Intermediate from "@/public/language_levels/toWEBP/intermediate.webp";
+import Advanced from "@/public/language_levels/toWEBP/advanced.webp";
+
+// Backgrounds
+import Backgound2 from "@/public/backgrounds/background2.png";
+import Backgound3 from "@/public/backgrounds/background3.png";
 
 export {
   logo,
   background,
+  Backgound2,
+  Backgound3,
   eng,
   rus,
   fr,

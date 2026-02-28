@@ -92,12 +92,12 @@ function NavMenuSheet() {
           {/* Bottom actions */}
           <div className="mt-auto border-t border-border pt-4 flex flex-col gap-3">
             <LocaleSwitcher />
-            <Link href="/auth/login" className="w-full" onClick={close}>
+            <Link href="/login" className="w-full" onClick={close}>
               <Button className="w-full bg-primary hover:bg-primary/90 text-white rounded-full font-semibold">
                 {buttons.signIn}
               </Button>
             </Link>
-            <Link href="/auth/signup" className="w-full" onClick={close}>
+            <Link href="/signup" className="w-full" onClick={close}>
               <Button className="w-full bg-secondary hover:bg-secondary/90 text-white rounded-full font-semibold">
                 {buttons.register}
               </Button>

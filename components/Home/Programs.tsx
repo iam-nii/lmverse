@@ -28,7 +28,7 @@ export default function Programs() {
     ];
 
     return (
-        <section className="py-16 bg-gradient-to-b from-[#e8f5e9]/60 to-[#e3f2fd]/60 dark:from-slate-900/60 dark:to-slate-800/60">
+        <section className="py-16 bg-white dark:bg-black border-t">
             <div className="md:px-40 px-5">
                 <motion.h2
                     initial={{ opacity: 0, y: 20 }}
