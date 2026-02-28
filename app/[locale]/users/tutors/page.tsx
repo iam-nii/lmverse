@@ -1,3 +1,5 @@
+"use client";
+
 import { type NextPageIntlayer } from "next-intlayer";
 import { useIntlayer } from "next-intlayer";
 import { motion } from "framer-motion";
