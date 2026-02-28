@@ -1,13 +1,13 @@
-import { type Dictionary } from "intlayer";
+import { type Dictionary, t } from "intlayer";
 
 const studentsPageContent = {
   key: "students",
   content: {
-    title: {
+    title: t({
       en: "Students",
       ru: "Студенты",
       fr: "Étudiants",
-    },
+    }),
   },
 } satisfies Dictionary;
 
