@@ -4,9 +4,10 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { Mail, Check } from 'lucide-react';
 import { EyeToggleIcon } from "@/components/ui/animated-state-icons";
-import { useIntlayer } from "next-intlayer";
+import { useIntlayer, useLocale } from "next-intlayer";
 
 export default function Login() {
+  const { locale } = useLocale();
   const { login } = useIntlayer("auth");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
@@ -71,7 +72,7 @@ export default function Login() {
             </div>
             <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{login.rememberMe}</span>
           </label>
-          <Link href="/forgot-password" className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 transition-colors">
+          <Link href={`/${locale}/forgot-password`} className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 transition-colors">
             {login.forgotPassword}
           </Link>
         </div>
@@ -111,7 +112,7 @@ export default function Login() {
 
       <p className="text-center text-sm text-slate-500 dark:text-slate-400 mt-8">
         {login.noAccount}{' '}
-        <Link href="/signup" className="font-semibold text-blue-600 dark:text-blue-400 hover:underline transition-all">
+        <Link href={`/${locale}/signup`} className="font-semibold text-blue-600 dark:text-blue-400 hover:underline transition-all">
           {login.signUpLink}
         </Link>
       </p>

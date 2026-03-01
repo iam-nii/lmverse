@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useIntlayer } from "next-intlayer";
+import { useIntlayer, useLocale } from "next-intlayer";
 import { AlertCircle, RefreshCcw, Home } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,7 @@ export default function Error({
     error: Error & { digest?: string };
     reset: () => void;
 }) {
+    const { locale } = useLocale();
     const { errorTitle, errorDesc, tryAgain, goHome } = useIntlayer("common");
 
     useEffect(() => {
@@ -69,7 +70,7 @@ export default function Error({
                         variant="outline"
                         className="w-full sm:w-auto px-8 py-6 rounded-full border-secondary text-secondary hover:bg-secondary hover:text-white transition-colors gap-2"
                     >
-                        <Link href="/">
+                        <Link href={`/${locale}`}>
                             <Home className="w-4 h-4" />
                             {goHome as unknown as string}
                         </Link>

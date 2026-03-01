@@ -6,13 +6,14 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { useIntlayer } from "next-intlayer";
+import { useIntlayer, useLocale } from "next-intlayer";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import LocaleSwitcher from "./LocaleSwitcher";
 import ThemeSwitch from "./ThemeSwitch";
 
 function NavMenu() {
+  const { locale } = useLocale();
   const navMenu = useIntlayer("navMenu");
 
   const courses = useIntlayer("courses");
@@ -53,7 +54,7 @@ function NavMenu() {
           {/* Home */}
           <NavigationMenuItem className="">
             <NavigationMenuLink asChild className="">
-              <Link href={navMenu.home.href.value} className="">
+              <Link href={`/${locale}${navMenu.home.href.value}`} className="">
                 <p className="text-lg text-secondary">{navMenu.home.label}</p>
               </Link>
             </NavigationMenuLink>
@@ -69,7 +70,7 @@ function NavMenu() {
                   <ListItem
                     key={course.title.value}
                     title={course.title.value}
-                    href={course.href}
+                    href={`/${locale}${course.href}`}
                   >
                     {course.description}
                   </ListItem>
@@ -81,7 +82,7 @@ function NavMenu() {
           {/* Dashboard */}
           <NavigationMenuItem>
             <NavigationMenuLink asChild>
-              <Link href={navMenu.dashboard.href.value}>
+              <Link href={`/${locale}${navMenu.dashboard.href.value}`}>
                 <p className="text-lg">{navMenu.dashboard.label}</p>
               </Link>
             </NavigationMenuLink>
@@ -90,7 +91,7 @@ function NavMenu() {
           {/* Blogs */}
           <NavigationMenuItem>
             <NavigationMenuLink asChild>
-              <Link href={navMenu.work.href.value}>
+              <Link href={`/${locale}${navMenu.work.href.value}`}>
                 <p className="text-lg">{navMenu.work.label}</p>
               </Link>
             </NavigationMenuLink>
@@ -99,7 +100,7 @@ function NavMenu() {
           {/* Contact us */}
           <NavigationMenuItem>
             <NavigationMenuLink asChild>
-              <Link href={navMenu.contactUs.href.value}>
+              <Link href={`/${locale}${navMenu.contactUs.href.value}`}>
                 <p className="text-lg ">{navMenu.contactUs.label}</p>
               </Link>
             </NavigationMenuLink>
@@ -110,12 +111,12 @@ function NavMenu() {
       <div className="flex gap-2">
         <ThemeSwitch />
         <LocaleSwitcher />
-        <Link href="/login">
+        <Link href={`/${locale}/login`}>
           <Button className="bg-primary hover:bg-primary/90 transition-colors text-white rounded-full">
             <p>{buttons.signIn}</p>
           </Button>
         </Link>
-        <Link href="/signup">
+        <Link href={`/${locale}/signup`}>
           <Button className="bg-secondary hover:bg-secondary/90 transition-colors text-white rounded-full">
             {buttons.register}
           </Button>

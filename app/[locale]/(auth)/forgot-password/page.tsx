@@ -3,9 +3,10 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Mail } from 'lucide-react';
-import { useIntlayer } from "next-intlayer";
+import { useIntlayer, useLocale } from "next-intlayer";
 
 export default function ForgotPassword() {
+    const { locale } = useLocale();
     const auth = useIntlayer("auth");
     // Cast via unknown to bypass intlayer union-type narrowing; all keys exist at runtime
     const forgotPassword = auth.forgotPassword as unknown as {
@@ -88,7 +89,7 @@ export default function ForgotPassword() {
             {/* Footer Link */}
             <div className="text-center mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-center items-center gap-2">
                 <span className="text-sm text-slate-500">{forgotPassword.rememberedPassword}</span>
-                <Link href="/login" className="text-sm font-bold text-blue-500 hover:text-blue-600">
+                <Link href={`/${locale}/login`} className="text-sm font-bold text-blue-500 hover:text-blue-600">
                     {forgotPassword.loginLink}
                 </Link>
             </div>

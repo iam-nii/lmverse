@@ -37,11 +37,10 @@ export default function Home() {
                 {hero.title}
               </h1>
               <p className="text-muted-foreground text-sm md:text-base leading-relaxed mb-4 max-w-sm">
-                Our specialized online courses are designed to bring the
-                classroom experience to you, no matter where you are.
+                {hero.description}
               </p>
               <p className="text-sm font-semibold mb-3">
-                Trusted by over 15K Users worldwide since 2022
+                {hero.trusted}
               </p>
               <div className="flex items-center gap-6 mb-6">
                 <div>

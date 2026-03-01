@@ -9,6 +9,16 @@ const homeContent = {
         ru: "Изучайте языки эффективно",
         fr: "Apprenez les langues efficacement",
       }),
+      description: t({
+        en: "Our specialized online courses are designed to bring the classroom experience to you, no matter where you are.",
+        ru: "Наша специализированная онлайн-курсовая программа разработана для того, чтобы привести опыт классной комнаты к вам, независимо от того, где вы находитесь.",
+        fr: "Nos cours spécialisés en ligne sont conçus pour vous apporter l'expérience de la classe, peu importe où vous vous trouvez.",
+      }),
+      trusted: t({
+        en: "Trusted by over 15K Users worldwide since 2024",
+        ru: "Проверено более 15K пользователей за рубежом с 2024 года",
+        fr: "Approuvé par plus de 15K utilisateurs à travers le monde depuis 2024",
+      }),
       subtitle: t({
         en: "Start speaking from the first lesson",
         ru: "Начни говорить с первого урока",

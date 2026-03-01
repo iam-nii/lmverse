@@ -1,12 +1,13 @@
 "use client";
 
-import { useIntlayer } from "next-intlayer";
+import { useIntlayer, useLocale } from "next-intlayer";
 import { FileQuestion, Home } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export default function NotFound() {
+    const { locale } = useLocale();
     const { notFoundTitle, notFoundDesc, goHome } = useIntlayer("common");
 
     return (
@@ -39,7 +40,7 @@ export default function NotFound() {
                     asChild
                     className="px-10 py-6 rounded-pill font-semibold gap-2 border border-primary text-white bg-primary hover:bg-[#15364A] transition-all"
                 >
-                    <Link href="/">
+                    <Link href={`/${locale}`}>
                         <Home className="w-4 h-4" />
                         {goHome as unknown as string}
                     </Link>

@@ -4,16 +4,17 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { logo } from "@/constants/images";
+import { logo, background, Backgound2 } from "@/constants/images";
 import { nunito } from "@/constants/fonts";
 import { motion, AnimatePresence } from "framer-motion";
-import { useIntlayer } from "next-intlayer";
+import { useIntlayer, useLocale } from "next-intlayer";
 
 export default function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { locale } = useLocale();
   const { quotes } = useIntlayer("auth");
   const [currentQuote, setCurrentQuote] = useState(0);
 
@@ -21,7 +22,16 @@ export default function AuthLayout({
   const prevQuote = () => setCurrentQuote((prev) => (prev - 1 + quotes.length) % quotes.length);
 
   return (
-    <div className="flex min-h-screen w-full bg-[#f0f4f8] dark:bg-black p-0 sm:p-4 md:p-6 lg:p-8 font-sans items-center justify-center">
+    <div className="flex min-h-screen w-full p-0 sm:p-4 md:p-6 lg:p-8 font-sans items-center justify-center">
+      {/* Background SVG only covers the hero viewport */}
+      <div className="absolute top-0 left-0 w-full h-screen -z-10 pointer-events-none">
+        <Image
+          src={Backgound2}
+          alt=""
+          aria-hidden
+          className="opacity-50 object-cover w-full h-full"
+        />
+      </div>
       <div className="flex flex-col lg:flex-row w-full max-w-7xl bg-white dark:bg-slate-900 sm:rounded-[2rem] overflow-hidden sm:shadow-2xl shadow-slate-200/50 dark:shadow-none min-h-screen sm:min-h-[85vh]">
 
         {/* Left/Top Side (Image Panel) */}
@@ -101,11 +111,11 @@ export default function AuthLayout({
         <div className="w-full lg:w-7/12 flex flex-col p-6 sm:p-10 lg:p-16 order-2 bg-white dark:bg-slate-900">
           {/* Desktop Logo Only (Hidden on Mobile) */}
           <div className="hidden lg:flex items-center justify-between w-full max-w-md mx-auto mb-16">
-            <Link href="/" className="flex items-center space-x-2">
+            <Link href={`/${locale}`} className="flex items-center space-x-2">
               <Image src={logo} alt="Lmverse Logo" width={32} height={32} className="w-8 h-8 object-contain" />
               <span className={`text-xl font-bold text-slate-800 dark:text-white ${nunito.className}`}>Lmverse</span>
             </Link>
-            <Link href="/" className="text-sm font-semibold text-slate-500 hover:text-blue-500 transition-colors">
+            <Link href={`/${locale}`} className="text-sm font-semibold text-slate-500 hover:text-blue-500 transition-colors">
               Return Home
             </Link>
           </div>

@@ -1,4 +1,5 @@
 import type { NextLayoutIntlayer } from "next-intlayer";
+import { IntlayerClientProvider } from "next-intlayer";
 import { Inter } from "next/font/google";
 import { getHTMLTextDir } from "intlayer";
 export { generateStaticParams } from "next-intlayer";
@@ -26,7 +27,9 @@ const LocaleLayout: NextLayoutIntlayer = async ({ children, params }) => {
       suppressHydrationWarning
     >
       <IntlayerServerProvider locale={locale}>
-        {children}
+        <IntlayerClientProvider locale={locale}>
+          {children}
+        </IntlayerClientProvider>
       </IntlayerServerProvider>
     </div>
   );
