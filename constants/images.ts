@@ -1,8 +1,11 @@
 import logo from "@/public/navbar/logo.webp";
 import background from "@/public/bg-gradient.svg";
+
+// Languages
 import eng from "@/public/languages/eng.svg";
 import rus from "@/public/languages/rus.svg";
 import fr from "@/public/languages/fr.svg";
+
 import Hero from "@/public/home_section_1.webp";
 import OnlineCourses from "@/public/online_courses.svg";
 import ExpertTutors from "@/public/expert_tutors.svg";
@@ -14,6 +17,7 @@ import TechnicalEnglish from "@/public/courses/technical_english.svg";
 import InternationalExams from "@/public/courses/international_exams.svg";
 import RussianExams from "@/public/courses/russian_exams.svg";
 import AtLmverse from "@/public/atlmverse.png";
+import WhyJoinUs from "@/public/whyjoinus.webp";
 
 // Language Levels
 import Beginners from "@/public/language_levels/toWEBP/beginner.webp";
@@ -27,6 +31,7 @@ import Backgound3 from "@/public/backgrounds/background3.png";
 
 export {
   logo,
+  WhyJoinUs,
   background,
   Backgound2,
   Backgound3,
