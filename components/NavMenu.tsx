@@ -6,45 +6,43 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { useIntlayer, useLocale } from "next-intlayer";
+import { useTranslations, useLocale } from "next-intl";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import LocaleSwitcher from "./LocaleSwitcher";
 import ThemeSwitch from "./ThemeSwitch";
 
 function NavMenu() {
-  const { locale } = useLocale();
-  const navMenu = useIntlayer("navMenu");
-
-  const courses = useIntlayer("courses");
-
-  const buttons = useIntlayer("buttons");
+  const locale = useLocale();
+  const tNav = useTranslations("navMenu");
+  const tCourses = useTranslations("courses");
+  const tButtons = useTranslations("buttons");
 
   const engCourses = [
     {
-      title: courses.genEng.label,
-      href: courses.genEng.href.value,
-      description: courses.genEng.description.value,
+      title: tCourses("genEng.label"),
+      href: tCourses("genEng.href"),
+      description: tCourses("genEng.description"),
     },
     {
-      title: courses.businessEng.label,
-      href: courses.businessEng.href.value,
-      description: courses.businessEng.description.value,
+      title: tCourses("businessEng.label"),
+      href: tCourses("businessEng.href"),
+      description: tCourses("businessEng.description"),
     },
     {
-      title: courses.techEng.label,
-      href: courses.techEng.href.value,
-      description: courses.techEng.description.value,
+      title: tCourses("techEng.label"),
+      href: tCourses("techEng.href"),
+      description: tCourses("techEng.description"),
     },
     {
-      title: courses.intExams.label,
-      href: courses.intExams.href.value,
-      description: courses.intExams.description.value,
+      title: tCourses("intExams.label"),
+      href: tCourses("intExams.href"),
+      description: tCourses("intExams.description"),
     },
     {
-      title: courses.rusExam.label,
-      href: courses.rusExam.href.value,
-      description: courses.rusExam.description.value,
+      title: tCourses("rusExam.label"),
+      href: tCourses("rusExam.href"),
+      description: tCourses("rusExam.description"),
     },
   ];
   return (
@@ -54,22 +52,22 @@ function NavMenu() {
           {/* Home */}
           <NavigationMenuItem className="">
             <NavigationMenuLink asChild className="">
-              <Link href={`/${locale}${navMenu.home.href.value}`} className="">
-                <p className="text-lg text-secondary">{navMenu.home.label}</p>
+              <Link href={`/${locale}${tNav("home.href")}`} className="">
+                <p className="text-lg text-secondary">{tNav("home.label")}</p>
               </Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
           {/* Courses */}
           <NavigationMenuItem className="font-semibold">
             <NavigationMenuTrigger className="bg-transparent">
-              <p className="text-lg font-medium">{navMenu.courses.label}</p>
+              <p className="text-lg font-medium">{tNav("courses.label")}</p>
             </NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid w-[400px] gap-2 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                 {engCourses.map((course) => (
                   <ListItem
-                    key={course.title.value}
-                    title={course.title.value}
+                    key={course.title}
+                    title={course.title}
                     href={`/${locale}${course.href}`}
                   >
                     {course.description}
@@ -82,8 +80,8 @@ function NavMenu() {
           {/* Dashboard */}
           <NavigationMenuItem>
             <NavigationMenuLink asChild>
-              <Link href={`/${locale}${navMenu.dashboard.href.value}`}>
-                <p className="text-lg">{navMenu.dashboard.label}</p>
+              <Link href={`/${locale}${tNav("dashboard.href")}`}>
+                <p className="text-lg">{tNav("dashboard.label")}</p>
               </Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
@@ -91,8 +89,8 @@ function NavMenu() {
           {/* Blogs */}
           <NavigationMenuItem>
             <NavigationMenuLink asChild>
-              <Link href={`/${locale}${navMenu.work.href.value}`}>
-                <p className="text-lg">{navMenu.work.label}</p>
+              <Link href={`/${locale}${tNav("work.href")}`}>
+                <p className="text-lg">{tNav("work.label")}</p>
               </Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
@@ -100,8 +98,8 @@ function NavMenu() {
           {/* Contact us */}
           <NavigationMenuItem>
             <NavigationMenuLink asChild>
-              <Link href={`/${locale}${navMenu.contactUs.href.value}`}>
-                <p className="text-lg ">{navMenu.contactUs.label}</p>
+              <Link href={`/${locale}${tNav("contactUs.href")}`}>
+                <p className="text-lg ">{tNav("contactUs.label")}</p>
               </Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
@@ -113,12 +111,12 @@ function NavMenu() {
         <LocaleSwitcher />
         <Link href={`/${locale}/login`}>
           <Button className="bg-primary hover:bg-primary/90 transition-colors text-white rounded-full">
-            <p>{buttons.signIn}</p>
+            <p>{tButtons("signIn")}</p>
           </Button>
         </Link>
         <Link href={`/${locale}/signup`}>
           <Button className="bg-secondary hover:bg-secondary/90 transition-colors text-white rounded-full">
-            {buttons.register}
+            {tButtons("register")}
           </Button>
         </Link>
       </div>

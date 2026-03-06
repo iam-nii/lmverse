@@ -1,11 +1,11 @@
 "use client";
 
-import { useIntlayer } from "next-intlayer";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 export default function Loading() {
-    const { loading } = useIntlayer("common");
+    const t = useTranslations("common");
 
     return (
         <div className="flex flex-col items-center justify-center min-h-[70vh] w-full px-4">
@@ -17,7 +17,7 @@ export default function Loading() {
             >
                 <LoadingSpinner size={64} />
                 <p className="text-xl font-medium text-slate-600 dark:text-slate-300 animate-pulse">
-                    {loading as unknown as string}
+                    {t("loading")}
                 </p>
             </motion.div>
         </div>

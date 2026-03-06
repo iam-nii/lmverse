@@ -1,0 +1,358 @@
+{
+  "students": {
+    "title": "Students"
+  },
+  "tutors": {
+    "title": "Tutors"
+  },
+  "page": {
+    "getStarted": {
+      "main": "Get started by editing",
+      "pageLink": "app/page.tsx"
+    }
+  },
+  "footer": {
+    "brand": {
+      "name": "Lmverse",
+      "description": "LmVerse is a platform for learning and tutoring international languages"
+    },
+    "download": {
+      "appStore": {
+        "text": "Download on the",
+        "store": "App Store"
+      },
+      "googlePlay": {
+        "text": "GET IT ON",
+        "store": "Google Play"
+      }
+    },
+    "sections": {
+      "support": {
+        "title": "Support",
+        "links": {
+          "0": "Education",
+          "1": "Enroll a Course",
+          "2": "Orders",
+          "3": "Payments",
+          "4": "Contact Us"
+        }
+      },
+      "about": {
+        "title": "About",
+        "links": {
+          "0": "Categories",
+          "1": "Services",
+          "2": "About us",
+          "3": "FAQ",
+          "4": "Blog"
+        }
+      },
+      "usefulLinks": {
+        "title": "Useful Links",
+        "links": {
+          "0": "Our values",
+          "1": "Our advisory board",
+          "2": "Our partners",
+          "3": "Become a partner",
+          "4": "Work at Future Learn"
+        }
+      },
+      "contactInfo": {
+        "title": "Contact Info",
+        "phone": {
+          "label": "Phone Number",
+          "value": "+79062620058"
+        },
+        "mail": {
+          "label": "Mail Address",
+          "value": "info@lmverse.ru"
+        },
+        "address": {
+          "label": "Address",
+          "value": "Saint-Petersburg, Russia"
+        }
+      }
+    },
+    "bottom": {
+      "copyright": "Copyright 2025 ©",
+      "rights": ". All right reserved.",
+      "terms": "Terms & Policy",
+      "privacy": "Privacy Policy"
+    }
+  },
+  "navMenu": {
+    "home": {
+      "label": "Home",
+      "href": "/"
+    },
+    "courses": {
+      "label": "Courses",
+      "href": "/courses"
+    },
+    "dashboard": {
+      "label": "Dashboard",
+      "href": "/dashboard"
+    },
+    "work": {
+      "label": "Work",
+      "href": "/work"
+    },
+    "contactUs": {
+      "label": "Contact Us",
+      "href": "/contact-us"
+    }
+  },
+  "book_consultation_modal": {
+    "title": "Sign up for a free online lesson",
+    "description": "Fill out the form below and our manager will contact you soon to answer all your questions and help you choose the optimal training program.",
+    "form": {
+      "firstName": {
+        "label": "First name",
+        "placeholder": "Enter your first name"
+      },
+      "lastName": {
+        "label": "Last name",
+        "placeholder": "Enter your last name"
+      },
+      "phone": {
+        "label": "Phone number",
+        "placeholder": "Enter your phone number"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "Enter your email"
+      },
+      "comments": {
+        "label": "Comments",
+        "placeholder": "Any additional information"
+      },
+      "consent": "By clicking the \\",
+      "submit": "Send"
+    },
+    "messages": {
+      "levelConsultation": "I would like to book a consultation for the {level} level.",
+      "genericRequest": "I would like to {message}."
+    }
+  },
+  "auth": {
+    "quotes": [
+      {
+        "text": "To have another language is to possess a second soul.",
+        "author": "Charlemagne"
+      },
+      {
+        "text": "Language is the road map of a culture. It tells you where its people come from and where they are going.",
+        "author": "Rita Mae Brown"
+      },
+      {
+        "text": "One language sets you in a corridor for life. Two languages open every door along the way.",
+        "author": "Frank Smith"
+      }
+    ],
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to your account to continue.",
+      "emailLabel": "Email address",
+      "passwordLabel": "Password",
+      "rememberMe": "Remember Me",
+      "forgotPassword": "Forgot Password?",
+      "loginButton": "Login",
+      "joinedBefore": "Joined us before?",
+      "googleButton": "Google",
+      "noAccount": "Don't have an account?",
+      "signUpLink": "Sign up"
+    },
+    "tutorLogin": {
+      "title": "Tutor Login",
+      "subtitle": "Sign in to manage your lessons and students."
+    },
+    "tutorSignup": {
+      "title": "Apply as a Tutor",
+      "subtitle": "Join our expert team and start teaching students globally.",
+      "pendingTitle": "Application Sent!",
+      "pendingMessage": "Your application is currently pending admin approval. You will receive an email once your account is activated.",
+      "pendingAction": "Return to Home"
+    },
+    "adminLogin": {
+      "title": "Admin Portal",
+      "subtitle": "Restricted access for platform management."
+    },
+    "signup": {
+      "title": "Create your account",
+      "subtitle": "Hello there! Let's create your account.",
+      "firstName": "First name",
+      "middleName": "Middle name",
+      "lastName": "Last name",
+      "emailPlaceholder": "Email address",
+      "passwordPlaceholder": "Password",
+      "agreement1": "I agree to Platform",
+      "terms": "Terms of Service",
+      "and": "and",
+      "privacy": "Privacy Policy",
+      "createAccountButton": "Create my account",
+      "haveAccount": "Joined us before?",
+      "loginLink": "Login"
+    },
+    "forgotPassword": {
+      "title": "Reset your password",
+      "subtitle": "Enter your email address and we'll send you a link to reset your password.",
+      "emailLabel": "Email Address",
+      "emailPlaceholder": "Enter your registered email",
+      "sendLinkButton": "Send Reset Link",
+      "checkInbox": "Check your inbox",
+      "sentLinkText1": "We've sent a password reset link to",
+      "sentLinkText2": "Please check your email and follow the instructions.",
+      "tryAnotherEmail": "Try another email",
+      "rememberedPassword": "Remembered your password?",
+      "loginLink": "Login"
+    },
+    "resetPassword": {
+      "title": "Create new password",
+      "subtitle": "Your new password must be different from previous used passwords.",
+      "newPasswordLabel": "New Password",
+      "confirmPasswordLabel": "Confirm New Password",
+      "resetButton": "Reset Password"
+    }
+  },
+  "buttons": {
+    "signIn": "Sign In",
+    "signOut": "Sign Out",
+    "register": "Register"
+  },
+  "common": {
+    "loading": "Loading...",
+    "errorTitle": "Something went wrong!",
+    "errorDesc": "We encountered an error while processing your request.",
+    "tryAgain": "Try again",
+    "goHome": "Go back home",
+    "notFoundTitle": "Page not found",
+    "notFoundDesc": "The page you are looking for doesn't exist or has been moved."
+  },
+  "courses": {
+    "genEng": {
+      "label": "General English",
+      "href": "/courses/gen-eng",
+      "description": "General English course"
+    },
+    "businessEng": {
+      "label": "Business English",
+      "href": "/courses/business-eng",
+      "description": "Business English course"
+    },
+    "techEng": {
+      "label": "Technical English",
+      "href": "/courses/tech-eng",
+      "description": "Technical English course"
+    },
+    "intExams": {
+      "label": "International Exams",
+      "href": "/courses/int-exams",
+      "description": "International Exams course",
+      "types": "IELTS, TOEFL, FCE"
+    },
+    "rusExam": {
+      "label": "Russian Exam",
+      "href": "/courses/rus-exam",
+      "description": "Russian Exam course"
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "Learn languages effectively",
+      "description": "Our specialized online courses are designed to bring the classroom experience to you, no matter where you are.",
+      "trusted": "Trusted by over 15K Users worldwide since 2024",
+      "subtitle": "Start speaking from the first lesson",
+      "cta1": "Sign up for a fee online trial session",
+      "cta2": "Book a trial"
+    },
+    "featuredLevels": {
+      "whatsNew": "What's New",
+      "title": "Featured Levels",
+      "viewAll": "View all Courses",
+      "bookConsultation": "Book a consultation",
+      "levels": {
+        "starter": {
+          "tag": "STARTER",
+          "description": "The foundation of the English language is the basic grammatical structures, keywords and correct pronunciation, without which it is impossible to build complex sentences and understand speech."
+        },
+        "beginner": {
+          "tag": "A1 - A2",
+          "title": "Beginner | Elementary | Pre-level",
+          "description": "Ideal for those who are just starting to learn a language and want to gradually speak confidently."
+        },
+        "intermediate": {
+          "tag": "B1 - B2",
+          "title": "Intermediate | Upper intermediate",
+          "description": "This is an advanced stage when you communicate confidently in English, understand complex texts, and express your thoughts freely."
+        },
+        "advanced": {
+          "tag": "C1 - C2",
+          "title": "Advanced | Proficiency",
+          "description": "The advanced level makes it easy to understand everything you hear and read, to express thoughts freely and accurately, even in difficult situations."
+        }
+      }
+    },
+    "programs": {
+      "title": "Our Programs have been designed for your convenience",
+      "individual": "Individual consultations",
+      "corporate": "Corporate Training",
+      "exams": "Exam preparations"
+    },
+    "whyJoinUs": {
+      "title": "Why join us?",
+      "description": "We are a team of native speakers and experienced teachers who have joined forces to create a unique educational platform. Each of our teachers has international certificates and experience working with students of various levels. We believe that everyone can learn English, and we are ready to help you with this.",
+      "points": {
+        "0": "Courses are for all ages and levels — from complete beginners to fluent speakers",
+        "1": "Learn through real dialogues, movies, songs, and life scenarios.",
+        "2": "Your progress and mistakes are not ignored.",
+        "3": "The Most World Class Instructors"
+      },
+      "register": "Register for a free trial lesson"
+    },
+    "speakingSection": {
+      "subtitle": "at LmVerse",
+      "title": "Immediately start speaking effectively in English",
+      "description": "Native speakers and highly qualified, experienced teachers provide high-quality instruction while helping students develop natural language proficiency. Our approach to language learning is centered on practical, real-life communication, making it the core component of every lesson. Classes are flexible and adapt to your schedule, allowing you to study whenever it is convenient — without stress or unnecessary pressure.",
+      "bullets": {
+        "0": "Stay motivated with highly qualified instructors",
+        "1": "Keep up with an effective approach to learning",
+        "2": "Build confidence through flexibility in learning",
+        "3": "Get certified with 100+ certification courses"
+      }
+    },
+    "lessonOptions": {
+      "title": "lesson options",
+      "elementary": {
+        "title": "Elementary",
+        "description": "For those who are not familiar with the language at all. Lots of grammar and basic rules."
+      },
+      "individual": {
+        "title": "Individual",
+        "description": "Courses tailored to your individual learning style and pace, guaranteeing progress and success."
+      },
+      "business": {
+        "title": "Business English",
+        "description": "Course focused on developing the key skills necessary for a successful career."
+      },
+      "group": {
+        "title": "Group lessons",
+        "description": "Lessons in a group of up to 8 people. A lot of conversational practice. Interactive learning materials."
+      }
+    },
+    "ctaCards": {
+      "tutor": {
+        "title": "Become A Tutor",
+        "description": "Top tutors from around the world teach hundreds of students different international languages.",
+        "button": "Register as a tutor"
+      },
+      "newsletter": {
+        "title": "Become a student",
+        "description": "Learning a language is not an obligation. This is an opportunity. And we've made it accessible. Start today. No pressure. No deadline. Without fear.",
+        "button": "Register as a student"
+      }
+    }
+  },
+  "returnHome": {
+    "title": "Return to Home"
+  }
+}

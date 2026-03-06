@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { useIntlayer } from "next-intlayer";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { WhyJoinUs as WhyJoinUsImage } from "@/constants/images";
 
@@ -11,7 +11,9 @@ type Props = {
 };
 
 export default function WhyJoinUs({ onBookConsultation }: Props) {
-  const { whyJoinUs } = useIntlayer("home");
+  const t = useTranslations("home.whyJoinUs");
+  const tobj = t.raw("points") as string[];
+  const points = Object.values(tobj) as string[];
   return (
     <section className="py-16 md:py-20 md:px-40 px-5">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center overflow-hidden">
@@ -41,13 +43,13 @@ export default function WhyJoinUs({ onBookConsultation }: Props) {
           className="order-1 md:order-2"
         >
           <h2 className="text-2xl md:text-3xl font-bold mb-4">
-            {whyJoinUs.title}
+            {t("title")}
           </h2>
           <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
-            {whyJoinUs.description}
+            {t("description")}
           </p>
           <ul className="space-y-3 mb-8">
-            {whyJoinUs.points.map((item, i) => (
+            {points.map((item, i) => (
               <li key={i} className="flex items-start gap-3 text-sm">
                 <span className="mt-0.5 w-5 h-5 rounded-full bg-secondary flex items-center justify-center text-white flex-shrink-0 text-xs">
                   ✓
@@ -60,7 +62,7 @@ export default function WhyJoinUs({ onBookConsultation }: Props) {
             onClick={onBookConsultation}
             className="bg-secondary text-white rounded-full px-8 font-semibold text-sm hover:scale-105 transition-transform"
           >
-            {whyJoinUs.register}
+            {t("register")}
           </Button>
         </motion.div>
       </div>

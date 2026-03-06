@@ -7,40 +7,40 @@ import BookConsultationModal from "@/components/BookConsultationModal";
 import { Starter, Beginners, Intermediate, Advanced } from "@/constants/images";
 import { Presentation } from "lucide-react";
 import { motion } from "framer-motion";
-import { useIntlayer } from "next-intlayer";
+import { useTranslations } from "next-intl";
 
 export default function FeaturedLevels() {
-  const { featuredLevels } = useIntlayer("home");
+  const t = useTranslations("home.featuredLevels");
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedLevel, setSelectedLevel] = useState<string | undefined>();
 
   const levels = [
     {
       id: 1,
-      tag: featuredLevels.levels.starter.tag,
+      tag: t("levels.starter.tag"),
       title: null,
-      description: featuredLevels.levels.starter.description,
+      description: t("levels.starter.description"),
       image: Starter,
     },
     {
       id: 2,
-      tag: featuredLevels.levels.beginner.tag,
-      title: featuredLevels.levels.beginner.title,
-      description: featuredLevels.levels.beginner.description,
+      tag: t("levels.beginner.tag"),
+      title: t("levels.beginner.title"),
+      description: t("levels.beginner.description"),
       image: Beginners,
     },
     {
       id: 3,
-      tag: featuredLevels.levels.intermediate.tag,
-      title: featuredLevels.levels.intermediate.title,
-      description: featuredLevels.levels.intermediate.description,
+      tag: t("levels.intermediate.tag"),
+      title: t("levels.intermediate.title"),
+      description: t("levels.intermediate.description"),
       image: Intermediate,
     },
     {
       id: 4,
-      tag: featuredLevels.levels.advanced.tag,
-      title: featuredLevels.levels.advanced.title,
-      description: featuredLevels.levels.advanced.description,
+      tag: t("levels.advanced.tag"),
+      title: t("levels.advanced.title"),
+      description: t("levels.advanced.description"),
       image: Advanced,
     },
   ];
@@ -64,15 +64,15 @@ export default function FeaturedLevels() {
           >
             <div>
               <p className="text-secondary uppercase font-bold text-xs tracking-wider mb-2">
-                {featuredLevels.whatsNew}
+                {t("whatsNew")}
               </p>
-              <h2 className="text-2xl md:text-3xl font-bold">{featuredLevels.title}</h2>
+              <h2 className="text-2xl md:text-3xl font-bold">{t("title")}</h2>
             </div>
             <Button
               variant="outline"
               className="mt-4 md:mt-0 border-secondary text-secondary hover:bg-secondary hover:text-white rounded-full transition-colors"
             >
-              {featuredLevels.viewAll}
+              {t("viewAll")}
             </Button>
           </motion.div>
 
@@ -136,7 +136,7 @@ export default function FeaturedLevels() {
                   {/* Divider & Action Button */}
                   <div className="mt-8 pt-5 border-t border-slate-100 dark:border-slate-800 flex justify-center md:justify-end">
                     <Button
-                      onClick={() => openModal(level.tag as unknown as string)}
+                      onClick={() => openModal(level.tag)}
                       className="bg-[#1D4760] hover:bg-[#15364A] text-white rounded-full text-sm px-6 h-11 flex items-center gap-2 w-full md:w-auto transition-colors"
                     >
                       <Presentation className="w-4 h-4" />
@@ -154,7 +154,7 @@ export default function FeaturedLevels() {
       <BookConsultationModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
-        levelTitle={selectedLevel}
+        initialMessage={selectedLevel}
       />
     </>
   );

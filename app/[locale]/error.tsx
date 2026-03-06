@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
-import { useIntlayer, useLocale } from "next-intlayer";
 import { AlertCircle, RefreshCcw, Home } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useTranslations, useLocale } from "next-intl";
 
 export default function Error({
     error,
@@ -14,8 +14,8 @@ export default function Error({
     error: Error & { digest?: string };
     reset: () => void;
 }) {
-    const { locale } = useLocale();
-    const { errorTitle, errorDesc, tryAgain, goHome } = useIntlayer("common");
+    const locale = useLocale();
+    const t = useTranslations("common");
 
     useEffect(() => {
         // Log the error to an error reporting service
@@ -37,11 +37,11 @@ export default function Error({
                 </div>
 
                 <h1 className="text-3xl font-bold mb-4 text-slate-900 dark:text-white">
-                    {errorTitle as unknown as string}
+                    {t("errorTitle")}
                 </h1>
 
                 <p className="text-slate-600 dark:text-slate-400 mb-8">
-                    {errorDesc as unknown as string}
+                    {t("errorDesc")}
                 </p>
 
                 {process.env.NODE_ENV === "development" && (
@@ -63,7 +63,7 @@ export default function Error({
                         className="w-full sm:w-auto px-8 py-6 rounded-full font-semibold gap-2"
                     >
                         <RefreshCcw className="w-4 h-4" />
-                        {tryAgain as unknown as string}
+                        {t("tryAgain")}
                     </Button>
                     <Button
                         asChild
@@ -72,7 +72,7 @@ export default function Error({
                     >
                         <Link href={`/${locale}`}>
                             <Home className="w-4 h-4" />
-                            {goHome as unknown as string}
+                            {t("goHome")}
                         </Link>
                     </Button>
                 </div>

@@ -1,11 +1,15 @@
-import type { NextLayoutIntlayer } from "next-intlayer";
-import { IntlayerClientProvider } from "next-intlayer";
 import { Inter } from "next/font/google";
-import { getHTMLTextDir } from "intlayer";
-export { generateStaticParams } from "next-intlayer";
-import { IntlayerServerProvider } from "next-intlayer/server";
+import { NextIntlClientProvider } from 'next-intl';
 import { ltSuperior } from "@/constants/fonts";
+import { AuthProvider } from "@/components/AuthProvider";
 import type { Metadata } from "next";
+import { notFound } from 'next/navigation';
+import { routing } from '@/i18n/routing';
+import { setRequestLocale, getMessages } from 'next-intl/server';
+
+
+
+
 const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
@@ -17,22 +21,40 @@ export const metadata: Metadata = {
     "LmVerse is a platform for learning and turoring international languages",
 };
 
-const LocaleLayout: NextLayoutIntlayer = async ({ children, params }) => {
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+type Props = {
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+};
+export default async function LocaleLayout({ children, params }: Props) {
   const { locale } = await params;
+  if (!routing.locales.includes(locale as any)) {
+    notFound();
+  }
+
+  setRequestLocale(locale);
+
+  // Providing all messages to the client
+  // side is the easiest way to get started
+  const messages = await getMessages();
+
+  // Basic RTL support based on locale
+  const dir = locale === 'ar' || locale === 'he' ? 'rtl' : 'ltr';
+
   return (
     <div
       lang={locale}
-      dir={getHTMLTextDir(locale)}
+      dir={dir}
       className={`${locale === "ru" ? ltSuperior.className : inter.className}`}
       suppressHydrationWarning
     >
-      <IntlayerServerProvider locale={locale}>
-        <IntlayerClientProvider locale={locale}>
+      <NextIntlClientProvider messages={messages}>
+        <AuthProvider>
           {children}
-        </IntlayerClientProvider>
-      </IntlayerServerProvider>
+        </AuthProvider>
+      </NextIntlClientProvider>
     </div>
   );
-};
-
-export default LocaleLayout;
+}

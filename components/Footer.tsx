@@ -1,23 +1,16 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { logo } from "@/constants/images";
 import { soure_gummy } from "@/constants/fonts";
-
-const footerLinks = {
-    Support: ["Education", "Enroll a Course", "Orders", "Payments", "Contact Us"],
-    About: ["Categories", "Services", "About us", "FAQ", "Blog"],
-    "Useful Links": [
-        "Our values",
-        "Our advisory board",
-        "Our partners",
-        "Become a partner",
-        "Work at Future Learn",
-    ],
-};
-
-const socialIcons = ["f", "in", "be", "li", "𝕏"];
+import { useTranslations, useLocale } from "next-intl";
 
 export default function Footer() {
+    const locale = useLocale();
+    const t = useTranslations("footer");
+    const year = new Date().getFullYear();
+
     return (
         <footer className="bg-[#1f3654] dark:bg-[#0f1a2e] text-white pt-16 pb-6">
             <div className="md:px-40 px-5">
@@ -28,7 +21,7 @@ export default function Footer() {
                         <div className="flex items-center gap-2 mb-4">
                             <Image src={logo} alt="logo" width={36} height={36} className="w-9 h-9" />
                             <span className={`text-xl font-bold text-white ${soure_gummy.className}`}>
-                                Lmverse
+                                {t("brand.name")}
                             </span>
                         </div>
                         {/* App store badges */}
@@ -39,8 +32,8 @@ export default function Footer() {
                             >
                                 <span className="text-sm">🍎</span>
                                 <div className="leading-tight">
-                                    <p className="text-[9px] text-white/60">Download on the</p>
-                                    <p className="text-xs font-semibold">App Store</p>
+                                    <p className="text-[9px] text-white/60">{t("download.appStore.text")}</p>
+                                    <p className="text-xs font-semibold">{t("download.appStore.store")}</p>
                                 </div>
                             </a>
                             <a
@@ -49,52 +42,81 @@ export default function Footer() {
                             >
                                 <span className="text-sm">▶</span>
                                 <div className="leading-tight">
-                                    <p className="text-[9px] text-white/60">GET IT ON</p>
-                                    <p className="text-xs font-semibold">Google Play</p>
+                                    <p className="text-[9px] text-white/60">{t("download.googlePlay.text")}</p>
+                                    <p className="text-xs font-semibold">{t("download.googlePlay.store")}</p>
                                 </div>
                             </a>
                         </div>
                     </div>
 
                     {/* Nav columns */}
-                    {Object.entries(footerLinks).map(([heading, links]) => (
-                        <div key={heading}>
-                            <h4 className="font-semibold text-base mb-3">{heading}</h4>
-                            <div
-                                className="w-8 h-0.5 bg-secondary mb-4"
-                                aria-hidden
-                            />
-                            <ul className="space-y-2">
-                                {links.map((link) => (
-                                    <li key={link}>
-                                        <Link
-                                            href="#"
-                                            className="text-white/70 text-sm hover:text-white transition-colors"
-                                        >
-                                            {link}
-                                        </Link>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    ))}
+                    <div>
+                        <h4 className="font-semibold text-base mb-3">{t("sections.support.title")}</h4>
+                        <div className="w-8 h-0.5 bg-secondary mb-4" aria-hidden />
+                        <ul className="space-y-2">
+                            {['0', '1', '2', '3', '4'].map((index) => (
+                                <li key={index}>
+                                    <Link
+                                        href={`/${locale}`}
+                                        className="text-white/70 text-sm hover:text-white transition-colors"
+                                    >
+                                        {t(`sections.support.links.${index}`)}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 className="font-semibold text-base mb-3">{t("sections.about.title")}</h4>
+                        <div className="w-8 h-0.5 bg-secondary mb-4" aria-hidden />
+                        <ul className="space-y-2">
+                            {['0', '1', '2', '3', '4'].map((index) => (
+                                <li key={index}>
+                                    <Link
+                                        href={`/${locale}`}
+                                        className="text-white/70 text-sm hover:text-white transition-colors"
+                                    >
+                                        {t(`sections.about.links.${index}`)}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 className="font-semibold text-base mb-3">{t("sections.usefulLinks.title")}</h4>
+                        <div className="w-8 h-0.5 bg-secondary mb-4" aria-hidden />
+                        <ul className="space-y-2">
+                            {['0', '1', '2', '3', '4'].map((index) => (
+                                <li key={index}>
+                                    <Link
+                                        href={`/${locale}`}
+                                        className="text-white/70 text-sm hover:text-white transition-colors"
+                                    >
+                                        {t(`sections.usefulLinks.links.${index}`)}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
 
                     {/* Contact Info */}
                     <div>
-                        <h4 className="font-semibold text-base mb-3">Contact Info</h4>
+                        <h4 className="font-semibold text-base mb-3">{t("sections.contactInfo.title")}</h4>
                         <div className="w-8 h-0.5 bg-secondary mb-4" aria-hidden />
                         <div className="space-y-4 text-sm text-white/70">
                             <div>
-                                <p className="text-white font-semibold">Phone Number</p>
-                                <p>310-437-2766</p>
+                                <p className="text-white font-semibold">{t("sections.contactInfo.phone.label")}</p>
+                                <p>{t("sections.contactInfo.phone.value")}</p>
                             </div>
                             <div>
-                                <p className="text-white font-semibold">Mail Address</p>
-                                <p>contact@example.com</p>
+                                <p className="text-white font-semibold">{t("sections.contactInfo.mail.label")}</p>
+                                <p>{t("sections.contactInfo.mail.value")}</p>
                             </div>
                             <div>
-                                <p className="text-white font-semibold">Address</p>
-                                <p>706 Campfire Ave. Meriden, CT</p>
+                                <p className="text-white font-semibold">{t("sections.contactInfo.address.label")}</p>
+                                <p>{t("sections.contactInfo.address.value")}</p>
                             </div>
                         </div>
                     </div>
@@ -103,11 +125,11 @@ export default function Footer() {
                 {/* Bottom bar */}
                 <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
                     <p className="text-white/50 text-sm">
-                        Copyright 2025 ©{" "}
-                        <Link href="#" className="text-secondary hover:underline">
-                            DreamsLMS
+                        {t("bottom.copyright")} {year} ©{" "}
+                        <Link href={`/${locale}`} className="text-secondary hover:underline">
+                            Lmverse
                         </Link>
-                        . All right reserved.
+                        {t("bottom.rights")}
                     </p>
 
                     {/* Social icons */}
@@ -128,11 +150,11 @@ export default function Footer() {
 
                     <div className="flex gap-4 text-sm text-white/50">
                         <Link href="#" className="hover:text-white transition-colors">
-                            Terms &amp; Policy
+                            {t("bottom.terms")}
                         </Link>
                         <span>•</span>
                         <Link href="#" className="hover:text-white transition-colors">
-                            Privacy Policy
+                            {t("bottom.privacy")}
                         </Link>
                     </div>
                 </div>

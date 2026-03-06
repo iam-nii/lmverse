@@ -2,10 +2,12 @@
 
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { useIntlayer } from "next-intlayer";
+import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
 
 export default function CtaCards() {
-    const { ctaCards } = useIntlayer("home");
+    const t = useTranslations("home.ctaCards");
+    const router = useRouter();
     return (
         <section className="py-12 md:px-40 px-5 bg-gradient-to-b from-white to-amber-50/40 dark:from-[#1a1f2e] dark:to-[#1a1f2e]">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -26,16 +28,17 @@ export default function CtaCards() {
                         className="absolute right-12 bottom-4 w-20 h-20 rounded-full bg-teal-700/40"
                         aria-hidden
                     />
-                    <h3 className="text-white text-2xl font-bold">{ctaCards.tutor.title}</h3>
+                    <h3 className="text-white text-2xl font-bold">{t("tutor.title")}</h3>
                     <p className="text-white/80 text-sm max-w-xs">
-                        {ctaCards.tutor.description}
+                        {t("tutor.description")}
                     </p>
-                    <Button className="bg-secondary hover:bg-secondary/90 text-white rounded-full font-semibold w-fit text-sm px-6 mt-auto">
-                        {ctaCards.tutor.button}
+                    <Button className="bg-secondary hover:bg-secondary/90 text-white rounded-full font-semibold w-fit text-sm px-6 mt-auto"
+                        onClick={() => router.push(`/tutor/signup` as any)}>
+                        {t("tutor.button")}
                     </Button>
                 </motion.div>
 
-                {/* Transform Access */}
+                {/* Register as a student */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -52,12 +55,13 @@ export default function CtaCards() {
                         className="absolute right-12 bottom-4 w-20 h-20 rounded-full bg-slate-700/40"
                         aria-hidden
                     />
-                    <h3 className="text-white text-2xl font-bold">{ctaCards.newsletter.title}</h3>
+                    <h3 className="text-white text-2xl font-bold">{t("newsletter.title")}</h3>
                     <p className="text-white/80 text-sm max-w-xs">
-                        {ctaCards.newsletter.description}
+                        {t("newsletter.description")}
                     </p>
-                    <Button className="bg-secondary hover:bg-secondary/90 text-white rounded-full font-semibold w-fit text-sm px-6 mt-auto">
-                        {ctaCards.newsletter.button}
+                    <Button className="bg-secondary hover:bg-secondary/90 text-white rounded-full font-semibold w-fit text-sm px-6 mt-auto"
+                        onClick={() => router.push(`/signup` as any)}>
+                        {t("newsletter.button")}
                     </Button>
                 </motion.div>
             </div>

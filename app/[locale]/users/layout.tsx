@@ -1,7 +1,13 @@
-import type { NextLayoutIntlayer } from "next-intlayer";
+
 import Navbar from "@/components/Navbar";
 
-const UsersLayout: NextLayoutIntlayer = async ({ children, params }) => {
+export default async function UsersLayout({
+    children,
+    params,
+}: {
+    children: React.ReactNode;
+    params: Promise<{ locale: string }>;
+}) {
     const { locale } = await params;
 
     return (
@@ -14,4 +20,4 @@ const UsersLayout: NextLayoutIntlayer = async ({ children, params }) => {
     );
 };
 
-export default UsersLayout;
+

@@ -326,3 +326,12 @@ with fully integrated:
 •	Analytics monitoring
 •	Subscription logic
 •	Administrative control
+
+________________________________________
+12. Tutor Account Authorization (Future Development)
+- Tutors cannot self-activate their accounts.
+- After completing registration at /tutor/signup, their account status is set to 'pending'.
+- An Admin must review and approve or reject tutor applications from the Admin Dashboard (Admin → Users → Tutors Tab → Pending Applications).
+- On approval: tutor status changes to 'active' and an activation email is sent.
+- On rejection: a rejection email with a reason is sent.
+- A tutor with 'pending' status who attempts to log in sees: "Your account is pending admin approval."

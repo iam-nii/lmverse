@@ -1,30 +1,30 @@
 "use client";
 import { motion } from "framer-motion";
 
-import { useIntlayer } from "next-intlayer";
+import { useTranslations } from "next-intl";
 
 export default function LessonOptions() {
-    const { lessonOptions } = useIntlayer("home");
+    const t = useTranslations("home.lessonOptions");
 
     const options = [
         {
-            title: lessonOptions.elementary.title,
-            description: lessonOptions.elementary.description,
+            title: t("elementary.title"),
+            description: t("elementary.description"),
             accentColor: "border-l-secondary",
         },
         {
-            title: lessonOptions.individual.title,
-            description: lessonOptions.individual.description,
+            title: t("individual.title"),
+            description: t("individual.description"),
             accentColor: "border-l-secondary",
         },
         {
-            title: lessonOptions.business.title,
-            description: lessonOptions.business.description,
+            title: t("business.title"),
+            description: t("business.description"),
             accentColor: "border-l-secondary",
         },
         {
-            title: lessonOptions.group.title,
-            description: lessonOptions.group.description,
+            title: t("group.title"),
+            description: t("group.description"),
             accentColor: "border-l-secondary",
         },
     ];
@@ -38,7 +38,7 @@ export default function LessonOptions() {
                 transition={{ duration: 0.5 }}
                 className="text-center text-2xl font-bold mb-10"
             >
-                {lessonOptions.title}
+                {t("title")}
             </motion.h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {options.map((opt, i) => (

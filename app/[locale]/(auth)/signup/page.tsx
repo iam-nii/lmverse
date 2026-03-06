@@ -2,50 +2,127 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Mail, User, Phone } from 'lucide-react';
+import { AlertCircle, Loader2, CheckCircle2 } from 'lucide-react';
 import { EyeToggleIcon } from "@/components/ui/animated-state-icons";
-import { useIntlayer, useLocale } from "next-intlayer";
+import { useTranslations, useLocale } from "next-intl";
+import { signUpWithEmail } from "@/store/api/authApi";
 
 export default function Signup() {
-  const { locale } = useLocale();
-  const { signup } = useIntlayer("auth");
+  const locale = useLocale();
+  const t = useTranslations("auth.signup");
+
+  const [form, setForm] = useState({
+    firstName: '',
+    middleName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    password: '',
+  });
   const [showPassword, setShowPassword] = useState(false);
+  const [agreed, setAgreed] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = async (e: React.SubmitEvent) => {
+    e.preventDefault();
+    setError(null);
+    setIsLoading(true);
+
+    const fullName = [form.firstName, form.middleName, form.lastName].filter(Boolean).join(' ');
+
+    const result = await signUpWithEmail({
+      email: form.email,
+      password: form.password,
+      fullName,
+      phone: form.phone,
+      role: 'student',
+    });
+
+    setIsLoading(false);
+
+    if (result.error) {
+      setError(result.error);
+      return;
+    }
+
+    setSuccess(true);
+  };
+
+  if (success) {
+    return (
+      <div className="w-full animate-in fade-in duration-500 flex flex-col items-center text-center gap-6 py-8">
+        <div className="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+          <CheckCircle2 className="w-8 h-8 text-green-600 dark:text-green-400" />
+        </div>
+        <div>
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Account created!</h2>
+          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+            Welcome to LMVerse. You can now{' '}
+            <Link href={`/${locale}/login`} className="font-semibold text-blue-600 dark:text-blue-400 hover:underline">
+              log in
+            </Link>
+            .
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full space-y-6 animate-in fade-in duration-500">
       {/* Title */}
       <div>
-        <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">{signup.title}</h2>
-        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-          {signup.subtitle}
-        </p>
+        <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">{t("title")}</h2>
+        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">{t("subtitle")}</p>
       </div>
 
-      {/* Signup Form */}
-      <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
+      {/* Error banner */}
+      {error && (
+        <div className="flex items-start gap-3 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-4 text-sm text-red-700 dark:text-red-400">
+          <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
 
+      {/* Signup Form */}
+      <form className="space-y-5" onSubmit={handleSubmit}>
         {/* Name Fields Row */}
         <div className="flex gap-3">
           <div className="space-y-1.5 flex-1 p-2 border border-slate-200 dark:border-slate-800 rounded-lg focus-within:ring-1 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all bg-white dark:bg-slate-900">
             <input
               type="text"
-              placeholder={signup.firstName as string}
+              name="firstName"
+              placeholder={t("firstName")}
               required
+              value={form.firstName}
+              onChange={handleChange}
               className="w-full h-8 px-2 outline-none text-sm bg-transparent dark:text-white"
             />
           </div>
           <div className="space-y-1.5 flex-1 p-2 border border-slate-200 dark:border-slate-800 rounded-lg focus-within:ring-1 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all bg-white dark:bg-slate-900">
             <input
               type="text"
-              placeholder={signup.middleName as string}
+              name="middleName"
+              placeholder={t("middleName")}
+              value={form.middleName}
+              onChange={handleChange}
               className="w-full h-8 px-2 outline-none text-sm bg-transparent dark:text-white"
             />
           </div>
           <div className="space-y-1.5 flex-1 p-2 border border-blue-400 bg-blue-50/20 dark:bg-blue-900/10 rounded-lg focus-within:ring-1 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all">
             <input
               type="text"
-              placeholder={signup.lastName as string}
+              name="lastName"
+              placeholder={t("lastName")}
               required
+              value={form.lastName}
+              onChange={handleChange}
               className="w-full h-8 px-2 outline-none text-sm bg-transparent dark:text-white"
             />
           </div>
@@ -56,8 +133,11 @@ export default function Signup() {
           <div className="relative p-2 border border-slate-200 dark:border-slate-800 rounded-lg focus-within:ring-1 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all bg-white dark:bg-slate-900">
             <input
               type="email"
-              placeholder={signup.emailPlaceholder as string}
+              name="email"
+              placeholder={t("emailPlaceholder")}
               required
+              value={form.email}
+              onChange={handleChange}
               className="w-full h-8 pl-2 pr-10 outline-none text-sm bg-transparent dark:text-white"
             />
           </div>
@@ -72,8 +152,11 @@ export default function Signup() {
           <div className="relative flex-1 p-2 border border-slate-200 dark:border-slate-800 rounded-lg focus-within:ring-1 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all bg-white dark:bg-slate-900">
             <input
               type="tel"
+              name="phone"
               placeholder="+7 (XXX) XXX-XX-XX"
               maxLength={18}
+              value={form.phone}
+              onChange={handleChange}
               className="w-full h-8 px-2 outline-none text-sm bg-transparent dark:text-white"
               onInput={(e) => {
                 e.currentTarget.value = e.currentTarget.value.replace(/[^\d+()\s-]/g, '');
@@ -87,8 +170,11 @@ export default function Signup() {
           <div className="relative p-2 border border-slate-200 dark:border-slate-800 rounded-lg focus-within:ring-1 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all bg-white dark:bg-slate-900">
             <input
               type={showPassword ? "text" : "password"}
-              placeholder={signup.passwordPlaceholder as string}
+              name="password"
+              placeholder={t("passwordPlaceholder")}
               required
+              value={form.password}
+              onChange={handleChange}
               className="w-full h-8 pl-2 pr-10 outline-none text-sm bg-transparent dark:text-white"
             />
             <button
@@ -108,15 +194,17 @@ export default function Signup() {
               id="terms"
               type="checkbox"
               required
+              checked={agreed}
+              onChange={(e) => setAgreed(e.target.checked)}
               className="w-4 h-4 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 text-blue-600 cursor-pointer"
             />
           </div>
           <div className="ml-3 text-sm">
             <label htmlFor="terms" className="text-slate-600 dark:text-slate-400">
-              {signup.agreement1}{' '}
-              <a href="#" className="font-medium text-blue-600 dark:text-blue-400 hover:underline">{signup.terms}</a>{' '}
-              {signup.and}{' '}
-              <a href="#" className="font-medium text-blue-600 dark:text-blue-400 hover:underline">{signup.privacy}</a>
+              {t("agreement1")}{' '}
+              <a href="#" className="font-medium text-blue-600 dark:text-blue-400 hover:underline">{t("terms")}</a>{' '}
+              {t("and")}{' '}
+              <a href="#" className="font-medium text-blue-600 dark:text-blue-400 hover:underline">{t("privacy")}</a>
             </label>
           </div>
         </div>
@@ -124,23 +212,22 @@ export default function Signup() {
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full h-12 mt-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-full flex items-center justify-center transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          disabled={isLoading || !agreed}
+          className="w-full h-12 mt-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-medium rounded-full flex items-center justify-center gap-2 transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
-          {signup.createAccountButton}
+          {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+          {t("createAccountButton")}
         </button>
       </form>
 
-      {/* Footer Link */}
-      <div className="text-center mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-center items-center">
-        {/* Login Link */}
-        <p className="text-center text-sm text-slate-500 dark:text-slate-400 mt-6">
-          {signup.haveAccount}{' '}
+      <div className="text-center mt-6 pt-4 border-t border-slate-100 dark:border-slate-800">
+        <p className="text-sm text-slate-500 dark:text-slate-400">
+          {t("haveAccount")}{' '}
           <Link href={`/${locale}/login`} className="font-semibold text-blue-600 dark:text-blue-400 hover:underline transition-all">
-            {signup.loginLink}
+            {t("loginLink")}
           </Link>
         </p>
       </div>
-
     </div>
   );
 }

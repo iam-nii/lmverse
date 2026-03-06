@@ -11,32 +11,32 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useIntlayer, useLocale } from "next-intlayer";
+import { useTranslations, useLocale } from "next-intl";
 import LocaleSwitcher from "./LocaleSwitcher";
 import ThemeSwitch from "./ThemeSwitch";
 
 function NavMenuSheet() {
-  const { locale } = useLocale();
+  const locale = useLocale();
   const [open, setOpen] = useState(false);
-  const navMenu = useIntlayer("navMenu");
-  const courses = useIntlayer("courses");
-  const buttons = useIntlayer("buttons");
+  const tNav = useTranslations("navMenu");
+  const tCourses = useTranslations("courses");
+  const tButtons = useTranslations("buttons");
 
   const close = () => setOpen(false);
 
   const navLinks = [
-    { label: navMenu.home.label, href: `/${locale}${navMenu.home.href.value}` },
-    { label: navMenu.dashboard.label, href: `/${locale}${navMenu.dashboard.href.value}` },
-    { label: navMenu.work.label, href: `/${locale}${navMenu.work.href.value}` },
-    { label: navMenu.contactUs.label, href: `/${locale}${navMenu.contactUs.href.value}` },
+    { label: tNav("home.label"), href: `/${locale}${tNav("home.href")}` },
+    { label: tNav("dashboard.label"), href: `/${locale}${tNav("dashboard.href")}` },
+    { label: tNav("work.label"), href: `/${locale}${tNav("work.href")}` },
+    { label: tNav("contactUs.label"), href: `/${locale}${tNav("contactUs.href")}` },
   ];
 
   const courseLinks = [
-    { label: courses.genEng.label, href: `/${locale}${courses.genEng.href.value}` },
-    { label: courses.businessEng.label, href: `/${locale}${courses.businessEng.href.value}` },
-    { label: courses.techEng.label, href: `/${locale}${courses.techEng.href.value}` },
-    { label: courses.intExams.label, href: `/${locale}${courses.intExams.href.value}` },
-    { label: courses.rusExam.label, href: `/${locale}${courses.rusExam.href.value}` },
+    { label: tCourses("genEng.label"), href: `/${locale}${tCourses("genEng.href")}` },
+    { label: tCourses("businessEng.label"), href: `/${locale}${tCourses("businessEng.href")}` },
+    { label: tCourses("techEng.label"), href: `/${locale}${tCourses("techEng.href")}` },
+    { label: tCourses("intExams.label"), href: `/${locale}${tCourses("intExams.href")}` },
+    { label: tCourses("rusExam.label"), href: `/${locale}${tCourses("rusExam.href")}` },
   ];
 
   return (
@@ -95,12 +95,12 @@ function NavMenuSheet() {
             <LocaleSwitcher />
             <Link href={`/${locale}/login`} className="w-full" onClick={close}>
               <Button className="w-full bg-primary hover:bg-primary/90 text-white rounded-full font-semibold">
-                {buttons.signIn}
+                {tButtons("signIn")}
               </Button>
             </Link>
             <Link href={`/${locale}/signup`} className="w-full" onClick={close}>
               <Button className="w-full bg-secondary hover:bg-secondary/90 text-white rounded-full font-semibold">
-                {buttons.register}
+                {tButtons("register")}
               </Button>
             </Link>
           </div>

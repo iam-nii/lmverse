@@ -1,14 +1,14 @@
 "use client";
 
-import { useIntlayer, useLocale } from "next-intlayer";
+import { useTranslations, useLocale } from "next-intl";
 import { FileQuestion, Home } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export default function NotFound() {
-    const { locale } = useLocale();
-    const { notFoundTitle, notFoundDesc, goHome } = useIntlayer("common");
+    const locale = useLocale();
+    const t = useTranslations("common");
 
     return (
         <div className="flex flex-col items-center justify-center min-h-[70vh] w-full px-4 text-center">
@@ -29,11 +29,11 @@ export default function NotFound() {
                 </h1>
 
                 <h2 className="text-2xl font-semibold mb-3 text-slate-800 dark:text-slate-200">
-                    {notFoundTitle as unknown as string}
+                    {t("notFoundTitle")}
                 </h2>
 
                 <p className="text-slate-600 dark:text-slate-400 mb-10">
-                    {notFoundDesc as unknown as string}
+                    {t("notFoundDesc")}
                 </p>
 
                 <Button
@@ -42,7 +42,7 @@ export default function NotFound() {
                 >
                     <Link href={`/${locale}`}>
                         <Home className="w-4 h-4" />
-                        {goHome as unknown as string}
+                        {t("goHome")}
                     </Link>
                 </Button>
             </motion.div>

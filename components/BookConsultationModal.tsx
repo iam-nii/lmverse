@@ -1,6 +1,4 @@
-"use client";
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
     Dialog,
     DialogContent,
@@ -13,14 +11,16 @@ import Image from "next/image";
 import { logo } from "@/constants/images";
 import { soure_gummy } from "@/constants/fonts";
 import { ChevronRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 type Props = {
     open: boolean;
     onClose: () => void;
-    levelTitle?: string;
+    initialMessage?: string;
 };
 
-export default function BookConsultationModal({ open, onClose, levelTitle }: Props) {
+export default function BookConsultationModal({ open, onClose, initialMessage }: Props) {
+    const t = useTranslations("book_consultation_modal");
     const [agreed, setAgreed] = useState(false);
     const [form, setForm] = useState({
         firstName: "",
@@ -29,6 +29,26 @@ export default function BookConsultationModal({ open, onClose, levelTitle }: Pro
         email: "",
         comments: "",
     });
+
+    useEffect(() => {
+        if (open) {
+            let defaultComment = "";
+            if (initialMessage) {
+                // If it's a level tag like "A1-A2" or "Starter"
+                const isLevel = /^[A-C][1-2]|Starter/i.test(initialMessage);
+                if (isLevel) {
+                    defaultComment = t("messages.levelConsultation", { level: initialMessage });
+                } else {
+                    // Otherwise just use the button text or custom message
+                    defaultComment = t("messages.genericRequest", { message: initialMessage });
+                }
+            }
+            setForm((prev) => ({
+                ...prev,
+                comments: defaultComment,
+            }));
+        }
+    }, [open, initialMessage, t]);
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -39,7 +59,7 @@ export default function BookConsultationModal({ open, onClose, levelTitle }: Pro
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         // TODO: wire to backend
-        console.log("Consultation request:", { ...form, levelTitle });
+        console.log("Consultation request:", { ...form, initialMessage });
         onClose();
     };
 
@@ -55,12 +75,10 @@ export default function BookConsultationModal({ open, onClose, levelTitle }: Pro
                         </span>
                     </div>
                     <DialogTitle className="text-center text-xl font-bold leading-snug">
-                        Sign up for a free online lesson
+                        {t("title")}
                     </DialogTitle>
                     <DialogDescription className="text-center text-sm text-muted-foreground">
-                        Fill out the form below and our manager will contact you soon to
-                        answer all your questions and help you choose the optimal training
-                        program.
+                        {t("description")}
                     </DialogDescription>
                 </DialogHeader>
 
@@ -68,10 +86,11 @@ export default function BookConsultationModal({ open, onClose, levelTitle }: Pro
                     {/* First name */}
                     <div className="flex flex-col gap-1">
                         <label className="text-sm font-medium">
-                            First name <span className="text-red-500">*</span>
+                            {t("form.firstName.label")} <span className="text-red-500">*</span>
                         </label>
                         <input
                             name="firstName"
+                            placeholder={t("form.firstName.placeholder")}
                             value={form.firstName}
                             onChange={handleChange}
                             required
@@ -82,10 +101,11 @@ export default function BookConsultationModal({ open, onClose, levelTitle }: Pro
                     {/* Last name */}
                     <div className="flex flex-col gap-1">
                         <label className="text-sm font-medium">
-                            Last name <span className="text-red-500">*</span>
+                            {t("form.lastName.label")} <span className="text-red-500">*</span>
                         </label>
                         <input
                             name="lastName"
+                            placeholder={t("form.lastName.placeholder")}
                             value={form.lastName}
                             onChange={handleChange}
                             required
@@ -96,11 +116,12 @@ export default function BookConsultationModal({ open, onClose, levelTitle }: Pro
                     {/* Phone */}
                     <div className="flex flex-col gap-1">
                         <label className="text-sm font-medium">
-                            Phone number <span className="text-red-500">*</span>
+                            {t("form.phone.label")} <span className="text-red-500">*</span>
                         </label>
                         <input
                             name="phone"
                             type="tel"
+                            placeholder={t("form.phone.placeholder")}
                             value={form.phone}
                             onChange={handleChange}
                             required
@@ -111,11 +132,12 @@ export default function BookConsultationModal({ open, onClose, levelTitle }: Pro
                     {/* Email */}
                     <div className="flex flex-col gap-1">
                         <label className="text-sm font-medium">
-                            Email <span className="text-red-500">*</span>
+                            {t("form.email.label")} <span className="text-red-500">*</span>
                         </label>
                         <input
                             name="email"
                             type="email"
+                            placeholder={t("form.email.placeholder")}
                             value={form.email}
                             onChange={handleChange}
                             required
@@ -125,9 +147,10 @@ export default function BookConsultationModal({ open, onClose, levelTitle }: Pro
 
                     {/* Comments */}
                     <div className="flex flex-col gap-1">
-                        <label className="text-sm font-medium">Comments</label>
+                        <label className="text-sm font-medium">{t("form.comments.label")}</label>
                         <textarea
                             name="comments"
+                            placeholder={t("form.comments.placeholder")}
                             value={form.comments}
                             onChange={handleChange}
                             rows={3}
@@ -147,8 +170,8 @@ export default function BookConsultationModal({ open, onClose, levelTitle }: Pro
                             />
                             <div
                                 className={`w-5 h-5 rounded flex items-center justify-center border-2 transition-colors ${agreed
-                                        ? "bg-secondary border-secondary"
-                                        : "bg-white border-border dark:bg-slate-700"
+                                    ? "bg-secondary border-secondary"
+                                    : "bg-white border-border dark:bg-slate-700"
                                     }`}
                             >
                                 {agreed && (
@@ -169,11 +192,7 @@ export default function BookConsultationModal({ open, onClose, levelTitle }: Pro
                             </div>
                         </div>
                         <span className="text-xs text-muted-foreground leading-relaxed">
-                            By clicking the &quot;Submit&quot; button, I consent to the
-                            processing of my personal data, in accordance with Federal Law No.
-                            152-FZ &quot;On Personal Data&quot;, on the terms and for the
-                            purposes specified in the Consent to the processing of personal
-                            data *
+                            {t("form.consent")}
                         </span>
                     </label>
 
@@ -183,10 +202,11 @@ export default function BookConsultationModal({ open, onClose, levelTitle }: Pro
                         disabled={!agreed}
                         className="w-full bg-secondary hover:bg-secondary/90 text-white rounded-full font-semibold text-sm py-3 flex items-center justify-center gap-1 disabled:opacity-50"
                     >
-                        Send <ChevronRight className="w-4 h-4" />
+                        {t("form.submit")} <ChevronRight className="w-4 h-4" />
                     </Button>
                 </form>
             </DialogContent>
         </Dialog>
     );
 }
+

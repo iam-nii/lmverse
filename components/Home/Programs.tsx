@@ -1,27 +1,27 @@
 "use client";
 import { motion } from "framer-motion";
 
-import { useIntlayer } from "next-intlayer";
+import { useTranslations } from "next-intl";
 
 export default function Programs() {
-    const { programs } = useIntlayer("home");
+    const t = useTranslations("home.programs");
 
     const programItems = [
         {
             icon: "📋",
-            label: programs.individual,
+            label: t("individual"),
             bg: "bg-amber-50 dark:bg-amber-900/20",
             iconBg: "bg-amber-100",
         },
         {
             icon: "💼",
-            label: programs.corporate,
+            label: t("corporate"),
             bg: "bg-rose-50 dark:bg-rose-900/20",
             iconBg: "bg-rose-100",
         },
         {
             icon: "🖥️",
-            label: programs.exams,
+            label: t("exams"),
             bg: "bg-indigo-50 dark:bg-indigo-900/20",
             iconBg: "bg-indigo-100",
         },
@@ -37,7 +37,7 @@ export default function Programs() {
                     transition={{ duration: 0.5 }}
                     className="text-center text-xl md:text-2xl font-bold mb-10"
                 >
-                    {programs.title}
+                    {t("title")}
                 </motion.h2>
                 <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
                     {programItems.map((p, i) => (

@@ -1,0 +1,358 @@
+{
+  "students": {
+    "title": "Étudiants"
+  },
+  "tutors": {
+    "title": "Tuteurs"
+  },
+  "page": {
+    "getStarted": {
+      "main": "Commencez par éditer",
+      "pageLink": "app/page.tsx"
+    }
+  },
+  "footer": {
+    "brand": {
+      "name": "Lmverse",
+      "description": "LmVerse est une plateforme d'apprentissage et de tutorat de langues internationales"
+    },
+    "download": {
+      "appStore": {
+        "text": "Télécharger sur l'",
+        "store": "App Store"
+      },
+      "googlePlay": {
+        "text": "DISPONIBLE SUR",
+        "store": "Google Play"
+      }
+    },
+    "sections": {
+      "support": {
+        "title": "Support",
+        "links": {
+          "0": "Éducation",
+          "1": "S'inscrire à un cours",
+          "2": "Commandes",
+          "3": "Paiements",
+          "4": "Contactez-nous"
+        }
+      },
+      "about": {
+        "title": "À propos",
+        "links": {
+          "0": "Catégories",
+          "1": "Services",
+          "2": "À propos de nous",
+          "3": "FAQ",
+          "4": "Blog"
+        }
+      },
+      "usefulLinks": {
+        "title": "Liens utiles",
+        "links": {
+          "0": "Nos valeurs",
+          "1": "Notre conseil",
+          "2": "Nos партнеры",
+          "3": "Devenir partenaire",
+          "4": "Travailler chez Future Learn"
+        }
+      },
+      "contactInfo": {
+        "title": "Infos de contact",
+        "phone": {
+          "label": "Numéro de téléphone",
+          "value": "+79062620058"
+        },
+        "mail": {
+          "label": "Adresse e-mail",
+          "value": "info@lmverse.ru"
+        },
+        "address": {
+          "label": "Adresse",
+          "value": "Saint-Pétersbourg, Russie"
+        }
+      }
+    },
+    "bottom": {
+      "copyright": "Copyright 2025 ©",
+      "rights": ". Tous droits réservés.",
+      "terms": "Conditions et politique",
+      "privacy": "Politique de confidentialité"
+    }
+  },
+  "navMenu": {
+    "home": {
+      "label": "Accueil",
+      "href": "/"
+    },
+    "courses": {
+      "label": "Cours",
+      "href": "/courses"
+    },
+    "dashboard": {
+      "label": "Dashboard",
+      "href": "/dashboard"
+    },
+    "work": {
+      "label": "Travail",
+      "href": "/work"
+    },
+    "contactUs": {
+      "label": "Contactez-nous",
+      "href": "/contact-us"
+    }
+  },
+  "book_consultation_modal": {
+    "title": "Inscrivez-vous à une leçon en ligne gratuite",
+    "description": "Remplissez le formulaire ci-dessous et notre responsable vous contactera bientôt pour répondre à toutes vos questions et vous aider à choisir le programme de formation optimal.",
+    "form": {
+      "firstName": {
+        "label": "Prénom",
+        "placeholder": "Entrez votre prénom"
+      },
+      "lastName": {
+        "label": "Nom",
+        "placeholder": "Entrez votre nom"
+      },
+      "phone": {
+        "label": "Numéro de téléphone",
+        "placeholder": "Entrez votre numéro de téléphone"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "Entrez votre email"
+      },
+      "comments": {
+        "label": "Commentaires",
+        "placeholder": "Toute information supplémentaire"
+      },
+      "consent": "En cliquant sur le bouton « Envoyer », je consens au traitement de mes données personnelles, conformément à la loi fédérale n° 152-FZ « Sur les données personnelles », selon les termes et aux fins spécifiés dans le Consentement au traitement des données personnelles *",
+      "submit": "Envoyer"
+    },
+    "messages": {
+      "levelConsultation": "Je souhaite réserver une consultation pour le niveau {level}.",
+      "genericRequest": "Je voudrais {message}."
+    }
+  },
+  "auth": {
+    "quotes": [
+      {
+        "text": "Posséder une autre langue, c'est posséder une deuxième âme.",
+        "author": "Charlemagne"
+      },
+      {
+        "text": "La langue est la carte routière d'une culture. Elle vous dit d'où vient son peuple et où il va.",
+        "author": "Rita Mae Brown"
+      },
+      {
+        "text": "Une langue vous place dans un couloir pour la vie. Deux langues ouvrent toutes les portes le long du chemin.",
+        "author": "Frank Smith"
+      }
+    ],
+    "login": {
+      "title": "Bon retour",
+      "subtitle": "Connectez-vous à votre compte pour continuer.",
+      "emailLabel": "Adresse e-mail",
+      "passwordLabel": "Mot de passe",
+      "rememberMe": "Se souvenir de moi",
+      "forgotPassword": "Mot de passe oublié ?",
+      "loginButton": "Se connecter",
+      "joinedBefore": "Vous nous avez déjà rejoints ?",
+      "googleButton": "Google",
+      "noAccount": "Pas de compte ?",
+      "signUpLink": "S'inscrire"
+    },
+    "tutorLogin": {
+      "title": "Connexion tuteur",
+      "subtitle": "Connectez-vous pour gérer vos leçons et vos élèves."
+    },
+    "tutorSignup": {
+      "title": "Postuler comme tuteur",
+      "subtitle": "Rejoignez notre équipe d'experts et commencez à enseigner.",
+      "pendingTitle": "Demande envoyée !",
+      "pendingMessage": "Votre demande est en attente d'approbation. Vous recevrez un e-mail une fois votre compte activé.",
+      "pendingAction": "Retour à l'accueil"
+    },
+    "adminLogin": {
+      "title": "Portail administrateur",
+      "subtitle": "Accès restreint pour la gestion de la plateforme."
+    },
+    "signup": {
+      "title": "Créez votre compte",
+      "subtitle": "Bonjour ! Créons votre compte.",
+      "firstName": "Prénom",
+      "middleName": "Deuxième prénom",
+      "lastName": "Nom de famille",
+      "emailPlaceholder": "Adresse e-mail",
+      "passwordPlaceholder": "Mot de passe",
+      "agreement1": "J'accepte les",
+      "terms": "Conditions d'utilisation",
+      "and": "et la",
+      "privacy": "Politique de confidentialité",
+      "createAccountButton": "Créer mon compte",
+      "haveAccount": "Déjà membre ?",
+      "loginLink": "Se connecter"
+    },
+    "forgotPassword": {
+      "title": "Réinitialiser votre mot de passe",
+      "subtitle": "Entrez votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.",
+      "emailLabel": "Adresse e-mail",
+      "emailPlaceholder": "Entrez votre e-mail",
+      "sendLinkButton": "Envoyer le lien de réinitialisation",
+      "checkInbox": "Vérifiez votre boîte de réception",
+      "sentLinkText1": "Nous avons envoyé un lien de réinitialisation de mot de passe à",
+      "sentLinkText2": "Veuillez vérifier votre e-mail et suivre les instructions.",
+      "tryAnotherEmail": "Essayer avec un autre e-mail",
+      "rememberedPassword": "Vous vous souvenez de votre mot de passe ?",
+      "loginLink": "Se connecter"
+    },
+    "resetPassword": {
+      "title": "Créer un nouveau mot de passe",
+      "subtitle": "Votre nouveau mot de passe doit être différent des mots de passe précédemment utilisés.",
+      "newPasswordLabel": "Nouveau mot de passe",
+      "confirmPasswordLabel": "Confirmer le nouveau mot de passe",
+      "resetButton": "Réinitialiser le mot de passe"
+    }
+  },
+  "buttons": {
+    "signIn": "Connexion",
+    "signOut": "Se déconnecter",
+    "register": "S'inscrire"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "errorTitle": "Quelque chose s'est mal passé !",
+    "errorDesc": "Nous avons rencontré une erreur lors du traitement de votre demande.",
+    "tryAgain": "Réessayer",
+    "goHome": "Retourner à l'accueil",
+    "notFoundTitle": "Page non trouvée",
+    "notFoundDesc": "La page que vous recherchez n'existe pas ou a été déplacée."
+  },
+  "courses": {
+    "genEng": {
+      "label": "Anglais général",
+      "href": "/courses/gen-eng",
+      "description": "Cours d'anglais général"
+    },
+    "businessEng": {
+      "label": "Anglais commercial",
+      "href": "/courses/business-eng",
+      "description": "Cours d'anglais commercial"
+    },
+    "techEng": {
+      "label": "Anglais technique",
+      "href": "/courses/tech-eng",
+      "description": "Cours d'anglais technique"
+    },
+    "intExams": {
+      "label": "Examen international",
+      "href": "/courses/int-exams",
+      "description": "Cours d'examen international",
+      "types": "IELTS, TOEFL, FCE"
+    },
+    "rusExam": {
+      "label": "Examen russe",
+      "href": "/courses/rus-exam",
+      "description": "Cours d'examen russe"
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "Apprenez les langues efficacement",
+      "description": "Nos cours spécialisés en ligne sont conçus pour vous apporter l'expérience de la classe, peu importe où vous vous trouvez.",
+      "trusted": "Approuvé par plus de 15K utilisateurs à travers le monde depuis 2024",
+      "subtitle": "Commencez à parler dès la première leçon",
+      "cta1": "S'inscrire à une session d'essai en ligne payante",
+      "cta2": "Réserver un essai"
+    },
+    "featuredLevels": {
+      "whatsNew": "Quoi de neuf",
+      "title": "Niveaux populaires",
+      "viewAll": "Voir tous les cours",
+      "bookConsultation": "Réserver une consultation",
+      "levels": {
+        "starter": {
+          "tag": "STARTER",
+          "description": "Les bases de la langue anglaise sont les structures grammaticales élémentaires, les mots-clés et une prononciation correcte, sans lesquels il est impossible de construire des phrases complexes."
+        },
+        "beginner": {
+          "tag": "A1 - A2",
+          "title": "Débutant | Élémentaire | Pré-intermédiaire",
+          "description": "Idéal pour ceux qui commencent tout juste à apprendre une langue et qui veulent parler avec confiance."
+        },
+        "intermediate": {
+          "tag": "B1 - B2",
+          "title": "Intermédiaire | Intermédiaire supérieur",
+          "description": "C'est un stade avancé où vous communiquez avec confiance en anglais, comprenez des textes complexes et exprimez librement vos pensées."
+        },
+        "advanced": {
+          "tag": "C1 - C2",
+          "title": "Avancé | Maîtrise",
+          "description": "Le niveau avancé permet de comprendre facilement tout ce que vous entendez et lisez, d'exprimer vos pensées librement et avec précision."
+        }
+      }
+    },
+    "programs": {
+      "title": "Nos programmes ont été conçus pour votre confort",
+      "individual": "Consultations individuelles",
+      "corporate": "Formation en entreprise",
+      "exams": "Préparation aux examens"
+    },
+    "whyJoinUs": {
+      "title": "Pourquoi nous rejoindre ?",
+      "description": "Nous sommes une équipe de locuteurs natifs et de professeurs expérimentés qui se sont unis pour créer une plateforme éducative unique. Chacun de nos professeurs possède des certificats internationaux et de l'expérience avec des étudiants de différents niveaux.",
+      "points": {
+        "0": "Des cours pour tous les âges et tous les niveaux — des grands débutants aux locuteurs courants",
+        "1": "Apprenez à travers des dialogues réels, des films, des chansons et des scénarios de vie.",
+        "2": "Vos progrès et vos erreurs ne sont pas ignorés.",
+        "3": "Les meilleurs instructeurs de classe mondiale"
+      },
+      "register": "S'inscrire à une leçon d'essai gratuite"
+    },
+    "speakingSection": {
+      "subtitle": "chez LmVerse",
+      "title": "Commencez immédiatement à parler efficacement en anglais",
+      "description": "Des locuteurs natifs et des professeurs hautement qualifiés et expérimentés dispensent un enseignement de haute qualité tout en aidant les étudiants à développer une maîtrise naturelle de la langue. Notre approche se concentre sur la communication pratique et réelle.",
+      "bullets": {
+        "0": "Restez motivé avec des instructeurs hautement qualifiés",
+        "1": "Suivez une approche d'apprentissage efficace",
+        "2": "Renforcez votre confiance grâce à la flexibilité de l'apprentissage",
+        "3": "Obtenez une certification avec plus de 100 cours certifiants"
+      }
+    },
+    "lessonOptions": {
+      "title": "options de leçons",
+      "elementary": {
+        "title": "Élémentaire",
+        "description": "Pour ceux qui ne connaissent pas du tout la langue. Beaucoup de grammaire et de règles de base."
+      },
+      "individual": {
+        "title": "Individuel",
+        "description": "Des cours adaptés à votre style et à votre rythme d'apprentissage individuels, garantissant des progrès."
+      },
+      "business": {
+        "title": "Anglais des affaires",
+        "description": "Cours axé sur le développement des compétences clés nécessaires pour une carrière réussie."
+      },
+      "group": {
+        "title": "Cours en groupe",
+        "description": "Leçons en groupe jusqu'à 8 personnes. Beaucoup de pratique de la conversation."
+      }
+    },
+    "ctaCards": {
+      "tutor": {
+        "title": "Devenir tuteur",
+        "description": "Les meilleurs tuteurs du monde entier enseignent à des centaines d'étudiants différentes langues internationales.",
+        "button": "S'inscrire comme tuteur"
+      },
+      "newsletter": {
+        "title": "Devenir étudiant",
+        "description": "Apprendre une langue n'est pas une obligation. C'est une opportunité. Et nous l'avons rendu accessible. Commencez aujourd'hui. Sans pression. Sans délai. Sans peur.",
+        "button": "S'inscrire comme étudiant"
+      }
+    }
+  },
+  "returnHome": {
+    "title": "Retour à l'accueil"
+  }
+}

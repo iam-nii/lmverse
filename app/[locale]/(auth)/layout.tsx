@@ -7,15 +7,17 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { logo, background, Backgound2 } from "@/constants/images";
 import { nunito } from "@/constants/fonts";
 import { motion, AnimatePresence } from "framer-motion";
-import { useIntlayer, useLocale } from "next-intlayer";
+import { useTranslations, useLocale } from "next-intl";
 
 export default function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { locale } = useLocale();
-  const { quotes } = useIntlayer("auth");
+  const locale = useLocale();
+  const t = useTranslations("auth");
+  const returnHome = useTranslations("returnHome");
+  const quotes = t.raw("quotes") as { text: string; author: string }[];
   const [currentQuote, setCurrentQuote] = useState(0);
 
   const nextQuote = () => setCurrentQuote((prev) => (prev + 1) % quotes.length);
@@ -116,7 +118,7 @@ export default function AuthLayout({
               <span className={`text-xl font-bold text-slate-800 dark:text-white ${nunito.className}`}>Lmverse</span>
             </Link>
             <Link href={`/${locale}`} className="text-sm font-semibold text-slate-500 hover:text-blue-500 transition-colors">
-              Return Home
+              {returnHome("title")}
             </Link>
           </div>
 

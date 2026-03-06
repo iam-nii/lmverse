@@ -4,30 +4,31 @@ import Image from "next/image";
 import { AtLmverse } from "@/constants/images";
 import { motion } from "framer-motion";
 
-import { useIntlayer } from "next-intlayer";
+import { useTranslations } from "next-intl";
 
 export default function SpeakingSection() {
-  const { speakingSection } = useIntlayer("home");
+  const t = useTranslations("home.speakingSection");
+  const tBullets = t.raw("bullets") as string[];
 
   const bullets = [
     {
       icon: "🏆",
-      title: speakingSection.bullets[0],
+      title: tBullets[0],
       color: "bg-rose-100",
     },
     {
       icon: "📚",
-      title: speakingSection.bullets[1],
+      title: tBullets[1],
       color: "bg-green-100",
     },
     {
       icon: "🎯",
-      title: speakingSection.bullets[2],
+      title: tBullets[2],
       color: "bg-rose-100",
     },
     {
       icon: "👑",
-      title: speakingSection.bullets[3],
+      title: tBullets[3],
       color: "bg-purple-100",
     },
   ];
@@ -42,13 +43,13 @@ export default function SpeakingSection() {
           transition={{ duration: 0.6 }}
         >
           <p className="text-secondary font-semibold text-sm mb-2">
-            {speakingSection.subtitle}
+            {t("subtitle")}
           </p>
           <h2 className="text-2xl md:text-3xl font-bold leading-snug mb-4">
-            {speakingSection.title}
+            {t("title")}
           </h2>
           <p className="text-muted-foreground text-sm mb-8 leading-relaxed">
-            {speakingSection.description}
+            {t("description")}
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {bullets.map((b, i) => (
