@@ -15,46 +15,62 @@ export async function signInWithEmail(email: string, password: string) {
     const supabase = createSupabaseBrowserClient();
     const { setLoading, setError, setUser, setSession, logout } = useAuthStore.getState();
 
-    setLoading(true);
-    setError(null);
+    try {
+        setLoading(true);
+        setError(null);
+        console.log("[AuthAPI] Initiating signInWithPassword for:", email);
 
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
-    if (error || !data.session) {
-        setError(error?.message ?? 'Login failed. Please try again.');
-        setLoading(false);
-        return { error: error?.message ?? 'Login failed.' };
-    }
+        console.log("[AuthAPI] signInWithPassword finished. Error:", error?.message || "None");
 
-    // Fetch profile from public.users
-    const { data: profile, error: profileError } = await supabase
-        .from('users')
-        .select('role, status')
-        .eq('id', data.user.id)
-        .single();
+        if (error || !data.session) {
+            setError(error?.message ?? 'Login failed. Please try again.');
+            setLoading(false);
+            return { error: error?.message ?? 'Login failed.' };
+        }
 
-    if (profileError || !profile) {
-        // Profile missing — use defaults
+        console.log("[AuthAPI] Fetching profile from 'users' table...");
+
+        // Fetch profile from public.users
+        const { data: profile, error: profileError } = await supabase
+            .from('users')
+            .select('role, status')
+            .eq('id', data.user.id)
+            .single();
+
+        console.log("[AuthAPI] Profile fetch finished. Found:", !!profile, "Error:", profileError?.message || "None");
+
+        if (profileError || !profile) {
+            console.warn("[AuthAPI] Profile fetch failed or empty. Falling back to student.");
+            setSession(data.session);
+            setUser(data.user, 'student');
+            setLoading(false);
+            return { error: null, role: 'student' as AppRole };
+        }
+
+        // Guard: pending tutors cannot log in
+        if (profile.role === 'tutor' && profile.status === 'pending') {
+            console.warn("[AuthAPI] Pending tutor blocked.");
+            await supabase.auth.signOut();
+            logout();
+            setLoading(false);
+            const pendingError = 'Your account is pending admin approval. You will be notified once approved.';
+            setError(pendingError);
+            return { error: pendingError };
+        }
+
+        console.log("[AuthAPI] Login sequence complete. Role:", profile.role);
         setSession(data.session);
-        setUser(data.user, 'student');
+        setUser(data.user, profile.role as AppRole);
         setLoading(false);
-        return { error: null, role: 'student' as AppRole };
-    }
-
-    // Guard: pending tutors cannot log in
-    if (profile.role === 'tutor' && profile.status === 'pending') {
-        await supabase.auth.signOut();
-        logout();
+        return { error: null, role: profile.role as AppRole };
+    } catch (err: any) {
+        console.error("[AuthAPI] CRITICAL ERROR in signInWithEmail:", err);
+        setError(err.message || 'An unexpected internal error occurred.');
         setLoading(false);
-        const pendingError = 'Your account is pending admin approval. You will be notified once approved.';
-        setError(pendingError);
-        return { error: pendingError };
+        return { error: err.message || 'Unexpected error' };
     }
-
-    setSession(data.session);
-    setUser(data.user, profile.role as AppRole);
-    setLoading(false);
-    return { error: null, role: profile.role as AppRole };
 }
 
 // ── Sign Up ────────────────────────────────────────────────────────────────
@@ -69,6 +85,7 @@ export async function signUpWithEmail({ email, password, fullName, phone, role =
         email,
         password,
         options: {
+            emailRedirectTo: `${window.location.origin}/api/auth/callback`,
             data: {
                 full_name: fullName,
                 phone: phone ?? '',
@@ -97,7 +114,7 @@ export async function sendPasswordResetEmail(email: string) {
 
     // The reset link will land on /password-reset (Supabase appends tokens automatically)
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/password-reset`,
+        redirectTo: `${window.location.origin}/api/auth/callback?next=/password-reset`,
     });
 
     setLoading(false);
@@ -142,7 +159,7 @@ export async function signOut() {
 // ── Auth State Listener (call once at app root) ───────────────────────────
 export const setupAuthListener = () => {
     const supabase = createSupabaseBrowserClient();
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event: string, session: any) => {
         const { setSession, setUser, setLoading, logout } = useAuthStore.getState();
 
         setLoading(true);

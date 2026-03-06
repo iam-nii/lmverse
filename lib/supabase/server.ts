@@ -17,7 +17,8 @@ export async function createSupabaseServerClient() {
                         cookiesToSet.forEach(({ name, value, options }) =>
                             cookieStore.set(name, value, options)
                         );
-                    } catch {
+                    } catch (error) {
+                        console.log(error);
                         // setAll called from a Server Component (read-only) — safe to ignore
                     }
                 },

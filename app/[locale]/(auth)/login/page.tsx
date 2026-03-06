@@ -26,6 +26,7 @@ export default function Login() {
     setIsLoading(true);
 
     const result = await signInWithEmail(email, password);
+    console.log(result);
 
     setIsLoading(false);
 
@@ -33,6 +34,7 @@ export default function Login() {
       setError(result.error);
       return;
     }
+    console.log(result.error);
 
     // Redirect based on role
     switch (result.role) {
