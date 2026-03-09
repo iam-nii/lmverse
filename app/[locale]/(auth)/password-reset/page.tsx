@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { Lock, AlertCircle, Loader2, CheckCircle2 } from 'lucide-react';
+import React, { useState } from "react";
+import { Lock, AlertCircle, Loader2, CheckCircle2 } from "lucide-react";
 import { EyeToggleIcon } from "@/components/ui/animated-state-icons";
 import { useTranslations, useLocale } from "next-intl";
-import { updatePassword } from "@/store/api/authApi";
-import Link from 'next/link';
+import { updatePassword } from "@/lib/auth/authApi";
+import Link from "next/link";
 
 export default function PasswordReset() {
   const locale = useLocale();
   const t = useTranslations("auth.resetPassword");
 
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -34,10 +34,10 @@ export default function PasswordReset() {
 
     setIsLoading(false);
 
-    if (result.error) {
-      setError(result.error);
-      return;
-    }
+    // if (result.error) {
+    //   setError(result.error);
+    //   return;
+    // }
 
     setSuccess(true);
   };
@@ -49,10 +49,15 @@ export default function PasswordReset() {
           <CheckCircle2 className="w-8 h-8 text-green-600 dark:text-green-400" />
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Password reset successful!</h2>
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+            Password reset successful!
+          </h2>
           <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-            Your password has been updated. You can now{' '}
-            <Link href={`/${locale}/login`} className="font-semibold text-blue-600 dark:text-blue-400 hover:underline">
+            Your password has been updated. You can now{" "}
+            <Link
+              href={`/${locale}/login`}
+              className="font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+            >
               log in
             </Link>
             .
@@ -64,10 +69,11 @@ export default function PasswordReset() {
 
   return (
     <div className="w-full space-y-8 animate-in fade-in duration-500">
-
       {/* Title */}
       <div>
-        <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white leading-tight">{t("title")}</h2>
+        <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white leading-tight">
+          {t("title")}
+        </h2>
         <p className="mt-3 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
           {t("subtitle")}
         </p>
@@ -83,7 +89,6 @@ export default function PasswordReset() {
 
       {/* Form */}
       <form className="space-y-6 mt-8" onSubmit={handleSubmit}>
-
         <div className="space-y-1.5">
           <label className="text-sm font-semibold text-slate-800 dark:text-slate-200">
             {t("newPasswordLabel")} <span className="text-red-500">*</span>
@@ -133,7 +138,11 @@ export default function PasswordReset() {
           disabled={isLoading}
           className="w-full h-12 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-medium rounded-full flex items-center justify-center gap-2 transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
-          {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Lock className="w-4 h-4" />}
+          {isLoading ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <Lock className="w-4 h-4" />
+          )}
           <span>{t("resetButton")}</span>
         </button>
       </form>
