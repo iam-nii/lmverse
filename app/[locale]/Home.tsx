@@ -17,6 +17,7 @@ import Footer from "@/components/Footer";
 import BookConsultationModal from "@/components/BookConsultationModal";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
+import Navbar from "@/components/Navbar";
 
 export default function Home() {
   const t = useTranslations("home");
@@ -31,6 +32,8 @@ export default function Home() {
   return (
     <>
       <main>
+      <Navbar />
+
         {/* ── Hero ─────────────────────────────────────── */}
         <section className="relative overflow-hidden">
           <div className="relative z-10 md:px-40 px-5 pt-10 pb-16 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
