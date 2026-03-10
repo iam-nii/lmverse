@@ -7,6 +7,7 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { setRequestLocale, getMessages } from "next-intl/server";
 import { Locale } from "@/types/types";
+import { AuthProvider } from "@/providers/AuthProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -58,9 +59,9 @@ export default async function LocaleLayout({ children, params }: Props) {
       suppressHydrationWarning
     >
       <NextIntlClientProvider messages={messages}>
-        {/* <AuthProvider> */}
+        <AuthProvider>
         {children}
-        {/* </AuthProvider> */}
+        </AuthProvider>
       </NextIntlClientProvider>
     </div>
   );
