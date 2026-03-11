@@ -8,15 +8,15 @@ const DEFAULT_LOCALE = "en";
 const roleConfig = {
   admin:{
     home: "/dashboard/admin",
-    forbidden: ["student", "tutor"]
+    forbidden: ["student", "tutor","login","signup"]
   },
   student:{
     home: "/dashboard/student",
-    forbidden: ["admin", "tutor"]
+    forbidden: ["admin", "tutor","login","signup"]
   },
   tutor:{
     home: "/dashboard/student",
-    forbidden: ["student", "admin"]
+    forbidden: ["student", "admin","login","signup"]
   }
 }
 
@@ -99,75 +99,6 @@ export async function updateSession(
       return NextResponse.redirect(new URL(`/${locale}${config.home}`,request.url))
     }    
   }
-  if(userRole == "admin" && (pathWithoutLocale.includes("student")|| pathWithoutLocale.includes("tutor")))
-  {
-    // redirect to admin page
-  }
-  if(userRole == "student" && (pathWithoutLocale.includes("admin")|| pathWithoutLocale.includes("tutor"))){
-    // redirect to student page
-  }
-  if(userRole == "tutor" && (pathWithoutLocale.includes("admin")|| pathWithoutLocale.includes("student"))){
-    // redirect to tutor page
-  }
-  // if(user && pathWithoutLocale.includes()){
-
-  // }
-
-
-  
-
-  // Check if the current route is a protected route for the given user role
-  const path = request.nextUrl.pathname
-  // console.log(request.nextUrl)
-  // console.log("path", path);
-
-  // --- 2. No user → block protected routes ---
-  // if (!user && !isPublic) {
-  //   const url = new URL(`/${locale}`, request.url);
-  //   if (request.nextUrl.pathname !== url.pathname) {
-  //     return NextResponse.redirect(url.toString());
-  //   }
-  // }
-
-  // --- 3. No role → redirect to locale root ---
-  // const userRole = user?.user_metadata?.role;
-  // if (!userRole) {
-  //   const url = new URL(`/${locale}`, request.url);
-  //   if (request.nextUrl.pathname !== url.pathname) {
-  //     return NextResponse.redirect(url.toString());
-  //   }
-  // }
-
-  // --- 4. Role-based access check ---
-  // const allowedRoutes = roleAccess[userRole as keyof typeof roleAccess] || [];
-  // const isAllowed =
-  //   allowedRoutes.some((route) => pathWithoutLocale.startsWith(route)) || isPublic;
-
-  // // Authenticated but visiting wrong role-protected route
-  // if (!isAllowed) {
-  //   const redirectUrl = new URL(
-  //     `/${locale}${roleHome[userRole as keyof typeof roleHome]}`,
-  //     request.url
-  //   );
-  //   if (request.nextUrl.pathname !== redirectUrl.pathname) {
-  //     return NextResponse.redirect(redirectUrl.toString());
-  //   }
-  // }
-
-  // --- 5. Authenticated user visiting public routes (login/signup) ---
-  // if (user && isPublic) {
-  //   // Only redirect if user tries to visit login or signup
-  //   const publicLoginSignupPaths = ["/login", "/signup"];
-  //   if (publicLoginSignupPaths.some((p) => pathWithoutLocale.startsWith(p))) {
-  //     const redirectUrl = new URL(
-  //       `/${locale}${roleHome[userRole as keyof typeof roleHome]}`,
-  //       request.url
-  //     );
-  //     if (request.nextUrl.pathname !== redirectUrl.pathname) {
-  //       return NextResponse.redirect(redirectUrl.toString());
-  //     }
-  //   }
-  // }
 
   return supabaseResponse;
 }
