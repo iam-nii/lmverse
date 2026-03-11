@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { LogoutButton } from "@/components/LogoutButtons";
 
 const StudentsPage = () => {
-  const t = useTranslations("studentDashboard");
+  const t = useTranslations("StudentDashboard");
 
   return (
     <div className="flex flex-col items-start gap-4">

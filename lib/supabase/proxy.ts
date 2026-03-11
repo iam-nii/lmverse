@@ -1,26 +1,26 @@
 import { createServerClient } from "@supabase/ssr";
+import { routerServerGlobal } from "next/dist/server/lib/router-utils/router-server-context";
 import { NextResponse, type NextRequest } from "next/server";
 
 const DEFAULT_LOCALE = "en";
 
-// Mapping of roles to allowed routes and home page
-const roleAccess = {
-  student: ["/dashboard/student"],
-  tutor: ["/dashboard/tutor"],
-  admin: ["/dashboard/admin"],
-};
-
-const roleHome = {
-  student: "/dashboard/student",
-  tutor: "/dashboard/tutor",
-  admin: "/dashboard/admin",
-};
-
-const protectedRoutes = {
-  student: ["/dashboard/tutor","/dashboard/admin"],
-  tutor: ["/dashboard/student","/dashboard/admin"],
-  admin: ["/dashboard/student","/dashboard/tutor"]
+// Role configuration
+const roleConfig = {
+  admin:{
+    home: "/dashboard/admin",
+    forbidden: ["student", "tutor"]
+  },
+  student:{
+    home: "/dashboard/student",
+    forbidden: ["admin", "tutor"]
+  },
+  tutor:{
+    home: "/dashboard/student",
+    forbidden: ["student", "admin"]
+  }
 }
+
+type RoleType = "admin" | "tutor" | "student";
 
 // Public routes accessible without login
 const publicRoutes = ["/login", "/signup", "/"];
@@ -69,7 +69,10 @@ export async function updateSession(
 
   const { data } = await supabase.auth.getClaims();
   const user = data?.claims;
-  console.log(user)
+  const userRole = user?.user_metadata?.role as RoleType | undefined;
+  console.log(userRole)
+
+  
 
   // --- 1. Redirect "/" to default locale ---
   const rootRedirect = new URL(`/${DEFAULT_LOCALE}`, request.url);
@@ -77,13 +80,39 @@ export async function updateSession(
     return NextResponse.redirect(rootRedirect.toString());
   }
 
-  // 1. Check if user is unauthenticated and is trying to access a dashboard
+  // 2. Check if user is unauthenticated and is trying to access a dashboard
   if(!user && pathWithoutLocale.includes("dashboard")){
     console.log("Accessing restricted route, redirecting to login...");
     // Redirect to the login page
     console.log(locale);
     return NextResponse.redirect(new URL(`/${locale}/login`, request.url))
   }
+
+  // 3. Check if a user is trying to access a restricted page
+  if(userRole && userRole in roleConfig){
+    const config = roleConfig[userRole];
+    const pathSegments = pathWithoutLocale.split('/').filter(Boolean);
+    const hasForbiddenSegment = config.forbidden.some(keyword => pathSegments.includes(keyword));
+    
+
+    if(hasForbiddenSegment){
+      return NextResponse.redirect(new URL(`/${locale}${config.home}`,request.url))
+    }    
+  }
+  if(userRole == "admin" && (pathWithoutLocale.includes("student")|| pathWithoutLocale.includes("tutor")))
+  {
+    // redirect to admin page
+  }
+  if(userRole == "student" && (pathWithoutLocale.includes("admin")|| pathWithoutLocale.includes("tutor"))){
+    // redirect to student page
+  }
+  if(userRole == "tutor" && (pathWithoutLocale.includes("admin")|| pathWithoutLocale.includes("student"))){
+    // redirect to tutor page
+  }
+  // if(user && pathWithoutLocale.includes()){
+
+  // }
+
 
   
 

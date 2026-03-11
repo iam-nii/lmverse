@@ -354,11 +354,10 @@
 
   },
   "StudentDashboard":{
-    "title":"Admin"
+    "title":"Student"
 
   },
   "TutorDashboard":{
-    "title":"Admin"
-
+    "title":"Tutor"
   }
 }
