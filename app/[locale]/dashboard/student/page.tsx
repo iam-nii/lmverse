@@ -2,12 +2,14 @@
 
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
+import { LogoutButton } from "@/components/LogoutButtons";
 
 const StudentsPage = () => {
   const t = useTranslations("students");
 
   return (
     <div className="flex flex-col items-start gap-4">
+      <LogoutButton/>
       <motion.h1
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}

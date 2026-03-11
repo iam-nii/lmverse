@@ -1,33 +1,52 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+const DEFAULT_LOCALE = "en";
+
+// Mapping of roles to allowed routes and home page
+const roleAccess = {
+  student: ["/dashboard/student"],
+  tutor: ["/dashboard/tutor"],
+  admin: ["/dashboard/admin"],
+};
+
+const roleHome = {
+  student: "/dashboard/student",
+  tutor: "/dashboard/tutor",
+  admin: "/dashboard/admin",
+};
+
+const protectedRoutes = {
+  student: ["/dashboard/tutor","/dashboard/admin"],
+  tutor: ["/dashboard/student","/dashboard/admin"],
+  admin: ["/dashboard/student","/dashboard/tutor"]
+}
+
+// Public routes accessible without login
+const publicRoutes = ["/login", "/signup", "/"];
 
 export async function updateSession(
   request: NextRequest,
   response: NextResponse
 ) {
   const supabaseResponse = response;
+
+  // Extract locale and path without locale
   const [, localeSegment, ...segments] = request.nextUrl.pathname.split("/");
-const pathwithoutLocale = "/" + segments.join("/");
+  const pathWithoutLocale = "/" + segments.join("/"); // Path ignoring locale
+  const locale = localeSegment ?? DEFAULT_LOCALE;
+  console.log("pathwithoutlocale:",pathWithoutLocale)
 
-  const publicRoutes = ["/login", "/signup", "/"];
-  const ispublic = publicRoutes.some((route) =>
-    pathwithoutLocale.startsWith(route)
-  );
-  const roleAccess = {
-    student: ["/dashboard/student"],
-    tutor: ["/dashboard/tutor"],
-    admin: ["/dashboard/admin"],
-  };
+  // Check if path is public
+  const isPublicRoute = publicRoutes.includes(pathWithoutLocale);
+  console.log(isPublicRoute);
+  // const isPublic = publicRoutes.some((route) =>
+  //   pathWithoutLocale.startsWith(route)
+  // ); 
 
-  const roleHome = {
-    student: "/dashboard/student",
-    tutor: "/dashboard/tutor",
-    admin: "/dashboard/admin",
-  };
 
-  // With Fluid compute, don't put this client in a global environment
-  // variable. Always create a new one on each request.
+
+  // Create Supabase client for server-side auth
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -40,7 +59,6 @@ const pathwithoutLocale = "/" + segments.join("/");
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value)
           );
-
           cookiesToSet.forEach(({ name, value, options }) =>
             supabaseResponse.cookies.set(name, value, options)
           );
@@ -51,52 +69,76 @@ const pathwithoutLocale = "/" + segments.join("/");
 
   const { data } = await supabase.auth.getClaims();
   const user = data?.claims;
+  console.log(user)
 
-  // No user = block protexted routes
-  if (!user && !ispublic) {
-    // no user, potentially respond by redirecting the user to the login page
-    const url = request.nextUrl.clone();
-    url.pathname = withLocale(localeSegment,"/");
-    return NextResponse.redirect(url);
-  }
-  
-  // Get user role
-  const userRole = user?.user_metadata?.role;
-  if(!userRole){
-    const url = request.nextUrl.clone();
-    url.pathname = withLocale(localeSegment,"/login");
-    return NextResponse.redirect(url);
+  // --- 1. Redirect "/" to default locale ---
+  const rootRedirect = new URL(`/${DEFAULT_LOCALE}`, request.url);
+  if (request.nextUrl.pathname === "/" && request.nextUrl.pathname !== rootRedirect.pathname) {
+    return NextResponse.redirect(rootRedirect.toString());
   }
 
-  const allowedRoutes = roleAccess[userRole as keyof typeof roleAccess] || [];
+  // 1. Check if user is unauthenticated and is trying to access a dashboard
+  if(!user && pathWithoutLocale.includes("dashboard")){
+    console.log("Accessing restricted route, redirecting to login...");
+    // Redirect to the login page
+    console.log(locale);
+    return NextResponse.redirect(new URL(`/${locale}/login`, request.url))
+  }
+
   
 
-  const isAllowed = allowedRoutes.some((route)=>pathwithoutLocale.startsWith(route)) 
-  || ispublic;
+  // Check if the current route is a protected route for the given user role
+  const path = request.nextUrl.pathname
+  // console.log(request.nextUrl)
+  // console.log("path", path);
 
-  // Authenticated but visiting the wrong route
-  if(!isAllowed){
-    const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = withLocale(localeSegment,roleHome[userRole as keyof typeof roleHome]);
+  // --- 2. No user → block protected routes ---
+  // if (!user && !isPublic) {
+  //   const url = new URL(`/${locale}`, request.url);
+  //   if (request.nextUrl.pathname !== url.pathname) {
+  //     return NextResponse.redirect(url.toString());
+  //   }
+  // }
 
-    if(redirectUrl.pathname !== request.nextUrl.pathname){
-      return NextResponse.redirect(redirectUrl);
-    }
-  }
+  // --- 3. No role → redirect to locale root ---
+  // const userRole = user?.user_metadata?.role;
+  // if (!userRole) {
+  //   const url = new URL(`/${locale}`, request.url);
+  //   if (request.nextUrl.pathname !== url.pathname) {
+  //     return NextResponse.redirect(url.toString());
+  //   }
+  // }
 
- //Authenticated user visiting login/signup
- if(user && ispublic && pathwithoutLocale !=="/"){
-  const redirectUrl = request.nextUrl.clone();
-  redirectUrl.pathname = withLocale(localeSegment,roleHome[userRole as keyof typeof roleHome]);
+  // --- 4. Role-based access check ---
+  // const allowedRoutes = roleAccess[userRole as keyof typeof roleAccess] || [];
+  // const isAllowed =
+  //   allowedRoutes.some((route) => pathWithoutLocale.startsWith(route)) || isPublic;
 
-  if (redirectUrl.pathname !== request.nextUrl.pathname){
-    return NextResponse.redirect(redirectUrl);
-  }
- }
+  // // Authenticated but visiting wrong role-protected route
+  // if (!isAllowed) {
+  //   const redirectUrl = new URL(
+  //     `/${locale}${roleHome[userRole as keyof typeof roleHome]}`,
+  //     request.url
+  //   );
+  //   if (request.nextUrl.pathname !== redirectUrl.pathname) {
+  //     return NextResponse.redirect(redirectUrl.toString());
+  //   }
+  // }
+
+  // --- 5. Authenticated user visiting public routes (login/signup) ---
+  // if (user && isPublic) {
+  //   // Only redirect if user tries to visit login or signup
+  //   const publicLoginSignupPaths = ["/login", "/signup"];
+  //   if (publicLoginSignupPaths.some((p) => pathWithoutLocale.startsWith(p))) {
+  //     const redirectUrl = new URL(
+  //       `/${locale}${roleHome[userRole as keyof typeof roleHome]}`,
+  //       request.url
+  //     );
+  //     if (request.nextUrl.pathname !== redirectUrl.pathname) {
+  //       return NextResponse.redirect(redirectUrl.toString());
+  //     }
+  //   }
+  // }
+
   return supabaseResponse;
-}
-
-function withLocale(locale: string | undefined, path: string) {
-  if (!locale) return path;
-  return `/${locale}${path}`;
 }

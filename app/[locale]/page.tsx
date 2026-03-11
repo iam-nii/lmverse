@@ -1,11 +1,10 @@
 import { use } from 'react';
 import { setRequestLocale } from 'next-intl/server';
-import Image from "next/image";
-import { background } from "@/constants/images";
+
 import HomePage from "./Home";
 
-export default function IndexPage({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale } = use(params);
+export default async function  IndexPage({ params }: { params:Promise<{ locale: string }> }) {
+  const { locale } = await params;
 
   // Enable static rendering
   setRequestLocale(locale);
@@ -17,17 +16,8 @@ export default function IndexPage({ params }: { params: Promise<{ locale: string
   return (
 
     <>
-      {/* Background SVG only covers the hero viewport */}
-      <div className="absolute top-0 left-0 w-full h-screen -z-10 pointer-events-none">
-        <Image
-          src={background}
-          alt=""
-          aria-hidden
-          className="opacity-50 object-cover w-full h-full"
-        />
-      </div>
+      
       <HomePage />
-      {/* <p>{locale}</p> */}
     </>
   );
 };
