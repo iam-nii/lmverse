@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 
 const TutorsPage = () => {
-  const t = useTranslations("tutors");
+  const t = useTranslations("tutorDashboard");
 
   return (
     <div className="flex flex-col items-start gap-4">

@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { createClient } from "../supabase/client";
 import { userSignInType, userSignUpType } from "@/types/userTypes";
 import { User } from "@supabase/supabase-js";

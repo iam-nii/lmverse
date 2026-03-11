@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 
 const AdminPage = () => {
-  const t = useTranslations("students");
+  const t = useTranslations("adminDashboard");
 
   return (
     <div className="flex flex-col items-start gap-4">
@@ -16,7 +16,7 @@ const AdminPage = () => {
         {t("title")}
       </motion.h1>
       <p className="text-slate-600 dark:text-slate-400">
-        Welcome to the students dashboard.
+        Welcome to the Admin dashboard.
       </p>
     </div>
   );
