@@ -95,7 +95,7 @@
 }
 
 .dark {
-  --background: #262b40;
+  --background: #2C2C2C;
   --foreground: #fff;
   --logo: #1f4163;
   --card: oklch(0.205 0 0);

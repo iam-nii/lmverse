@@ -7,6 +7,8 @@ import { EyeToggleIcon } from "@/components/ui/animated-state-icons";
 import { useTranslations, useLocale } from "next-intl";
 // import { signInWithEmail } from "@/store/api/authApi";
 import { useRouter } from "next/navigation";
+import { signInWithEmail } from "@/lib/auth/authApi";
+import { userSignInType } from "@/types/userTypes";
 
 export default function AdminLogin() {
   const locale = useLocale();
@@ -20,19 +22,23 @@ export default function AdminLogin() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     setError(null);
     setIsLoading(true);
+    const PAYLOAD:userSignInType = {
+      email,
+      password
+    }
 
-    // const result = await signInWithEmail(email, password);
+    const result = await signInWithEmail(PAYLOAD);
 
     setIsLoading(false);
 
-    // if (result.error) {
-    //   setError(result.error);
-    //   return;
-    // }
+    if (result.error) {
+      setError(result.error);
+      return;
+    }
 
     // // Redirect based on role - only allow admins
     // if (result.role === "admin") {

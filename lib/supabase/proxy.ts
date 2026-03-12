@@ -68,7 +68,7 @@ export async function updateSession(
   );
 
   const { data: {user}, error } = await supabase.auth.getUser();
-  console.log(user)
+  // console.log(user)
  
   const userRole = user?.user_metadata?.role as RoleType | undefined;
 
