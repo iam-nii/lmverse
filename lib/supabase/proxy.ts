@@ -72,9 +72,6 @@ export async function updateSession(
  
   const userRole = user?.user_metadata?.role as RoleType | undefined;
 
-
-  
-
   // --- 1. Redirect "/" to default locale ---
   const rootRedirect = new URL(`/${DEFAULT_LOCALE}`, request.url);
   if (request.nextUrl.pathname === "/" && request.nextUrl.pathname !== rootRedirect.pathname) {
