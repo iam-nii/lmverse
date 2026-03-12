@@ -26,31 +26,19 @@ export default function Login() {
     setError(null);
     setIsLoading(true);
 
-<<<<<<< HEAD:app/[locale]/(auth)/login/page.tsx
-    const result = await signInWithEmail(email, password);
-    console.log(result);
-=======
     const PAYLOAD: userSignInType = {
       email,
       password,
     };
->>>>>>> supabase/implementAuth:app/[locale]/(auth)/(student)/login/page.tsx
 
     // console.log(PAYLOAD);
 
     const result = await signInWithEmail(PAYLOAD);
     if (result.error) {
-<<<<<<< HEAD:app/[locale]/(auth)/login/page.tsx
-      setError(result.error);
-      return;
-    }
-    console.log(result.error);
-=======
       setError(error);
     } else if (result.data) {
       const data = result.data.user.user_metadata;
       setIsLoading(false);
->>>>>>> supabase/implementAuth:app/[locale]/(auth)/(student)/login/page.tsx
 
       // Redirect based on role
       switch (data.role) {
