@@ -4,19 +4,21 @@ import { motion } from "framer-motion";
 
 import { useState, type PropsWithChildren } from "react";
 import { Sidebar } from "../components/Sidebar";
+import { MainContent } from "../components/MainContent";
 
 
 export default function AdminLayout({ children }: PropsWithChildren) {
-  const [selected, setSelected] = useState<MenuItemId>('Dashboard');
+  const [selected, setSelected] = useState<MenuItemId>('dashboard');
   const [sidebarOpen, setsidebarOpen] = useState(true);
   return (
     <motion.div className="flex">
       <Sidebar
        isOpen={sidebarOpen}
-        onToggle={() => setSidebarOpen(!sidebarOpen)}
+        onToggle={() => setsidebarOpen(!sidebarOpen)}
         selected={selected}
         onSelect={setSelected}
       />
+      <MainContent selectedItem={selected}/>
 
     </motion.div>
   );
