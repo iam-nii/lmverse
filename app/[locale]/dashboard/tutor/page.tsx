@@ -3,8 +3,8 @@
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 
-const StudentsPage = () => {
-  const t = useTranslations("students");
+const TutorsPage = () => {
+  const t = useTranslations("tutorDashboard");
 
   return (
     <div className="flex flex-col items-start gap-4">
@@ -16,10 +16,10 @@ const StudentsPage = () => {
         {t("title")}
       </motion.h1>
       <p className="text-slate-600 dark:text-slate-400">
-        Welcome to the students dashboard.
+        Welcome to the tutors dashboard.
       </p>
     </div>
   );
 };
 
-export default StudentsPage;
+export default TutorsPage;
