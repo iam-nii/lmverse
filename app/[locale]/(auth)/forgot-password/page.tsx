@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { Mail, AlertCircle, Loader2 } from 'lucide-react';
 import { useTranslations, useLocale } from "next-intl";
-import { sendPasswordResetEmail } from "@/store/api/authApi";
+import { sendPasswordResetEmail } from '@/lib/auth/authApi';
 
 export default function ForgotPassword() {
     const locale = useLocale();
@@ -24,7 +24,7 @@ export default function ForgotPassword() {
 
         setIsLoading(false);
 
-        if (result.error) {
+        if (result?.error) {
             setError(result.error);
             return;
         }
