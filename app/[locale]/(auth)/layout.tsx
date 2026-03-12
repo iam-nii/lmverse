@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { logo, background, Backgound2 } from "@/constants/images";
+import { logo, Backgound2 } from "@/constants/images";
 import { nunito } from "@/constants/fonts";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslations, useLocale } from "next-intl";
@@ -21,7 +21,8 @@ export default function AuthLayout({
   const [currentQuote, setCurrentQuote] = useState(0);
 
   const nextQuote = () => setCurrentQuote((prev) => (prev + 1) % quotes.length);
-  const prevQuote = () => setCurrentQuote((prev) => (prev - 1 + quotes.length) % quotes.length);
+  const prevQuote = () =>
+    setCurrentQuote((prev) => (prev - 1 + quotes.length) % quotes.length);
 
   return (
     <div className="flex min-h-screen w-full p-0 sm:p-4 md:p-6 lg:p-8 font-sans items-center justify-center">
@@ -35,13 +36,22 @@ export default function AuthLayout({
         />
       </div>
       <div className="flex flex-col lg:flex-row w-full max-w-7xl bg-white dark:bg-slate-900 sm:rounded-[2rem] overflow-hidden sm:shadow-2xl shadow-slate-200/50 dark:shadow-none min-h-screen sm:min-h-[85vh]">
-
         {/* Left/Top Side (Image Panel) */}
         <div className="w-full lg:w-5/12 relative p-4 pb-0 lg:p-4 lg:pr-2 flex flex-col h-[40vh] sm:h-[45vh] lg:h-auto order-1">
           {/* Mobile Logo Only (Hidden on Desktop) */}
           <div className="flex lg:hidden items-center space-x-2 mb-4 px-2">
-            <Image src={logo} alt="Lmverse Logo" width={32} height={32} className="w-8 h-8 object-contain" />
-            <span className={`text-xl font-bold text-slate-800 dark:text-white ${nunito.className}`}>Lmverse</span>
+            <Image
+              src={logo}
+              alt="Lmverse Logo"
+              width={32}
+              height={32}
+              className="w-8 h-8 object-contain"
+            />
+            <span
+              className={`text-xl font-bold text-slate-800 dark:text-white ${nunito.className}`}
+            >
+              Lmverse
+            </span>
           </div>
 
           {/* Inner rounded container for the image */}
@@ -57,7 +67,6 @@ export default function AuthLayout({
             />
             {/* Quote Overlay */}
             <div className="absolute inset-x-4 sm:inset-x-6 lg:inset-x-8 bottom-4 sm:bottom-6 lg:bottom-8 p-6 lg:p-8 bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 text-white overflow-hidden">
-
               <div className="relative min-h-[100px] flex flex-col justify-center items-center">
                 <AnimatePresence mode="wait">
                   <motion.div
@@ -69,9 +78,11 @@ export default function AuthLayout({
                     className="absolute inset-0 flex flex-col items-center justify-center"
                   >
                     <h3 className="text-lg lg:text-xl font-medium leading-snug mb-4 text-center">
-                      "{quotes[currentQuote].text}"
+                      &quot;{quotes[currentQuote].text}&quot;
                     </h3>
-                    <p className="text-xs lg:text-sm font-medium text-white/80 text-center">- {quotes[currentQuote].author}</p>
+                    <p className="text-xs lg:text-sm font-medium text-white/80 text-center">
+                      - {quotes[currentQuote].author}
+                    </p>
                   </motion.div>
                 </AnimatePresence>
               </div>
@@ -83,7 +94,11 @@ export default function AuthLayout({
                     <button
                       key={idx}
                       onClick={() => setCurrentQuote(idx)}
-                      className={`w-2.5 h-2.5 rounded-full transition-colors ${idx === currentQuote ? 'bg-white shadow-sm' : 'bg-white/30 hover:bg-white/50 cursor-pointer'}`}
+                      className={`w-2.5 h-2.5 rounded-full transition-colors ${
+                        idx === currentQuote
+                          ? "bg-white shadow-sm"
+                          : "bg-white/30 hover:bg-white/50 cursor-pointer"
+                      }`}
                       aria-label={`Go to quote ${idx + 1}`}
                     />
                   ))}
@@ -114,10 +129,23 @@ export default function AuthLayout({
           {/* Desktop Logo Only (Hidden on Mobile) */}
           <div className="hidden lg:flex items-center justify-between w-full max-w-md mx-auto mb-16">
             <Link href={`/${locale}`} className="flex items-center space-x-2">
-              <Image src={logo} alt="Lmverse Logo" width={32} height={32} className="w-8 h-8 object-contain" />
-              <span className={`text-xl font-bold text-slate-800 dark:text-white ${nunito.className}`}>Lmverse</span>
+              <Image
+                src={logo}
+                alt="Lmverse Logo"
+                width={32}
+                height={32}
+                className="w-8 h-8 object-contain"
+              />
+              <span
+                className={`text-xl font-bold text-slate-800 dark:text-white ${nunito.className}`}
+              >
+                Lmverse
+              </span>
             </Link>
-            <Link href={`/${locale}`} className="text-sm font-semibold text-slate-500 hover:text-blue-500 transition-colors">
+            <Link
+              href={`/${locale}`}
+              className="text-sm font-semibold text-slate-500 hover:text-blue-500 transition-colors"
+            >
               {returnHome("title")}
             </Link>
           </div>
@@ -126,7 +154,6 @@ export default function AuthLayout({
             {children}
           </main>
         </div>
-
       </div>
     </div>
   );

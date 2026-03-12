@@ -1,14 +1,13 @@
 import { Inter } from "next/font/google";
-import { NextIntlClientProvider } from 'next-intl';
+import { NextIntlClientProvider } from "next-intl";
 import { ltSuperior } from "@/constants/fonts";
-import { AuthProvider } from "@/components/AuthProvider";
+// import { AuthProvider } from "@/components/AuthProvider";
 import type { Metadata } from "next";
-import { notFound } from 'next/navigation';
-import { routing } from '@/i18n/routing';
-import { setRequestLocale, getMessages } from 'next-intl/server';
-
-
-
+import { notFound } from "next/navigation";
+import { routing } from "@/i18n/routing";
+import { setRequestLocale, getMessages } from "next-intl/server";
+import { Locale } from "@/types/types";
+import { AuthProvider } from "@/providers/AuthProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -20,6 +19,11 @@ export const metadata: Metadata = {
   description:
     "LmVerse is a platform for learning and turoring international languages",
 };
+type LocaleProps = {
+  params: {
+    locale: Locale;
+  };
+};
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -27,9 +31,13 @@ export function generateStaticParams() {
 type Props = {
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
+  // params: {
+  //   locale: string;
+  // };
 };
 export default async function LocaleLayout({ children, params }: Props) {
   const { locale } = await params;
+  console.log(locale);
   if (!routing.locales.includes(locale as any)) {
     notFound();
   }
@@ -41,7 +49,8 @@ export default async function LocaleLayout({ children, params }: Props) {
   const messages = await getMessages();
 
   // Basic RTL support based on locale
-  const dir = locale === 'ar' || locale === 'he' ? 'rtl' : 'ltr';
+  const dir =
+    locale === "en" || locale === "ru" || locale === "fr" ? "ltr" : "rlt";
 
   return (
     <div
@@ -52,7 +61,7 @@ export default async function LocaleLayout({ children, params }: Props) {
     >
       <NextIntlClientProvider messages={messages}>
         <AuthProvider>
-          {children}
+        {children}
         </AuthProvider>
       </NextIntlClientProvider>
     </div>

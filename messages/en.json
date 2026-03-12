@@ -1,10 +1,4 @@
 {
-  "students": {
-    "title": "Students"
-  },
-  "tutors": {
-    "title": "Tutors"
-  },
   "page": {
     "getStarted": {
       "main": "Get started by editing",
@@ -354,5 +348,16 @@
   },
   "returnHome": {
     "title": "Return to Home"
+  },
+  "adminDashboard":{
+    "title":"Admin"
+
+  },
+  "StudentDashboard":{
+    "title":"Student"
+
+  },
+  "TutorDashboard":{
+    "title":"Tutor"
   }
 }

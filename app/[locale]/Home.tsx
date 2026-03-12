@@ -17,7 +17,8 @@ import Footer from "@/components/Footer";
 import BookConsultationModal from "@/components/BookConsultationModal";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
-
+import Navbar from "@/components/Navbar";
+import { background } from "@/constants/images";
 export default function Home() {
   const t = useTranslations("home");
   const [modalOpen, setModalOpen] = useState(false);
@@ -31,6 +32,17 @@ export default function Home() {
   return (
     <>
       <main>
+        {/* Background SVG only covers the hero viewport */}
+      <div className="absolute top-0 left-0 w-full h-screen -z-10 pointer-events-none">
+        <Image
+          src={background}
+          alt=""
+          aria-hidden
+          className="opacity-50 object-cover w-full h-full"
+        />
+      </div>
+      <Navbar />
+
         {/* ── Hero ─────────────────────────────────────── */}
         <section className="relative overflow-hidden">
           <div className="relative z-10 md:px-40 px-5 pt-10 pb-16 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">

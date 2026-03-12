@@ -1,23 +1,22 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import Link from 'next/link';
-import { AlertCircle, Loader2, CheckCircle2 } from 'lucide-react';
+import React, { useState } from "react";
+import Link from "next/link";
+import { AlertCircle, Loader2, CheckCircle2 } from "lucide-react";
 import { EyeToggleIcon } from "@/components/ui/animated-state-icons";
 import { useTranslations, useLocale } from "next-intl";
-import { signUpWithEmail } from "@/store/api/authApi";
 
 export default function Signup() {
   const locale = useLocale();
   const t = useTranslations("auth.signup");
 
   const [form, setForm] = useState({
-    firstName: '',
-    middleName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    password: '',
+    firstName: "",
+    middleName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [agreed, setAgreed] = useState(false);
@@ -26,7 +25,7 @@ export default function Signup() {
   const [success, setSuccess] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e: React.SubmitEvent) => {
@@ -34,22 +33,23 @@ export default function Signup() {
     setError(null);
     setIsLoading(true);
 
-    const fullName = [form.firstName, form.middleName, form.lastName].filter(Boolean).join(' ');
+    const fullName = [form.firstName, form.middleName, form.lastName]
+      .filter(Boolean)
+      .join(" ");
 
-    const result = await signUpWithEmail({
+    const ROLE = "student";
+
+    const PAYLOAD = {
       email: form.email,
       password: form.password,
       fullName,
       phone: form.phone,
-      role: 'student',
-    });
+      role: ROLE,
+    };
+
+    console.log(PAYLOAD);
 
     setIsLoading(false);
-
-    if (result.error) {
-      setError(result.error);
-      return;
-    }
 
     setSuccess(true);
   };
@@ -61,10 +61,15 @@ export default function Signup() {
           <CheckCircle2 className="w-8 h-8 text-green-600 dark:text-green-400" />
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Account created!</h2>
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+            Account created!
+          </h2>
           <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-            Welcome to LMVerse. You can now{' '}
-            <Link href={`/${locale}/login`} className="font-semibold text-blue-600 dark:text-blue-400 hover:underline">
+            Welcome to LMVerse. You can now{" "}
+            <Link
+              href={`/${locale}/login`}
+              className="font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+            >
               log in
             </Link>
             .
@@ -78,8 +83,12 @@ export default function Signup() {
     <div className="w-full space-y-6 animate-in fade-in duration-500">
       {/* Title */}
       <div>
-        <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">{t("title")}</h2>
-        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">{t("subtitle")}</p>
+        <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">
+          {t("title")}
+        </h2>
+        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+          {t("subtitle")}
+        </p>
       </div>
 
       {/* Error banner */}
@@ -159,7 +168,10 @@ export default function Signup() {
               onChange={handleChange}
               className="w-full h-8 px-2 outline-none text-sm bg-transparent dark:text-white"
               onInput={(e) => {
-                e.currentTarget.value = e.currentTarget.value.replace(/[^\d+()\s-]/g, '');
+                e.currentTarget.value = e.currentTarget.value.replace(
+                  /[^\d+()\s-]/g,
+                  ""
+                );
               }}
             />
           </div>
@@ -200,11 +212,24 @@ export default function Signup() {
             />
           </div>
           <div className="ml-3 text-sm">
-            <label htmlFor="terms" className="text-slate-600 dark:text-slate-400">
-              {t("agreement1")}{' '}
-              <a href="#" className="font-medium text-blue-600 dark:text-blue-400 hover:underline">{t("terms")}</a>{' '}
-              {t("and")}{' '}
-              <a href="#" className="font-medium text-blue-600 dark:text-blue-400 hover:underline">{t("privacy")}</a>
+            <label
+              htmlFor="terms"
+              className="text-slate-600 dark:text-slate-400"
+            >
+              {t("agreement1")}{" "}
+              <a
+                href="#"
+                className="font-medium text-blue-600 dark:text-blue-400 hover:underline"
+              >
+                {t("terms")}
+              </a>{" "}
+              {t("and")}{" "}
+              <a
+                href="#"
+                className="font-medium text-blue-600 dark:text-blue-400 hover:underline"
+              >
+                {t("privacy")}
+              </a>
             </label>
           </div>
         </div>
@@ -222,8 +247,11 @@ export default function Signup() {
 
       <div className="text-center mt-6 pt-4 border-t border-slate-100 dark:border-slate-800">
         <p className="text-sm text-slate-500 dark:text-slate-400">
-          {t("haveAccount")}{' '}
-          <Link href={`/${locale}/login`} className="font-semibold text-blue-600 dark:text-blue-400 hover:underline transition-all">
+          {t("haveAccount")}{" "}
+          <Link
+            href={`/${locale}/login`}
+            className="font-semibold text-blue-600 dark:text-blue-400 hover:underline transition-all"
+          >
             {t("loginLink")}
           </Link>
         </p>

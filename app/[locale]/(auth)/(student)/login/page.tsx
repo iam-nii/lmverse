@@ -1,57 +1,67 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import Link from 'next/link';
-import { Mail, Check, AlertCircle, Loader2 } from 'lucide-react';
+import React, { useState } from "react";
+import Link from "next/link";
+import { Mail, Check, AlertCircle, Loader2 } from "lucide-react";
 import { EyeToggleIcon } from "@/components/ui/animated-state-icons";
 import { useTranslations, useLocale } from "next-intl";
-import { signInWithEmail } from "@/store/api/authApi";
 import { useRouter } from "next/navigation";
+import { userSignInType } from "@/types/userTypes";
+import { signInWithEmail } from "@/lib/auth/authApi";
 
 export default function Login() {
   const locale = useLocale();
   const t = useTranslations("auth.login");
   const router = useRouter();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     setError(null);
     setIsLoading(true);
 
-    const result = await signInWithEmail(email, password);
+    const PAYLOAD: userSignInType = {
+      email,
+      password,
+    };
 
-    setIsLoading(false);
+    // console.log(PAYLOAD);
 
+    const result = await signInWithEmail(PAYLOAD);
     if (result.error) {
-      setError(result.error);
-      return;
-    }
+      setError(error);
+    } else if (result.data) {
+      const data = result.data.user.user_metadata;
+      setIsLoading(false);
 
-    // Redirect based on role
-    switch (result.role) {
-      case 'admin':
-        router.push(`/${locale}/users/admin`);
-        break;
-      case 'tutor':
-        router.push(`/${locale}/users/tutors`);
-        break;
-      default:
-        router.push(`/${locale}/users/students`);
+      // Redirect based on role
+      switch (data.role) {
+        case "admin":
+          router.push(`/${locale}/dashboard/admin`);
+          break;
+        case "tutor":
+          router.push(`/${locale}/dashboard/tutor`);
+          break;
+        default:
+          router.push(`/${locale}/dashboard/student`);
+      }
     }
+    setIsLoading(false);
   };
 
   return (
     <div className="w-full space-y-8 animate-in fade-in duration-500">
       {/* Title */}
       <div>
-        <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">{t("title")}</h2>
+        <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">
+          {t("title")}
+        </h2>
         <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
           {t("subtitle")}
         </p>
@@ -111,14 +121,23 @@ export default function Login() {
         <div className="flex items-center justify-between pt-1">
           <label className="flex items-center space-x-2 cursor-pointer group">
             <div
-              className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${rememberMe ? 'bg-blue-600 border-blue-600 dark:bg-blue-500 dark:border-blue-500' : 'border-slate-300 dark:border-slate-700 group-hover:border-blue-500'}`}
+              className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${
+                rememberMe
+                  ? "bg-blue-600 border-blue-600 dark:bg-blue-500 dark:border-blue-500"
+                  : "border-slate-300 dark:border-slate-700 group-hover:border-blue-500"
+              }`}
               onClick={() => setRememberMe(!rememberMe)}
             >
               {rememberMe && <Check className="h-3.5 w-3.5 text-white" />}
             </div>
-            <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{t("rememberMe")}</span>
+            <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+              {t("rememberMe")}
+            </span>
           </label>
-          <Link href={`/${locale}/forgot-password`} className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 transition-colors">
+          <Link
+            href={`/${locale}/forgot-password`}
+            className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 transition-colors"
+          >
             {t("forgotPassword")}
           </Link>
         </div>
@@ -135,8 +154,11 @@ export default function Login() {
       </form>
 
       <p className="text-center text-sm text-slate-500 dark:text-slate-400 mt-8">
-        {t("noAccount")}{' '}
-        <Link href={`/${locale}/signup`} className="font-semibold text-blue-600 dark:text-blue-400 hover:underline transition-all">
+        {t("noAccount")}{" "}
+        <Link
+          href={`/${locale}/signup`}
+          className="font-semibold text-blue-600 dark:text-blue-400 hover:underline transition-all"
+        >
           {t("signUpLink")}
         </Link>
       </p>
