@@ -61,7 +61,7 @@ export const Sidebar = ({
     <aside
       className={`
     flex flex-col
-    ${isOpen ? "w-60" : "w-16"}
+    ${isOpen ? "w-80" : "w-16"}
     transition-all duration-200
     overflow-hidden
     border
@@ -70,7 +70,6 @@ export const Sidebar = ({
     border-neutral-700 dark:border-neutral-300
     rounded-3xl
     py-8
-    h-full
     sticky top-0
     shadow-lg shadow-black/20
   `}
@@ -123,9 +122,13 @@ export const Sidebar = ({
         })}
       </ul>
 
-      <div className="flex flex-col gap-2 items-center justify-center px-5 mt-40">
+      <div
+        className={`flex flex-col gap-2 items-center justify-center px-5 mt-40 ${
+          isOpen ? "block" : "hidden"
+        }`}
+      >
         <LocaleSwitcher triggerClassName="w-full" />
-        <LogoutButton className="w-full bg-red-400" />
+        <LogoutButton className="w-full bg-red-500 text-white" />
       </div>
     </aside>
   );
