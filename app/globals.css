@@ -61,6 +61,7 @@
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
+
   --logo: #b7b7b7;
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -95,7 +96,7 @@
 }
 
 .dark {
-  --background: #2C2C2C;
+  --background: #2c2c2c;
   --foreground: #fff;
   --logo: #1f4163;
   --card: oklch(0.205 0 0);
@@ -138,15 +139,15 @@
   }
 }
 
-.container-gradient {
+/* .container-gradient {
   /* Ellipse 9 */
-  position: absolute;
-  width: 498.65px;
-  height: 923.4px;
-  left: 891.28px;
-  top: 0px;
+/* position: absolute; */
+/* width: 498.65px; */
+/* height: 923.4px; */
+/* left: 891.28px; */
+/* top: 0px; */
 
-  background: linear-gradient(180deg, rgba(14, 60, 141, 0.17) 0%, #c8ffd8 100%);
-  filter: blur(200px);
-  transform: matrix(1, 0, 0, -1, 0, 0);
-}
+/* background: linear-gradient(180deg, rgba(14, 60, 141, 0.17) 0%, #c8ffd8 100%); */
+/* filter: blur(200px); */
+/* transform: matrix(1, 0, 0, -1, 0, 0); */
+/* } */

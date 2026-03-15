@@ -354,5 +354,22 @@
   },
   "returnHome": {
     "title": "На главную"
+  },
+  "adminDashboard": {
+    "title": "Панель администратора",
+    "routes": {
+      "dashboard": "Панель администратора",
+      "courses": "Курсы",
+      "teachers": "Преподаватели",
+      "students": "Студенты",
+      "settings": "Настройки",
+      "profile": "Профиль"
+    }
+  },
+  "StudentDashboard": {
+    "title": "Студенческий кабинет"
+  },
+  "TutorDashboard": {
+    "title": "Преподавательский кабинет"
   }
 }

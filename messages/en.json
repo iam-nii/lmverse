@@ -349,15 +349,21 @@
   "returnHome": {
     "title": "Return to Home"
   },
-  "adminDashboard":{
-    "title":"Admin"
-
+  "adminDashboard": {
+    "title": "Dashboard Page",
+    "routes": {
+      "dashboard": "Dashboard",
+      "courses": "Courses",
+      "teachers": "Teachers",
+      "students": "Students",
+      "settings": "Settings",
+      "profile": "Profile"
+    }
   },
-  "StudentDashboard":{
-    "title":"Student"
-
+  "StudentDashboard": {
+    "title": "Student"
   },
-  "TutorDashboard":{
-    "title":"Tutor"
+  "TutorDashboard": {
+    "title": "Tutor"
   }
 }

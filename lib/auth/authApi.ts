@@ -1,7 +1,5 @@
-import { useRouter } from "next/navigation";
 import { createClient } from "../supabase/client";
 import { userSignInType, userSignUpType } from "@/types/userTypes";
-import { User } from "@supabase/supabase-js";
 
 export async function SignupEmailPassword(PAYLOAD: userSignUpType) {
   const supabase = createClient();
@@ -42,11 +40,10 @@ export async function SignOut() {
 export async function sendPasswordResetEmail(email: string) {
   const supabase = createClient();
 
-  const {error} = await supabase.auth.resetPasswordForEmail(email, {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: `${window.location.origin}/`,
   });
-  if(error)
-    return {error: error.message};
+  if (error) return { error: error.message };
 }
 
 export async function updatePassword(password: string) {

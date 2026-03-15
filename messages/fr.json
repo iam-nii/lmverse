@@ -349,16 +349,21 @@
   "returnHome": {
     "title": "Retour à l'accueil"
   },
-  "adminDashboard":{
-    "title":"Admin"
-
+  "adminDashboard": {
+    "title": "Tableau de bord",
+    "routes": {
+      "dashboard": "Tableau de bord",
+      "courses": "Cours",
+      "teachers": "Enseignants",
+      "students": "Étudiants",
+      "settings": "Paramètres",
+      "profile": "Profil"
+    }
   },
-  "StudentDashboard":{
-    "title":"Admin"
-
+  "StudentDashboard": {
+    "title": "Tableau de bord"
   },
-  "TutorDashboard":{
-    "title":"Admin"
-
+  "TutorDashboard": {
+    "title": "Tableau de bord"
   }
 }

@@ -1,4 +1,5 @@
 import logo from "@/public/navbar/logo.webp";
+import logoDark from "@/public/logo_dark_svg.svg";
 import background from "@/public/bg-gradient.svg";
 
 // Languages
@@ -31,6 +32,7 @@ import Backgound3 from "@/public/backgrounds/background3.png";
 
 export {
   logo,
+  logoDark,
   WhyJoinUs,
   background,
   Backgound2,
