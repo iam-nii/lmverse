@@ -2,7 +2,6 @@
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "./ui/button";
-import Image from "next/image";
 import { useEffect, useEffectEvent, useState } from "react";
 
 export default function ThemeSwitch() {
@@ -32,9 +31,13 @@ export default function ThemeSwitch() {
       suppressHydrationWarning={true}
       variant="outline"
       size="icon"
-      className="rounded-full"
+      className="rounded-full hover:cursor-pointer"
     >
-      {resolvedTheme === "light" ? <Moon /> : <Sun />}
+      {resolvedTheme === "light" ? (
+        <Moon stroke="black" />
+      ) : (
+        <Sun stroke="black" />
+      )}
     </Button>
   );
 }

@@ -23,8 +23,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
-
-const LocaleSwitcher: FC = () => {
+type triggerProps = {
+  triggerClassName?: string;
+};
+const LocaleSwitcher: FC<triggerProps> = ({ triggerClassName }) => {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
@@ -43,15 +45,18 @@ const LocaleSwitcher: FC = () => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="flex flex-row items-center gap-2">
+      <DropdownMenuTrigger asChild className={triggerClassName}>
+        <Button
+          variant="outline"
+          className="flex flex-row items-center gap-2 border-1 border-black cursor-pointer"
+        >
           <Image
             src={locale === "en" ? eng : locale === "ru" ? rus : fr}
             alt={languages[locale]?.label || "Language"}
             width={20}
             height={20}
           />
-          {languages[locale]?.label || "ENG"}
+          <p className="text-black">{languages[locale]?.label || "ENG"}</p>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-fit align-start">
