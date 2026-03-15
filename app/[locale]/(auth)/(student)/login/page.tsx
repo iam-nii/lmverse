@@ -35,7 +35,8 @@ export default function Login() {
 
     const result = await signInWithEmail(PAYLOAD);
     if (result.error) {
-      setError(error);
+      console.log(result.error);
+      setError(result.error);
     } else if (result.data) {
       const data = result.data.user.user_metadata;
       setIsLoading(false);
