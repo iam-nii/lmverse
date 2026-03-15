@@ -1,23 +1,29 @@
-import {create} from "zustand";
-import { Session, User } from "@supabase/supabase-js";
+import { create } from "zustand";
+import { AuthState } from "@/types/types";
 
-type AuthState = {
-    user: User | null
-    session: Session | null
-    loading: boolean 
-    setSession: (session: Session | null) => void
-}
+export const useAuthStore = create<AuthState>((set) => ({
+  user: null,
+  session: null,
+  loading: true,
+  error: null,
+  role: null,
 
-
-export const useAuthStore = create<AuthState>((set)=>({
- user: null,
- session: null,
- loading: true,
-
-//  Actions
- setSession: (session)=> set({
-    session,
-    user: session?.user ?? null,
-    loading: false
- })
-}))
+  //  Actions
+  setSession: (session) =>
+    set({
+      session,
+      user: session?.user ?? null,
+      loading: false,
+    }),
+  setLoading: (loading) => set({ loading }),
+  setError: (error) => set({ error }),
+  setRole: (role) => set({ role }),
+  logout: () =>
+    set({
+      user: null,
+      session: null,
+      role: null,
+      loading: false,
+      error: null,
+    }),
+}));
