@@ -5,6 +5,7 @@ import Link from "next/link";
 import { AlertCircle, Loader2, CheckCircle2 } from "lucide-react";
 import { EyeToggleIcon } from "@/components/ui/animated-state-icons";
 import { useTranslations, useLocale } from "next-intl";
+import { SignUpOptions, signUpWithEmail } from "@/store/api/authApi";
 
 export default function Signup() {
   const locale = useLocale();
@@ -39,7 +40,7 @@ export default function Signup() {
 
     const ROLE = "student";
 
-    const PAYLOAD = {
+    const PAYLOAD: SignUpOptions = {
       email: form.email,
       password: form.password,
       fullName,
@@ -47,10 +48,12 @@ export default function Signup() {
       role: ROLE,
     };
 
-    console.log(PAYLOAD);
-
+    // console.log(PAYLOAD);
+    const result = await signUpWithEmail(PAYLOAD);
+    if (result.error) {
+      setError(result.error);
+    }
     setIsLoading(false);
-
     setSuccess(true);
   };
 
@@ -65,7 +68,8 @@ export default function Signup() {
             Account created!
           </h2>
           <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-            Welcome to LMVerse. You can now{" "}
+            Welcome to LMVerse. Please check your email for verification. You
+            can Login after verification.
             <Link
               href={`/${locale}/login`}
               className="font-semibold text-blue-600 dark:text-blue-400 hover:underline"
