@@ -52,6 +52,7 @@ export default function Signup() {
     const result = await signUpWithEmail(PAYLOAD);
     if (result.error) {
       setError(result.error);
+      return;
     }
     setIsLoading(false);
     setSuccess(true);

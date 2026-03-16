@@ -5,16 +5,13 @@ import Link from "next/link";
 import { Mail, AlertCircle, Loader2 } from "lucide-react";
 import { EyeToggleIcon } from "@/components/ui/animated-state-icons";
 import { useTranslations, useLocale } from "next-intl";
-// import { signInWithEmail } from "@/store/api/authApi";
-import { useRouter } from "next/navigation";
-import { signInWithEmail } from "@/lib/auth/authApi";
+import { signInWithEmail } from "@/store/api/authApi";
 import { userSignInType } from "@/types/userTypes";
 
 export default function AdminLogin() {
   const locale = useLocale();
   const tAdmin = useTranslations("auth.adminLogin");
   const tLogin = useTranslations("auth.login");
-  const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,12 +23,12 @@ export default function AdminLogin() {
     e.preventDefault();
     setError(null);
     setIsLoading(true);
-    const PAYLOAD:userSignInType = {
+    const PAYLOAD: userSignInType = {
       email,
-      password
-    }
+      password,
+    };
 
-    const result = await signInWithEmail(PAYLOAD);
+    const result = await signInWithEmail(PAYLOAD.email, PAYLOAD.password);
 
     setIsLoading(false);
 
