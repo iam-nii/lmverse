@@ -64,16 +64,16 @@ export async function signInWithEmail(email: string, password: string) {
     }
 
     // Guard: pending tutors cannot log in
-    if (profile.role === "tutor" && profile.status === "pending") {
-      console.warn("[AuthAPI] Pending tutor blocked.");
-      await supabase.auth.signOut();
-      logout();
-      setLoading(false);
-      const pendingError =
-        "Your account is pending admin approval. You will be notified once approved.";
-      setError(pendingError);
-      return { error: pendingError };
-    }
+    // if (profile.role === "tutor" && profile.status === "pending") {
+    //   console.warn("[AuthAPI] Pending tutor blocked.");
+    //   await supabase.auth.signOut();
+    //   logout();
+    //   setLoading(false);
+    //   const pendingError =
+    //     "Your account is pending admin approval. You will be notified once approved.";
+    //   setError(pendingError);
+    //   return { error: pendingError };
+    // }
 
     console.log("[AuthAPI] Login sequence complete. Role:", profile.role);
     setSession(data.session);
