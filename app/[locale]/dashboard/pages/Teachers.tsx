@@ -16,7 +16,9 @@ export default function Teachers() {
         {tutors.tutors.map((tutor) => (
           <div key={tutor.id}>
             <h2>{tutor.full_name}</h2>
-            <p>{tutor.email}</p>
+            {/* <p>{tutor.email}</p> */}
+            <p>{tutor.about}</p>
+            <p>{tutor.experience}</p>
           </div>
         ))}
       </div>
