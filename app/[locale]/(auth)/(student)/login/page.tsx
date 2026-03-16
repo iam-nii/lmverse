@@ -7,7 +7,7 @@ import { EyeToggleIcon } from "@/components/ui/animated-state-icons";
 import { useTranslations, useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import { userSignInType } from "@/types/userTypes";
-import { signInWithEmail } from "@/lib/auth/authApi";
+import { signInWithEmail } from "@/store/api/authApi";
 
 export default function Login() {
   const locale = useLocale();
@@ -33,26 +33,30 @@ export default function Login() {
 
     // console.log(PAYLOAD);
 
-    const result = await signInWithEmail(PAYLOAD);
+    const result = await signInWithEmail(PAYLOAD.email, PAYLOAD.password);
     if (result.error) {
       console.log(result.error);
       setError(result.error);
-    } else if (result.data) {
-      const data = result.data.user.user_metadata;
       setIsLoading(false);
 
-      // Redirect based on role
-      switch (data.role) {
-        case "admin":
-          router.push(`/${locale}/dashboard/admin`);
-          break;
-        case "tutor":
-          router.push(`/${locale}/dashboard/tutor`);
-          break;
-        default:
-          router.push(`/${locale}/dashboard/student`);
-      }
+      return;
     }
+    // } else if (result.data) {
+    //   const data = result.data.user.user_metadata;
+    //   setIsLoading(false);
+
+    //   // Redirect based on role
+    //   switch (data.role) {
+    //     case "admin":
+    //       router.push(`/${locale}/dashboard/admin`);
+    //       break;
+    //     case "tutor":
+    //       router.push(`/${locale}/dashboard/tutor`);
+    //       break;
+    //     default:
+    //       router.push(`/${locale}/dashboard/student`);
+    //   }
+    // }
     setIsLoading(false);
   };
 
