@@ -31,16 +31,45 @@ export const useTutorStore = create<TutorStore>((set, get) => ({
     set({ loading: true, error: null });
 
     try {
-      const { data, error } = await supabase
-        .from("users")
-        .select("*")
-        .eq("role", "tutor")
-        .order("created_at", { ascending: false });
+      // const { data, error } = await supabase
+      //   .from("users")
+      //   .select("*")
+      //   .eq("role", "tutor")
+      //   .order("created_at", { ascending: false });
+
+      const {data, error} = await supabase
+      .from("tutors")
+      .select(`*,
+        users(
+        email,
+        full_name,
+        phone_number,
+        role,
+        status,
+        created_at,
+        avatar,
+        updated_at
+        )`)
 
       if (error) throw error;
 
+      const transformedTutors = (data as any[]).map(item => ({
+  id: item.user_id,
+  about: item.about,
+  experience: item.experience_years?.toString() || '',
+  is_approved: item.is_approved,
+  email: item.users.email,
+  full_name: item.users.full_name,
+  phone_number: item.users.phone_number || '',
+  role: item.users.role,
+  status: item.users.status,
+  profile_picture: item.users.avatar || '',
+  created_at: item.users.created_at,
+  updated_at: item.users.updated_at
+}));
+
       const tutorsData: Tutors = {
-        tutors: (data as Tutor[]) || [],
+        tutors: transformedTutors,
       };
 
       set({

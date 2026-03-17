@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Mail, Check, AlertCircle, Loader2 } from "lucide-react";
 import { EyeToggleIcon } from "@/components/ui/animated-state-icons";
@@ -8,6 +8,7 @@ import { useTranslations, useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import { userSignInType } from "@/types/userTypes";
 import { signInWithEmail } from "@/store/api/authApi";
+import {useAuthStore} from '@/store/AuthStore';
 
 export default function Login() {
   const locale = useLocale();
@@ -20,6 +21,14 @@ export default function Login() {
   const [rememberMe, setRememberMe] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const {user} = useAuthStore();
+
+  useEffect(()=>{
+    if(user){
+      
+    }
+  },[user])
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
