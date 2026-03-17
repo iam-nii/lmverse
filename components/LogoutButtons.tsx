@@ -1,5 +1,5 @@
 import { Button } from "./ui/button";
-import { SignOut } from "@/lib/auth/authApi";
+import {signOut} from '@/store/api/authApi';
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 
@@ -14,7 +14,7 @@ export const LogoutButton = ({
   const router = useRouter();
   const locale = useLocale();
   const logout = () => {
-    SignOut();
+    signOut();
     router.replace(`/${locale}/login`);
   };
   return (
