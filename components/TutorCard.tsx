@@ -20,11 +20,17 @@ interface TutorCardWithAvatarProps {
 export default function TutorCardWithAvatar({ 
   tutor, 
   rating = 4.9, 
-  lessonsCount = 185,
-  coursesCount = 16,
-  studentsCount = 100,
-  hourlyRate = 20
+  lessonsCount = 0,
+  coursesCount = 0,
+  studentsCount = 0,
+  hourlyRate = 0
 }: TutorCardWithAvatarProps) {
+
+  console.log(tutor.is_approved);
+
+  const verifyTutor = (tutorId: string) =>{
+
+  }
   return (
     <div className="max-w-sm bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-xl transition-all duration-300">
       {/* Header with rating and badge */}
@@ -89,8 +95,10 @@ export default function TutorCardWithAvatar({
           <span className="text-2xl font-bold text-gray-900">{hourlyRate}</span>
           <span className="text-gray-400 text-sm ml-1">/hr</span>
         </div>
-        {tutor.is_approved ? (
-            <button className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium rounded-full text-sm shadow-md hover:shadow-lg transition-all duration-200">
+        {!tutor.is_approved ? (
+            <button
+            onClick={()=>verifyTutor(tutor.id)}
+            className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium rounded-full text-sm shadow-md hover:shadow-lg transition-all duration-200">
           Approve
         </button>
         ) :

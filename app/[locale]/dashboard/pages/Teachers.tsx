@@ -19,11 +19,11 @@ export default function Teachers() {
           key={tutor.id} 
           tutor={tutor}
           // These could come from your database or be calculated
-          rating={4.9}
-          lessonsCount={185}
-          coursesCount={16}
-          studentsCount={100}
-          hourlyRate={20}
+          rating={0}
+          lessonsCount={0}
+          coursesCount={0}
+          studentsCount={0}
+          hourlyRate={0}
         />
       ))}
       </div>
