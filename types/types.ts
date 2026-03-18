@@ -39,6 +39,24 @@ export interface Tutors {
   tutors: Tutor[];
 }
 
+export interface IStudent {
+  id: string;
+  about: string;
+  email: string;
+  full_name: string;
+  phone_number: string;
+  role: string;
+  status: string;
+  profile_picture: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Students {
+  students: IStudent[];
+}
+
+
 export type AppRole = "admin" | "tutor" | "student" | "pending";
 
 export type AuthState = {

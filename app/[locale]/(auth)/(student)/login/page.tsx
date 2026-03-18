@@ -8,7 +8,11 @@ import { useTranslations, useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import { userSignInType } from "@/types/userTypes";
 import { signInWithEmail } from "@/store/api/authApi";
+<<<<<<< HEAD
 import { useAuthStore } from "@/store/AuthStore";
+=======
+import {useAuthStore} from '@/store/AuthStore';
+>>>>>>> 9a6f50cc112e01ffa70044a7cea90f19fa151148
 
 export default function Login() {
   const locale = useLocale();
@@ -31,6 +35,18 @@ export default function Login() {
   const [rememberMe, setRememberMe] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const {user} = useAuthStore();
+
+  useEffect(()=>{
+    if(user){
+      const userRole = user.user_metadata.role;
+      // console.log(user)
+      router.replace(`/dashboard/${userRole}`)
+      
+      
+    }
+  },[user])
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
