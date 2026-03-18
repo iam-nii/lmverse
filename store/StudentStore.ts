@@ -1,32 +1,32 @@
 import { create } from "zustand";
 import { createClient } from "@/lib/supabase/client";
-import { Tutor, Tutors } from "@/types/types";
+import { IStudent, Students } from "@/types/types";
 
-interface TutorStore {
-  tutors: Tutors;
+interface IStudentStore {
+  students: Students;
   loading: boolean;
   error: string | null;
-  setTutors: (tutors: Tutors) => void;
+  setStudents: (students: Students) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
-  fetchTutors: () => Promise<Tutors>;
-  approveTutor: (tutorId: string) => Promise<void>;
-  rejectTutor: (tutorId: string) => Promise<void>;
-  updateTutorStatus: (tutorId: string, status: string) => Promise<void>;
-  getPendingTutors: () => Tutor[];
-  getApprovedTutors: () => Tutor[];
+  fetchStudents: () => Promise<Students>;
+  approveStudent: (studentId: string) => Promise<void>;
+  rejectStudent: (studentId: string) => Promise<void>;
+  updateStudentStatus: (studentId: string, status: string) => Promise<void>;
+  getPendingStudents: () => IStudent[];
+  getApprovedStudents: () => IStudent[];
 }
 
-export const useTutorStore = create<TutorStore>((set, get) => ({
-  tutors: { tutors: [] },
+export const useStudentStore = create<IStudentStore>((set, get) => ({
+  students: { students: [] },
   loading: false,
   error: null,
 
-  setTutors: (tutors: Tutors) => set({ tutors }),
+  setStudents: (students: Students) => set({ students }),
   setLoading: (loading: boolean) => set({ loading }),
   setError: (error: string | null) => set({ error }),
 
-  fetchTutors: async () => {
+  fetchStudents: async () => {
     const supabase = createClient();
     set({ loading: true, error: null });
 
@@ -37,7 +37,9 @@ export const useTutorStore = create<TutorStore>((set, get) => ({
       //   .eq("role", "tutor")
       //   .order("created_at", { ascending: false });
 
-      const { data, error } = await supabase.from("tutors").select(`*,
+      const {data, error} = await supabase
+      .from("students")
+      .select(`*,
         users(
         email,
         full_name,
@@ -47,37 +49,33 @@ export const useTutorStore = create<TutorStore>((set, get) => ({
         created_at,
         avatar,
         updated_at
-        )`);
+        )`)
 
       if (error) throw error;
 
-      const transformedTutors = data!.map((item) => ({
+      const transformedStudents = (data as any[]).map(item => ({
         id: item.user_id,
         about: item.about,
-        experience: item.experience_years?.toString() || "",
-        is_approved: item.is_approved,
         email: item.users.email,
         full_name: item.users.full_name,
-        phone_number: item.users.phone_number || "",
+        phone_number: item.users.phone_number || '',
         role: item.users.role,
         status: item.users.status,
-        profile_picture: item.users.avatar || "",
+        profile_picture: item.users.avatar || '',
         created_at: item.users.created_at,
-        updated_at: item.users.updated_at,
-      }));
+        updated_at: item.users.updated_at
+        }));
 
-      const tutorsData: Tutors = {
-        tutors: transformedTutors,
+      const studentsData: Students = {
+        students: transformedStudents,
       };
 
-      console.log(tutorsData);
-
       set({
-        tutors: tutorsData,
+        students: studentsData,
         loading: false,
       });
 
-      return tutorsData;
+      return studentsData;
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Failed to fetch tutors";
@@ -86,18 +84,18 @@ export const useTutorStore = create<TutorStore>((set, get) => ({
     }
   },
 
-  approveTutor: async (tutorId: string) => {
+  approveStudent: async (studentId: string) => {
     const supabase = createClient();
     set({ loading: true, error: null });
 
     try {
       const { error } = await supabase
-        .from("tutors")
+        .from("students")
         .update({
           status: "approved",
           is_approved: true,
         })
-        .eq("id", tutorId);
+        .eq("id", studentId);
 
       if (error) throw error;
 
@@ -106,21 +104,21 @@ export const useTutorStore = create<TutorStore>((set, get) => ({
         .update({
           updated_at: new Date().toISOString(),
         })
-        .eq("id", tutorId)
-        .eq("role", "tutor");
+        .eq("user_id", studentId)
+        .eq("role", "student");
 
       if (updateError) throw updateError;
 
       // Update local state
-      const currentTutors = get().tutors.tutors;
-      const updatedTutors = currentTutors.map((tutor) =>
-        tutor.id === tutorId
-          ? { ...tutor, status: "approved", is_approved: true }
-          : tutor
+      const currentStudents = get().students.students;
+      const updatedStudents = currentStudents.map((student) =>
+        student.id === studentId
+          ? { ...student, status: "approved", is_approved: true }
+          : student
       );
 
       set({
-        tutors: { tutors: updatedTutors },
+        students: { students: updatedStudents },
         loading: false,
       });
     } catch (error) {
@@ -131,18 +129,18 @@ export const useTutorStore = create<TutorStore>((set, get) => ({
     }
   },
 
-  rejectTutor: async (tutorId: string) => {
+  rejectStudent: async (studentId: string) => {
     const supabase = createClient();
     set({ loading: true, error: null });
 
     try {
       const { error } = await supabase
-        .from("tutors")
+        .from("students")
         .update({
           status: "rejected",
           is_approved: false,
         })
-        .eq("id", tutorId);
+        .eq("id", studentId);
 
       if (error) throw error;
 
@@ -151,21 +149,20 @@ export const useTutorStore = create<TutorStore>((set, get) => ({
         .update({
           updated_at: new Date().toISOString(),
         })
-        .eq("id", tutorId)
-        .eq("role", "tutor");
+        .eq("id", studentId)
 
       if (updateError) throw updateError;
 
       // Update local state
-      const currentTutors = get().tutors.tutors;
-      const updatedTutors = currentTutors.map((tutor) =>
-        tutor.id === tutorId
-          ? { ...tutor, status: "rejected", is_approved: false }
-          : tutor
+      const currentStudents = get().students.students;
+      const updatedStudents = currentStudents.map((student) =>
+        student.id === studentId
+          ? { ...student, status: "rejected", is_approved: false }
+          : student
       );
 
       set({
-        tutors: { tutors: updatedTutors },
+        students: { students: updatedStudents },
         loading: false,
       });
     } catch (error) {
@@ -176,7 +173,7 @@ export const useTutorStore = create<TutorStore>((set, get) => ({
     }
   },
 
-  updateTutorStatus: async (tutorId: string, status: string) => {
+  updateStudentStatus: async (studentId: string, status: string) => {
     const supabase = createClient();
     set({ loading: true, error: null });
 
@@ -184,26 +181,26 @@ export const useTutorStore = create<TutorStore>((set, get) => ({
       const isApproved = status === "approved";
 
       const { error } = await supabase
-        .from("tutors")
+        .from("students")
         .update({
           status,
           is_approved: isApproved,
           updated_at: new Date().toISOString(),
         })
-        .eq("id", tutorId);
+        .eq("id", studentId);
 
       if (error) throw error;
 
       // Update local state
-      const currentTutors = get().tutors.tutors;
-      const updatedTutors = currentTutors.map((tutor) =>
-        tutor.id === tutorId
-          ? { ...tutor, status, is_approved: isApproved }
-          : tutor
+      const currentStudents = get().students.students;
+      const updatedStudents = currentStudents.map((student) =>
+        student.id === studentId
+          ? { ...student, status, is_approved: isApproved }
+          : student
       );
 
       set({
-        tutors: { tutors: updatedTutors },
+        students: { students: updatedStudents },
         loading: false,
       });
     } catch (error) {
@@ -216,11 +213,11 @@ export const useTutorStore = create<TutorStore>((set, get) => ({
     }
   },
 
-  getPendingTutors: () => {
-    return get().tutors.tutors.filter((tutor) => tutor.status === "pending");
+  getPendingStudents: () => {
+    return get().students.students.filter((student) => student.status === "pending");
   },
 
-  getApprovedTutors: () => {
-    return get().tutors.tutors.filter((tutor) => tutor.status === "approved");
+  getApprovedStudents: () => {
+    return get().students.students.filter((student) => student.status === "approved");
   },
 }));

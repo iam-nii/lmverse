@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useTutorStore } from "@/store/TutorStore";
 import { useEffect } from "react";
+import TutorCard from "@/components/TutorCard";
 
 export default function Teachers() {
   const { fetchTutors, tutors, loading, error } = useTutorStore();
@@ -10,16 +11,20 @@ export default function Teachers() {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
   return (
-    <motion.div>
+    <motion.div className="">
       <h1>Teachers</h1>
-      <div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
         {tutors.tutors.map((tutor) => (
-          <div key={tutor.id}>
-            <h2>{tutor.full_name}</h2>
-            {/* <p>{tutor.email}</p> */}
-            <p>{tutor.about}</p>
-            <p>{tutor.experience}</p>
-          </div>
+          <TutorCard
+            key={tutor.id}
+            tutor={tutor}
+            // These could come from your database or be calculated
+            rating={0}
+            lessonsCount={0}
+            coursesCount={0}
+            studentsCount={0}
+            hourlyRate={0}
+          />
         ))}
       </div>
     </motion.div>

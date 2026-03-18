@@ -61,7 +61,7 @@ export const Sidebar = ({
     <aside
       className={`
     flex flex-col
-    ${isOpen ? "w-80" : "w-16"}
+    ${isOpen ? "min-w-80" : "min-w-16"}
     transition-all duration-200
     overflow-hidden
     border

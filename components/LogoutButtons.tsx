@@ -1,5 +1,9 @@
 import { Button } from "./ui/button";
+<<<<<<< HEAD
 import { signOut } from "@/store/api/authApi";
+=======
+import {signOut} from '@/store/api/authApi';
+>>>>>>> 9a6f50cc112e01ffa70044a7cea90f19fa151148
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 
