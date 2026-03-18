@@ -26,6 +26,10 @@ export default function Login() {
 
   useEffect(()=>{
     if(user){
+      const userRole = user.user_metadata.role;
+      // console.log(user)
+      router.replace(`/dashboard/${userRole}`)
+      
       
     }
   },[user])
