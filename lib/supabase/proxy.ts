@@ -6,19 +6,19 @@ const DEFAULT_LOCALE = "en";
 
 // Role configuration
 const roleConfig = {
-  admin:{
+  admin: {
     home: "/dashboard/admin",
-    forbidden: ["student", "tutor","login","signup"]
+    forbidden: ["student", "tutor", "login", "signup"],
   },
-  student:{
+  student: {
     home: "/dashboard/student",
-    forbidden: ["admin", "tutor","login","signup"]
+    forbidden: ["admin", "tutor", "login", "signup"],
   },
-  tutor:{
+  tutor: {
     home: "/dashboard/student",
-    forbidden: ["student", "admin","login","signup"]
-  }
-}
+    forbidden: ["student", "admin", "login", "signup"],
+  },
+};
 
 type RoleType = "admin" | "tutor" | "student";
 
@@ -35,16 +35,14 @@ export async function updateSession(
   const [, localeSegment, ...segments] = request.nextUrl.pathname.split("/");
   const pathWithoutLocale = "/" + segments.join("/"); // Path ignoring locale
   const locale = localeSegment ?? DEFAULT_LOCALE;
-  console.log("pathwithoutlocale:",pathWithoutLocale)
+  console.log("pathwithoutlocale:", pathWithoutLocale);
 
   // Check if path is public
   const isPublicRoute = publicRoutes.includes(pathWithoutLocale);
   console.log(isPublicRoute);
   // const isPublic = publicRoutes.some((route) =>
   //   pathWithoutLocale.startsWith(route)
-  // ); 
-
-
+  // );
 
   // Create Supabase client for server-side auth
   const supabase = createServerClient(
@@ -67,35 +65,44 @@ export async function updateSession(
     }
   );
 
-  const { data: {user}, error } = await supabase.auth.getUser();
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
   // console.log(user)
- 
+
   const userRole = user?.user_metadata?.role as RoleType | undefined;
 
   // --- 1. Redirect "/" to default locale ---
   const rootRedirect = new URL(`/${DEFAULT_LOCALE}`, request.url);
-  if (request.nextUrl.pathname === "/" && request.nextUrl.pathname !== rootRedirect.pathname) {
+  if (
+    request.nextUrl.pathname === "/" &&
+    request.nextUrl.pathname !== rootRedirect.pathname
+  ) {
     return NextResponse.redirect(rootRedirect.toString());
   }
 
   // 2. Check if user is unauthenticated and is trying to access a dashboard
-  if(!user  && pathWithoutLocale.includes("dashboard")){
+  if (!user && pathWithoutLocale.includes("dashboard")) {
     console.log("Accessing restricted route, redirecting to login...");
     // Redirect to the login page
     console.log(locale);
-    return NextResponse.redirect(new URL(`/${locale}/login`, request.url))
+    return NextResponse.redirect(new URL(`/${locale}/login`, request.url));
   }
 
   // 3. Check if a user is trying to access a restricted page
-  if(userRole && userRole in roleConfig){
+  if (userRole && userRole in roleConfig) {
     const config = roleConfig[userRole];
-    const pathSegments = pathWithoutLocale.split('/').filter(Boolean);
-    const hasForbiddenSegment = config.forbidden.some(keyword => pathSegments.includes(keyword));
-    
+    const pathSegments = pathWithoutLocale.split("/").filter(Boolean);
+    const hasForbiddenSegment = config.forbidden.some((keyword) =>
+      pathSegments.includes(keyword)
+    );
 
-    if(hasForbiddenSegment){
-      return NextResponse.redirect(new URL(`/${locale}${config.home}`,request.url))
-    }    
+    if (hasForbiddenSegment) {
+      return NextResponse.redirect(
+        new URL(`/${locale}${config.home}`, request.url)
+      );
+    }
   }
 
   return supabaseResponse;

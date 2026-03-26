@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Backgound2, Backgound3, Hero } from "@/constants/images";
-
+import { Nunito } from "next/font/google";
 import Features from "@/components/Home/Features";
 import Courses from "@/components/Home/Courses";
 import SpeakingSection from "@/components/Home/SpeakingSection";
@@ -19,6 +19,9 @@ import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
 import Navbar from "@/components/Navbar";
 import { background } from "@/constants/images";
+
+const nunito = Nunito({ subsets: ["latin"], variable: "--font-nunito" });
+
 export default function Home() {
   const t = useTranslations("home");
   const [modalOpen, setModalOpen] = useState(false);
@@ -33,15 +36,15 @@ export default function Home() {
     <>
       <main>
         {/* Background SVG only covers the hero viewport */}
-      <div className="absolute top-0 left-0 w-full h-screen -z-10 pointer-events-none">
-        <Image
-          src={background}
-          alt=""
-          aria-hidden
-          className="opacity-50 object-cover w-full h-full"
-        />
-      </div>
-      <Navbar />
+        <div className="absolute top-0 left-0 w-full h-screen -z-10 pointer-events-none">
+          <Image
+            src={background}
+            alt=""
+            aria-hidden
+            className="opacity-50 object-cover w-full h-full"
+          />
+        </div>
+        <Navbar />
 
         {/* ── Hero ─────────────────────────────────────── */}
         <section className="relative overflow-hidden">
@@ -51,15 +54,15 @@ export default function Home() {
               <p className="text-sm font-semibold text-muted-foreground mb-2">
                 {t("hero.subtitle")}
               </p>
-              <h1 className="text-[32px] md:text-5xl font-bold leading-tight mb-4 whitespace-pre-line">
+              <h1
+                className={`text-[32px] md:text-5xl font-bold leading-tight mb-4 whitespace-pre-line`}
+              >
                 {t("hero.title")}
               </h1>
               <p className="text-muted-foreground text-sm md:text-base leading-relaxed mb-4 max-w-sm">
                 {t("hero.description")}
               </p>
-              <p className="text-sm font-semibold mb-3">
-                {t("hero.trusted")}
-              </p>
+              <p className="text-sm font-semibold mb-3">{t("hero.trusted")}</p>
               <div className="flex items-center gap-6 mb-6">
                 <div>
                   <span className="text-3xl font-bold">1000+</span>
@@ -71,7 +74,7 @@ export default function Home() {
               </div>
               <Button
                 onClick={() => openModal(t("hero.cta1"))}
-                className="bg-secondary hover:bg-secondary/90 text-white rounded-full px-8 font-semibold"
+                className="hover:bg-primary/90 text-white rounded-full px-8 font-semibold cursor-pointer"
               >
                 {t("hero.cta1")}
               </Button>
@@ -92,12 +95,7 @@ export default function Home() {
         {/* ── Features strip ──────────────────────────── */}
         <section className="relative md:px-40 px-5 pb-10">
           <div className="absolute top-0 left-0 w-full h-screen -z-10 pointer-events-none">
-            <Image
-              src={Backgound2}
-              alt=""
-              aria-hidden
-              className=""
-            />
+            <Image src={Backgound2} alt="" aria-hidden className="" />
             <Image
               src={Backgound3}
               alt=""
@@ -112,14 +110,14 @@ export default function Home() {
         <section className="md:px-40 px-5 pb-16">
           <div className="flex justify-between items-center mb-4">
             <div>
-              <p className="text-secondary uppercase font-bold text-xs tracking-wider">
+              <p className="uppercase font-bold text-xs tracking-wider">
                 available courses
               </p>
               <h2 className="text-2xl font-bold mt-1">Top Courses</h2>
             </div>
             <Button
               variant="ghost"
-              className="text-secondary bg-secondary/10 rounded-full font-semibold"
+              className=" rounded-full font-semibold cursor-pointer"
             >
               {t("featuredLevels.viewAll")}
             </Button>
@@ -137,7 +135,11 @@ export default function Home() {
         <FeaturedLevels />
 
         {/* ── Why Join Us ─────────────────────────────── */}
-        <WhyJoinUs onBookConsultation={() => openModal("register for a free trial lesson")} />
+        <WhyJoinUs
+          onBookConsultation={() =>
+            openModal("register for a free trial lesson")
+          }
+        />
 
         {/* ── Testimonials ────────────────────────────── */}
         <Testimonials />

@@ -5,6 +5,8 @@ import Link from "next/link";
 import { AlertCircle, Loader2, CheckCircle2, ArrowLeft } from "lucide-react";
 import { EyeToggleIcon } from "@/components/ui/animated-state-icons";
 import { useTranslations, useLocale } from "next-intl";
+import { SignUpOptions, signUpWithEmail } from "@/store/api/authApi";
+import { toast } from "sonner";
 
 export default function TutorSignup() {
   const locale = useLocale();
@@ -39,7 +41,7 @@ export default function TutorSignup() {
       .filter(Boolean)
       .join(" ");
 
-    const PAYLOAD = {
+    const PAYLOAD: SignUpOptions = {
       email: form.email,
       password: form.password,
       fullName,
@@ -47,6 +49,9 @@ export default function TutorSignup() {
       role: ROLE,
     };
     console.log(PAYLOAD);
+
+    const result = await signUpWithEmail(PAYLOAD);
+    if (result.error) toast.error(`Error signing up: ${result.error}`);
 
     setIsLoading(false);
 

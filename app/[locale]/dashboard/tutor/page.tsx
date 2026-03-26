@@ -2,9 +2,10 @@
 
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
+import { LogoutButton } from "@/components/LogoutButtons";
 
 const TutorsPage = () => {
-  const t = useTranslations("tutorDashboard");
+  const t = useTranslations("TutorDashboard");
 
   return (
     <div className="flex flex-col items-start gap-4">
@@ -18,6 +19,7 @@ const TutorsPage = () => {
       <p className="text-slate-600 dark:text-slate-400">
         Welcome to the tutors dashboard.
       </p>
+      <LogoutButton />
     </div>
   );
 };

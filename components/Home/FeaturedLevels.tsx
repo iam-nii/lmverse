@@ -63,14 +63,14 @@ export default function FeaturedLevels() {
             className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12"
           >
             <div>
-              <p className="text-secondary uppercase font-bold text-xs tracking-wider mb-2">
+              <p className="uppercase font-bold text-xs tracking-wider mb-2">
                 {t("whatsNew")}
               </p>
               <h2 className="text-2xl md:text-3xl font-bold">{t("title")}</h2>
             </div>
             <Button
               variant="outline"
-              className="mt-4 md:mt-0 border-secondary text-secondary hover:bg-secondary hover:text-white rounded-full transition-colors"
+              className="mt-4 md:mt-0 border-secondary rounded-full transition-colors cursor-pointer"
             >
               {t("viewAll")}
             </Button>
@@ -105,7 +105,6 @@ export default function FeaturedLevels() {
 
                 {/* Content Area */}
                 <div className="flex flex-col flex-1 px-1">
-
                   {/* Instructor row */}
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 rounded-full overflow-hidden relative border border-slate-200 dark:border-slate-700 bg-slate-200">
@@ -118,8 +117,12 @@ export default function FeaturedLevels() {
                       />
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight">Nicole Brown</p>
-                      <p className="text-xs text-slate-500 font-medium tracking-wide">Instructor</p>
+                      <p className="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight">
+                        Nicole Brown
+                      </p>
+                      <p className="text-xs text-slate-500 font-medium tracking-wide">
+                        Instructor
+                      </p>
                     </div>
                   </div>
 
@@ -143,7 +146,6 @@ export default function FeaturedLevels() {
                       Book a consultation
                     </Button>
                   </div>
-
                 </div>
               </motion.div>
             ))}

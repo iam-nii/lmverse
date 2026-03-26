@@ -6,8 +6,10 @@ import { Mail, AlertCircle, Loader2 } from "lucide-react";
 import { EyeToggleIcon } from "@/components/ui/animated-state-icons";
 import { useTranslations, useLocale } from "next-intl";
 // import { signInWithEmail } from "@/store/api/authApi";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
+import { toast } from "sonner";
+import { signInWithEmail } from "@/store/api/authApi";
 
 export default function TutorLogin() {
   const locale = useLocale();
@@ -24,8 +26,9 @@ export default function TutorLogin() {
 
   useEffect(() => {
     if (searchParams.get("error") === "pending") {
-      setError(
-        "Your account is pending admin approval. You will be notified once approved."
+      toast.error(
+        "Your account is pending admin approval. You will be notified once approved.",
+        { position: "bottom-right" }
       );
     }
   }, [searchParams]);
@@ -35,7 +38,14 @@ export default function TutorLogin() {
     setError(null);
     setIsLoading(true);
 
-    // const result = await signInWithEmail(email, password);
+    const result = await signInWithEmail(email, password);
+
+    if (result.error) {
+      toast.error(result.error, { position: "bottom-right" });
+      setIsLoading(false);
+
+      return;
+    }
 
     setIsLoading(false);
 

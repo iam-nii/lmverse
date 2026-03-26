@@ -1,7 +1,7 @@
 import { Inter } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { ltSuperior } from "@/constants/fonts";
-// import { AuthProvider } from "@/components/AuthProvider";
+import { Nunito } from "next/font/google";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";

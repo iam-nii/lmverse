@@ -1,6 +1,7 @@
 import { createClient as createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useAuthStore } from "@/store/AuthStore";
 import { AppRole } from "@/types/types";
+import { withRateLimit } from "@universal-rate-limit/nextjs";
 
 // ── Types ──────────────────────────────────────────────────────────────────
 export type SignUpOptions = {
@@ -14,8 +15,7 @@ export type SignUpOptions = {
 // ── Sign In ────────────────────────────────────────────────────────────────
 export async function signInWithEmail(email: string, password: string) {
   const supabase = createSupabaseBrowserClient();
-  const { setLoading, setError, setSession, logout, setRole } =
-    useAuthStore.getState();
+  const { setLoading, setError, setSession, setRole } = useAuthStore.getState();
 
   try {
     setLoading(true);
@@ -105,6 +105,7 @@ export async function signUpWithEmail({
 
   setLoading(true);
   setError(null);
+  console.log(role);
 
   const { error } = await supabase.auth.signUp({
     email,

@@ -110,12 +110,12 @@ function NavMenu() {
         <ThemeSwitch />
         <LocaleSwitcher />
         <Link href={`/${locale}/login`}>
-          <Button className="bg-primary hover:bg-primary/90 transition-colors text-white rounded-full">
+          <Button className="bg-primary hover:bg-primary/90 transition-colors rounded-full cursor-pointer">
             <p>{tButtons("signIn")}</p>
           </Button>
         </Link>
         <Link href={`/${locale}/signup`}>
-          <Button className="bg-secondary hover:bg-secondary/90 transition-colors text-white rounded-full">
+          <Button className="bg-blue-500 cursor-pointer hover:bg-blue-400 border-border border  rounded-full">
             {tButtons("register")}
           </Button>
         </Link>

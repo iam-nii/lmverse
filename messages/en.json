@@ -164,7 +164,7 @@
       "title": "Apply as a Tutor",
       "subtitle": "Join our expert team and start teaching students globally.",
       "pendingTitle": "Application Sent!",
-      "pendingMessage": "Your application is currently pending admin approval. You will receive an email once your account is activated.",
+      "pendingMessage": "Your application is currently pending admin approval. You will receive an email to confirm your account. Upon ocnfirmation, your account will remain locked until approved by an administrator.",
       "pendingAction": "Return to Home"
     },
     "adminLogin": {
