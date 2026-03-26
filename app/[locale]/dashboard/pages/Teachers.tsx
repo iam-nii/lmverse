@@ -5,11 +5,15 @@ import Image from "next/image";
 import { useTutorStore } from "@/store/TutorStore";
 import TutorCard from "@/components/TutorCard";
 import { Tutor } from "@/types/types";
+import { useAuthStore } from "@/store/AuthStore";
+import { DefaultAvatar } from "@/constants/images";
 
 export default function Teachers() {
   const { fetchTutors, approveTutor, rejectTutor, tutors, loading, error } =
     useTutorStore();
   const [selectedTutor, setSelectedTutor] = useState<Tutor | null>(null);
+
+  const { user } = useAuthStore();
 
   useEffect(() => {
     fetchTutors();
@@ -39,19 +43,20 @@ export default function Teachers() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="flex-1 min-h-screen bg-[#F8FAFC]"
+        className="flex-1 min-h-screen text-black dark:text-white"
       >
         {/* Top Navigation Bar */}
-        <header className="flex items-center justify-between px-8 py-4 bg-white border-b border-gray-100">
+        <header className="flex items-center justify-between px-8 py-4 ">
           <div className="flex-1 max-w-xl relative">
             <Search
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              className="absolute left-3 top-1/2 -translate-y-1/2"
               size={18}
             />
             <input
               type="text"
               placeholder="Search..."
-              className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-[#16476a]/20 transition-all font-medium"
+              className="w-full pl-10 pr-4 py-2 rounded-full text-sm focus:outline-none 
+              focus:ring-2 focus:ring-[#fff]/20 transition-all font-medium"
             />
           </div>
           <div className="flex items-center gap-4 ml-4">
@@ -61,7 +66,9 @@ export default function Teachers() {
             </button>
             <div className="w-9 h-9 rounded-full overflow-hidden border border-gray-200 bg-gray-100">
               <Image
-                src="/default-avatar.png"
+                src={
+                  user?.user_metadata?.avatar?.split("?")[0] || DefaultAvatar
+                }
                 alt="Admin"
                 width={36}
                 height={36}
@@ -74,9 +81,7 @@ export default function Teachers() {
         {/* Main Content Area */}
         <main className="p-8 max-w-[1400px] mx-auto">
           <div className="mb-8 max-w-2xl">
-            <h1 className="text-3xl font-bold text-[#1e2235] mb-2 tracking-tight">
-              Teachers
-            </h1>
+            <h1 className="text-3xl font-bold mb-2 tracking-tight">Teachers</h1>
             <p className="text-gray-500">
               Search for specific subjects and find the teachers you&apos;re
               ready to take a course with.
@@ -86,10 +91,8 @@ export default function Teachers() {
           <div className="space-y-10">
             <section>
               <div className="flex items-center justify-between mb-6 pb-2 border-b border-gray-100">
-                <h2 className="text-xl font-bold text-gray-900 tracking-tight">
-                  All Levels
-                </h2>
-                <button className="text-[#16476a] font-semibold text-sm hover:underline hover:text-[#1D4760] transition-colors">
+                <h2 className="text-xl font-bold tracking-tight">All Levels</h2>
+                <button className=" font-semibold text-sm hover:underline hover:text-[#1D4760] transition-colors">
                   View all &gt;
                 </button>
               </div>
@@ -100,15 +103,15 @@ export default function Teachers() {
                     key={tutor.id}
                     tutor={tutor}
                     rating={4.9}
-                    lessonsCount={Math.floor(Math.random() * 200) + 10}
-                    coursesCount={Math.floor(Math.random() * 30) + 5}
-                    studentsCount={Math.floor(Math.random() * 300) + 50}
+                    lessonsCount={0}
+                    coursesCount={0}
+                    studentsCount={0}
                     variant={index % 2 === 0 ? "dark" : "light"}
                     onViewMore={() => setSelectedTutor(tutor)}
                   />
                 ))}
                 {tutors.tutors.length === 0 && (
-                  <div className="col-span-full py-12 text-center bg-white rounded-2xl border border-gray-100 border-dashed">
+                  <div className="col-span-full py-12 text-center rounded-2xl border border-gray-100 border-dashed">
                     <p className="text-gray-500 mb-2">No teachers found.</p>
                   </div>
                 )}
@@ -125,10 +128,10 @@ export default function Teachers() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="flex-1 min-h-screen bg-[#F8FAFC]"
+      className="flex-1 min-h-screen"
     >
       {/* Top Header */}
-      <header className="flex items-center px-8 py-4 bg-white border-b border-gray-100 shadow-sm">
+      <header className="flex items-center px-8 py-4 border-b border-gray-100 shadow-sm">
         <div className="flex items-center gap-2 text-sm text-gray-500 font-medium">
           <button
             onClick={() => setSelectedTutor(null)}
@@ -146,11 +149,11 @@ export default function Teachers() {
       {/* Main Detail Content */}
       <main className="p-8 max-w-5xl mx-auto">
         {/* Detail Header & Action */}
-        <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-8 bg-white p-6 rounded-[1rem] shadow-sm border border-gray-100">
+        <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-8 p-6 rounded-[1rem] shadow-sm border border-gray-100">
           <div className="flex items-start gap-6">
             <div className="relative w-24 h-24 rounded-full overflow-hidden border-4 border-gray-50 shrink-0 shadow-sm">
               <Image
-                src={selectedTutor.profile_picture || "/default-avatar.png"}
+                src={DefaultAvatar}
                 alt={selectedTutor.full_name || "Tutor"}
                 fill
                 className="object-cover"
@@ -199,7 +202,7 @@ export default function Teachers() {
               }`}
             >
               <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                className={`inline-block h-4 w-4 transform rounded-full transition-transform ${
                   selectedTutor.is_approved
                     ? "translate-x-[22px]"
                     : "translate-x-1"
@@ -218,8 +221,8 @@ export default function Teachers() {
         {/* Details Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="md:col-span-2 space-y-6">
-            <div className="bg-white p-6 rounded-[1rem] shadow-sm border border-gray-100 h-full">
-              <h2 className="text-lg font-bold text-gray-900 mb-4 tracking-tight border-b border-gray-100 pb-3">
+            <div className="p-6 rounded-[1rem] shadow-sm border border-gray-100 h-full">
+              <h2 className="text-lg font-bold mb-4 tracking-tight border-b border-gray-100 pb-3">
                 About the Teacher
               </h2>
               <p className="text-gray-600 leading-relaxed text-sm whitespace-pre-wrap">
@@ -230,7 +233,7 @@ export default function Teachers() {
           </div>
 
           <div className="space-y-6">
-            <div className="bg-white p-6 rounded-[1rem] shadow-sm border border-gray-100">
+            <div className=" p-6 rounded-[1rem] shadow-sm border border-gray-100">
               <h3 className="text-lg font-bold text-gray-900 mb-4 tracking-tight border-b border-gray-100 pb-3">
                 Contact Info
               </h3>

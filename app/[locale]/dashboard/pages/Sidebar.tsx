@@ -64,10 +64,8 @@ export const Sidebar = ({
     ${isOpen ? "min-w-80" : "min-w-16"}
     transition-all duration-200
     overflow-hidden
-    border
-    bg-[#2C2C2C] text-white
-    dark:bg-[#F0F0F0] dark:text-black
-    border-neutral-700 dark:border-neutral-300
+    border-border
+    bg-secondary
     rounded-3xl
     py-8
     sticky top-0
@@ -77,7 +75,7 @@ export const Sidebar = ({
       {/* Top section */}
       <div className="flex items-center justify-between px-4 mb-8">
         <Image
-          src={theme === "dark" ? logo : logoDark}
+          src={logo}
           alt="logo"
           width={42}
           height={42}
@@ -127,8 +125,8 @@ export const Sidebar = ({
           isOpen ? "block" : "hidden"
         }`}
       >
-        <LocaleSwitcher triggerClassName="w-full" />
-        <LogoutButton className="w-full bg-red-500 text-white" />
+        <LocaleSwitcher triggerClassName="w-full bg-secondary hover:opacity-90 hover:bg-secondary " />
+        <LogoutButton className="w-full" />
       </div>
     </aside>
   );

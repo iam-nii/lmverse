@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { createClient } from "@/lib/supabase/client";
 import { Tutor, Tutors } from "@/types/types";
+import { DefaultAvatar } from "@/constants/images";
 
 interface TutorStore {
   tutors: Tutors;
@@ -50,6 +51,7 @@ export const useTutorStore = create<TutorStore>((set, get) => ({
         )`);
 
       if (error) throw error;
+      const avatar = String(getURL());
 
       const transformedTutors = data!.map((item) => ({
         id: item.user_id,
@@ -61,7 +63,7 @@ export const useTutorStore = create<TutorStore>((set, get) => ({
         phone_number: item.users.phone_number || "",
         role: item.users.role,
         status: item.users.status,
-        profile_picture: item.users.avatar || "",
+        profile_picture: avatar!, // get default as a temporary fix
         created_at: item.users.created_at,
         updated_at: item.users.updated_at,
       }));
@@ -224,3 +226,14 @@ export const useTutorStore = create<TutorStore>((set, get) => ({
     return get().tutors.tutors.filter((tutor) => tutor.status === "approved");
   },
 }));
+
+const getURL = async () => {
+  const supabase = createClient();
+  const { data, error } = await supabase.storage
+    .from("Users_Avatars")
+    .createSignedUrl("user_default.png", 60 * 60);
+
+  if (data) return data.signedUrl;
+
+  if (error) return "";
+};

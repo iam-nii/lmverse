@@ -5,15 +5,6 @@ import { useLocale } from "next-intl";
 import { useRouter, usePathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { eng, rus, fr } from "@/constants/images";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -38,9 +29,9 @@ const LocaleSwitcher: FC<triggerProps> = ({ triggerClassName }) => {
   };
 
   const languages: Record<string, { label: string; locale: string }> = {
-    en: { label: "ENG", locale: "en" },
-    ru: { label: "RUS", locale: "ru" },
-    fr: { label: "FR", locale: "fr" },
+    en: { label: "English", locale: "en" },
+    ru: { label: "Русский", locale: "ru" },
+    fr: { label: "Français", locale: "fr" },
   };
 
   return (
@@ -48,7 +39,7 @@ const LocaleSwitcher: FC<triggerProps> = ({ triggerClassName }) => {
       <DropdownMenuTrigger asChild className={triggerClassName}>
         <Button
           variant="outline"
-          className="flex flex-row items-center gap-2 border-1 border-black cursor-pointer"
+          className="flex flex-row items-center gap-2 cursor-pointer"
         >
           <Image
             src={locale === "en" ? eng : locale === "ru" ? rus : fr}
@@ -56,7 +47,9 @@ const LocaleSwitcher: FC<triggerProps> = ({ triggerClassName }) => {
             width={20}
             height={20}
           />
-          <p className="text-black">{languages[locale]?.label || "ENG"}</p>
+          <p className="text-muted-foreground">
+            {languages[locale]?.label || "ENG"}
+          </p>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-fit align-start">

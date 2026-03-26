@@ -8,26 +8,22 @@ import { useTranslations, useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import { userSignInType } from "@/types/userTypes";
 import { signInWithEmail } from "@/store/api/authApi";
-<<<<<<< HEAD
 import { useAuthStore } from "@/store/AuthStore";
-=======
-import {useAuthStore} from '@/store/AuthStore';
->>>>>>> 9a6f50cc112e01ffa70044a7cea90f19fa151148
 
 export default function Login() {
   const locale = useLocale();
   const t = useTranslations("auth.login");
   const router = useRouter();
-  const { user } = useAuthStore();
+  // const { user } = useAuthStore();
 
-  useEffect(() => {
-    if (user) {
-      console.log(user);
-      const userRole = user.user_metadata.role;
-      console.log(userRole);
-      router.push(`/${locale}/dashboard/${userRole}`);
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user) {
+  //     console.log(user);
+  //     const userRole = user.user_metadata.role;
+  //     console.log(userRole);
+  //     router.push(`/${locale}/dashboard/${userRole}`);
+  //   }
+  // }, [user]);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -36,17 +32,15 @@ export default function Login() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const {user} = useAuthStore();
+  const { user } = useAuthStore();
 
-  useEffect(()=>{
-    if(user){
+  useEffect(() => {
+    if (user) {
       const userRole = user.user_metadata.role;
       // console.log(user)
-      router.replace(`/dashboard/${userRole}`)
-      
-      
+      router.push(`/dashboard/${userRole}`);
     }
-  },[user])
+  }, [user]);
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
@@ -58,32 +52,13 @@ export default function Login() {
       password,
     };
 
-    // console.log(PAYLOAD);
-
     const result = await signInWithEmail(PAYLOAD.email, PAYLOAD.password);
     if (result.error) {
       console.log(result.error);
       setError(result.error);
       setIsLoading(false);
-
       return;
     }
-    // } else if (result.data) {
-    //   const data = result.data.user.user_metadata;
-    //   setIsLoading(false);
-
-    //   // Redirect based on role
-    //   switch (data.role) {
-    //     case "admin":
-    //       router.push(`/${locale}/dashboard/admin`);
-    //       break;
-    //     case "tutor":
-    //       router.push(`/${locale}/dashboard/tutor`);
-    //       break;
-    //     default:
-    //       router.push(`/${locale}/dashboard/student`);
-    //   }
-    // }
     setIsLoading(false);
   };
 

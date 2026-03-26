@@ -42,9 +42,7 @@ export default function SpeakingSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <p className="text-secondary font-semibold text-sm mb-2">
-            {t("subtitle")}
-          </p>
+          <p className=" font-semibold text-sm mb-2">{t("subtitle")}</p>
           <h2 className="text-2xl md:text-3xl font-bold leading-snug mb-4">
             {t("title")}
           </h2>
@@ -80,7 +78,11 @@ export default function SpeakingSection() {
           transition={{ duration: 0.6 }}
           className="flex justify-center h-full md:relative"
         >
-          <Image src={AtLmverse} alt="At Lmverse" className="md:relative md:top-15 max-w-[1500px] h-full hover:scale-105 transition-transform duration-700" />
+          <Image
+            src={AtLmverse}
+            alt="At Lmverse"
+            className="md:relative md:top-15 max-w-[1500px] h-full hover:scale-105 transition-transform duration-700"
+          />
         </motion.div>
       </div>
     </section>

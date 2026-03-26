@@ -88,8 +88,8 @@ export default function Features() {
           >
             <motion.div
               whileHover={{ y: -5, scale: 1.02 }}
-              className="bg-white p-1 flex flex-col 
-              rounded-lg border-[1px] border-gray-200 py-4 px-5 shadow-sm hover:shadow-md transition-shadow cursor-default
+              className="p-1 flex flex-col bg-card
+              rounded-lg border-[1px] py-4 px-5 shadow-sm hover:shadow-md transition-shadow cursor-default
               items-center justify-center h-full"
             >
               <Image src={feature.icon} alt={feature.title} />

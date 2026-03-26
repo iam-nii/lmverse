@@ -1,22 +1,13 @@
-
-import Navbar from "@/components/Navbar";
-
 export default async function UsersLayout({
-    children,
-    params,
+  children,
+  params,
 }: {
-    children: React.ReactNode;
-    params: Promise<{ locale: string }>;
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }) {
-    const { locale } = await params;
-
-    return (
-        <div className="min-h-screen flex flex-col">
-            <main className="flex-1 container mx-auto px-4 py-8">
-                {children}
-            </main>
-        </div>
-    );
-};
-
-
+  return (
+    <div>
+      <main>{children}</main>
+    </div>
+  );
+}

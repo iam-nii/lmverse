@@ -1,11 +1,9 @@
 import { Button } from "./ui/button";
-<<<<<<< HEAD
 import { signOut } from "@/store/api/authApi";
-=======
-import {signOut} from '@/store/api/authApi';
->>>>>>> 9a6f50cc112e01ffa70044a7cea90f19fa151148
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
+import { useState } from "react";
+import { LoadingSpinner } from "./ui/loading-spinner";
 
 type LogoutButtonProps = {
   className?: string;
@@ -17,9 +15,12 @@ export const LogoutButton = ({
 }: LogoutButtonProps) => {
   const router = useRouter();
   const locale = useLocale();
+  const [loading, setLoading] = useState(false);
   const logout = () => {
+    setLoading(true);
     signOut();
     router.replace(`/${locale}/login`);
+    setLoading(false);
   };
   return (
     <Button
@@ -27,7 +28,14 @@ export const LogoutButton = ({
       variant={variant}
       className={`cursor-pointer ${className}`}
     >
-      Logout
+      {loading ? (
+        <>
+          {" "}
+          <LoadingSpinner />
+        </>
+      ) : (
+        <>Logout</>
+      )}
     </Button>
   );
 };
