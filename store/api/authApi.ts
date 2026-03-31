@@ -2,6 +2,7 @@ import { createClient as createSupabaseBrowserClient } from "@/lib/supabase/clie
 import { useAuthStore } from "@/store/AuthStore";
 import { AppRole } from "@/types/types";
 import { withRateLimit } from "@universal-rate-limit/nextjs";
+import { redirect } from "next/navigation";
 
 // ── Types ──────────────────────────────────────────────────────────────────
 export type SignUpOptions = {
@@ -180,6 +181,7 @@ export async function signOut() {
   await supabase.auth.signOut();
   useAuthStore.getState().logout();
   useAuthStore.getState().setLoading(false);
+  redirect("/");
 }
 
 // ── Auth State Listener (call once at app root) ───────────────────────────

@@ -51,7 +51,7 @@ export default function LessonOptions() {
             key={i}
             className={`border-l-4 ${opt.accentColor} rounded-r-xl border border-border pl-5 pr-4 py-5 bg-card shadow-sm hover:shadow-md transition-shadow cursor-default`}
           >
-            <p className=" font-semibold text-sm mb-2 underline underline-offset-2 cursor-pointer hover:text-secondary/80 transition-colors">
+            <p className="font-semibold text-sm mb-2 underline underline-offset-2 cursor-pointer hover:text-secondary/80 transition-colors">
               {opt.title}
             </p>
             <p className="text-muted-foreground text-sm leading-relaxed">

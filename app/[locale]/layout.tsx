@@ -1,4 +1,3 @@
-import { Inter } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { ltSuperior } from "@/constants/fonts";
 import { Nunito } from "next/font/google";
@@ -9,7 +8,7 @@ import { setRequestLocale, getMessages } from "next-intl/server";
 import { Locale } from "@/types/types";
 import { AuthProvider } from "@/providers/AuthProvider";
 
-const inter = Inter({
+const nunito = Nunito({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
@@ -56,7 +55,7 @@ export default async function LocaleLayout({ children, params }: Props) {
     <div
       lang={locale}
       dir={dir}
-      className={`${locale === "ru" ? ltSuperior.className : inter.className}`}
+      className={`${locale === "ru" ? ltSuperior.className : nunito.className}`}
       suppressHydrationWarning
     >
       <NextIntlClientProvider messages={messages}>

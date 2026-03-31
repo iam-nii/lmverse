@@ -16,9 +16,9 @@ import {
 } from "@tabler/icons-react";
 import { logo } from "@/constants/images";
 
-import { NavMain } from "@/components/nav-main";
-import { NavSecondary } from "@/components/nav-secondary";
-import { NavUser } from "@/components/nav-user";
+import { NavMain } from "@/components/sidebar/nav-main";
+import { NavSecondary } from "@/components/sidebar/nav-secondary";
+import { NavUser } from "@/components/sidebar/nav-user";
 import {
   Sidebar,
   SidebarContent,
@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/sidebar";
 import Image from "next/image";
 import { useAuthStore } from "@/store/AuthStore";
-import LocaleSwitcher from "./LocaleSwitcher";
+import LocaleSwitcher from "../LocaleSwitcher";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useAuthStore();
@@ -39,12 +39,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     navMain: [
       {
         title: "Dashboard",
-        url: `${userRole}`,
+        url: `/dashboard/${userRole}`,
         icon: IconDashboard,
       },
       {
         title: "Courses",
-        url: `${userRole}/courses`,
+        url: `/dashboard/${userRole}/courses`,
         icon: IconListDetails,
       },
       {
@@ -133,12 +133,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
         <SidebarMenu>
-          <SidebarMenuItem>
+          <SidebarMenuItem className="flex justify-between align-middle items-center gap-5 ">
             <SidebarMenuButton
               asChild
-              className="data-[slot=sidebar-menu-button]:p-1.5!"
+              className="data-[slot=sidebar-menu-button]:p-1.5! hover:bg-none"
             >
-              <a href="#">
+              <a href="#" className="hover:bg-none">
                 <Image
                   src={logo}
                   alt="logo"

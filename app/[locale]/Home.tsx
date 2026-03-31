@@ -17,7 +17,7 @@ import Footer from "@/components/Footer";
 import BookConsultationModal from "@/components/BookConsultationModal";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/sidebar/Navbar";
 import { background } from "@/constants/images";
 
 const nunito = Nunito({ subsets: ["latin"], variable: "--font-nunito" });
