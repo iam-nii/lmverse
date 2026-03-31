@@ -56,13 +56,17 @@ const LocaleSwitcher: FC<triggerProps> = ({ triggerClassName }) => {
         <DropdownMenuGroup>
           {availableLocales.map((loc) => (
             <DropdownMenuItem key={loc}>
-              <Image
-                src={loc === "en" ? eng : loc === "ru" ? rus : fr}
-                alt={languages[loc]?.label || loc}
-                width={20}
-                height={20}
-              />
-              <Button variant="ghost" onClick={() => setLocale(loc)}>
+              <Button
+                variant="ghost"
+                onClick={() => setLocale(loc)}
+                className="w-full flex align-start justify-between"
+              >
+                <Image
+                  src={loc === "en" ? eng : loc === "ru" ? rus : fr}
+                  alt={languages[loc]?.label || loc}
+                  width={20}
+                  height={20}
+                />
                 {languages[loc]?.label || loc}
               </Button>
             </DropdownMenuItem>

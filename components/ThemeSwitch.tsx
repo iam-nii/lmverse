@@ -29,14 +29,16 @@ export default function ThemeSwitch() {
       onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")}
       aria-label="Toggle theme"
       suppressHydrationWarning={true}
-      variant="outline"
+      variant="secondary"
       size="icon"
-      className="rounded-full hover:cursor-pointer"
+      className={`rounded-full hover:cursor-pointer border-1 ${
+        resolvedTheme === "light" ? "border-slate-500" : "border-slate-400"
+      }`}
     >
       {resolvedTheme === "light" ? (
-        <Moon stroke="black" />
+        <Moon stroke={`${resolvedTheme === "light" ? "black" : "white"}`} />
       ) : (
-        <Sun stroke="black" />
+        <Sun stroke={`${resolvedTheme === "light" ? "black" : "white"}`} />
       )}
     </Button>
   );

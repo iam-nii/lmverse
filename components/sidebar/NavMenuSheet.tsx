@@ -12,8 +12,8 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useTranslations, useLocale } from "next-intl";
-import LocaleSwitcher from "./LocaleSwitcher";
-import ThemeSwitch from "./ThemeSwitch";
+import LocaleSwitcher from "../LocaleSwitcher";
+import ThemeSwitch from "../ThemeSwitch";
 
 function NavMenuSheet() {
   const locale = useLocale();
@@ -26,17 +26,38 @@ function NavMenuSheet() {
 
   const navLinks = [
     { label: tNav("home.label"), href: `/${locale}${tNav("home.href")}` },
-    { label: tNav("dashboard.label"), href: `/${locale}${tNav("dashboard.href")}` },
+    {
+      label: tNav("dashboard.label"),
+      href: `/${locale}${tNav("dashboard.href")}`,
+    },
     { label: tNav("work.label"), href: `/${locale}${tNav("work.href")}` },
-    { label: tNav("contactUs.label"), href: `/${locale}${tNav("contactUs.href")}` },
+    {
+      label: tNav("contactUs.label"),
+      href: `/${locale}${tNav("contactUs.href")}`,
+    },
   ];
 
   const courseLinks = [
-    { label: tCourses("genEng.label"), href: `/${locale}${tCourses("genEng.href")}` },
-    { label: tCourses("businessEng.label"), href: `/${locale}${tCourses("businessEng.href")}` },
-    { label: tCourses("techEng.label"), href: `/${locale}${tCourses("techEng.href")}` },
-    { label: tCourses("intExams.label"), href: `/${locale}${tCourses("intExams.href")}` },
-    { label: tCourses("rusExam.label"), href: `/${locale}${tCourses("rusExam.href")}` },
+    {
+      label: tCourses("genEng.label"),
+      href: `/${locale}${tCourses("genEng.href")}`,
+    },
+    {
+      label: tCourses("businessEng.label"),
+      href: `/${locale}${tCourses("businessEng.href")}`,
+    },
+    {
+      label: tCourses("techEng.label"),
+      href: `/${locale}${tCourses("techEng.href")}`,
+    },
+    {
+      label: tCourses("intExams.label"),
+      href: `/${locale}${tCourses("intExams.href")}`,
+    },
+    {
+      label: tCourses("rusExam.label"),
+      href: `/${locale}${tCourses("rusExam.href")}`,
+    },
   ];
 
   return (
@@ -48,7 +69,11 @@ function NavMenuSheet() {
             aria-label={open ? "Close menu" : "Open menu"}
             className="p-2 rounded-lg hover:bg-muted transition-colors"
           >
-            <MenuCloseIcon isOpen={open} size={24} className="text-slate-800 dark:text-white" />
+            <MenuCloseIcon
+              isOpen={open}
+              size={24}
+              className="text-slate-800 dark:text-white"
+            />
           </button>
         </SheetTrigger>
 

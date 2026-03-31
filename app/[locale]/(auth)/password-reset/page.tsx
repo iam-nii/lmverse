@@ -4,8 +4,9 @@ import React, { useState } from "react";
 import { Lock, AlertCircle, Loader2, CheckCircle2 } from "lucide-react";
 import { EyeToggleIcon } from "@/components/ui/animated-state-icons";
 import { useTranslations, useLocale } from "next-intl";
-import { updatePassword } from "@/lib/auth/authApi";
+
 import Link from "next/link";
+import { updatePassword } from "@/store/api/authApi";
 
 export default function PasswordReset() {
   const locale = useLocale();
@@ -34,10 +35,10 @@ export default function PasswordReset() {
 
     setIsLoading(false);
 
-    // if (result.error) {
-    //   setError(result.error);
-    //   return;
-    // }
+    if (result.error) {
+      setError(result.error);
+      return;
+    }
 
     setSuccess(true);
   };

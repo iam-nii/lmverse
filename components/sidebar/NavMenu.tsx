@@ -8,9 +8,9 @@ import {
 } from "@/components/ui/navigation-menu";
 import { useTranslations, useLocale } from "next-intl";
 import Link from "next/link";
-import { Button } from "./ui/button";
-import LocaleSwitcher from "./LocaleSwitcher";
-import ThemeSwitch from "./ThemeSwitch";
+import { Button } from "../ui/button";
+import LocaleSwitcher from "../LocaleSwitcher";
+import ThemeSwitch from "../ThemeSwitch";
 
 function NavMenu() {
   const locale = useLocale();
