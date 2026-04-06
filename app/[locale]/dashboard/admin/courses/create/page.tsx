@@ -14,7 +14,7 @@ import {
   levels,
 } from "@/lib/zodSchemas";
 import { useAuthStore } from "@/store/AuthStore";
-import { ArrowLeft, SparkleIcon } from "lucide-react";
+import { ArrowLeft, PlusIcon, SparkleIcon } from "lucide-react";
 import Link from "next/link";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -41,6 +41,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { RichTextEditor } from "@/components/rich-text-editor/Editor";
 
 function CourseCreationPage() {
   const { user } = useAuthStore();
@@ -183,7 +184,7 @@ function CourseCreationPage() {
                       <FieldLabel htmlFor="course-description">
                         Course Description
                       </FieldLabel>
-                      <InputGroup>
+                      {/* <InputGroup>
                         <InputGroupTextarea
                           {...field}
                           id="course-description"
@@ -197,14 +198,15 @@ function CourseCreationPage() {
                             {field.value.length}/500 characters
                           </InputGroupText>
                         </InputGroupAddon>
-                      </InputGroup>
-                      <FieldDescription>
+                      </InputGroup> */}
+                      <RichTextEditor />
+                      {/* <FieldDescription>
                         A detailed description of the course to be shown when
                         students want to know more about what a course offers
-                      </FieldDescription>
-                      {fieldState.invalid && (
+                      </FieldDescription> */}
+                      {/* {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
-                      )}
+                      )} */}
                     </Field>
                   )}
                 />
@@ -321,6 +323,10 @@ function CourseCreationPage() {
                 />
               </div>
             </FieldGroup>
+
+            <Button>
+              Create course <PlusIcon size={16} className="ml-1" />
+            </Button>
           </form>
         </CardContent>
       </Card>
