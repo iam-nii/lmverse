@@ -324,7 +324,7 @@ function CourseCreationPage() {
               </div>
             </FieldGroup>
 
-            <Button>
+            <Button type="submit">
               Create course <PlusIcon size={16} className="ml-1" />
             </Button>
           </form>
