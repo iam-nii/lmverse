@@ -42,9 +42,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { RichTextEditor } from "@/components/rich-text-editor/Editor";
+import { useState } from "react";
 
 function CourseCreationPage() {
   const { user } = useAuthStore();
+  const [post, setPost] = useState("");
 
   const form = useForm<courseSchemaType>({
     resolver: zodResolver(courseSchema),
@@ -63,6 +65,10 @@ function CourseCreationPage() {
     // Do something with the form values.
     console.log(data);
   }
+  const onRichTextEditorChange = (content: string) => {
+    setPost(content);
+    console.log(content);
+  };
   return (
     <>
       <div className="flex flex-row items-center gap-4">
@@ -142,7 +148,7 @@ function CourseCreationPage() {
                   )}
                 />
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4">
                 <Controller
                   name="smallDescription"
                   control={form.control}
@@ -157,7 +163,7 @@ function CourseCreationPage() {
                           id="short-description"
                           placeholder="A short description about the course to be shown on course cards"
                           rows={6}
-                          className="min-h-24"
+                          className="min-h-24 "
                           aria-invalid={fieldState.invalid}
                         />
                         <InputGroupAddon align="block-end">
@@ -199,7 +205,7 @@ function CourseCreationPage() {
                           </InputGroupText>
                         </InputGroupAddon>
                       </InputGroup> */}
-                      <RichTextEditor />
+                      <RichTextEditor field={field} />
                       {/* <FieldDescription>
                         A detailed description of the course to be shown when
                         students want to know more about what a course offers

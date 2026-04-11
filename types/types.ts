@@ -56,7 +56,6 @@ export interface Students {
   students: IStudent[];
 }
 
-
 export type AppRole = "admin" | "tutor" | "student" | "pending";
 
 export type AuthState = {
@@ -70,4 +69,15 @@ export type AuthState = {
   setError: (error: string | null) => void;
   setRole: (role: AppRole | null) => void; // Add setRole action
   logout: () => void; // Add logout action
+};
+
+export type FormValues = {
+  title: string;
+  description: string;
+  fileKey: string;
+  price: number;
+  level: string;
+  smallDescription: string;
+  slug: string;
+  status: string;
 };
