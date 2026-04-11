@@ -14,6 +14,7 @@ import {
   ListOrdered,
   SeparatorVertical,
   Strikethrough,
+  Undo,
 } from "lucide-react";
 import { Editor } from "@tiptap/react";
 import { Toggle } from "../ui/toggle";
@@ -23,6 +24,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
+import { Button } from "../ui/button";
 export default function MenuBar({ editor }: { editor: Editor | null }) {
   const [, forceUpdate] = useState({});
 
@@ -46,6 +48,7 @@ export default function MenuBar({ editor }: { editor: Editor | null }) {
           <Tooltip>
             <TooltipTrigger asChild>
               <Toggle
+                pressed={editor.isActive("bold")}
                 onPressedChange={() =>
                   editor.chain().focus().toggleBold().run()
                 }
@@ -57,8 +60,9 @@ export default function MenuBar({ editor }: { editor: Editor | null }) {
           </Tooltip>
 
           <Tooltip>
-            <TooltipTrigger asChild>
+            <TooltipTrigger asChild type="button">
               <Toggle
+                pressed={editor.isActive("italic")}
                 onPressedChange={() =>
                   editor.chain().focus().toggleItalic().run()
                 }
@@ -70,8 +74,9 @@ export default function MenuBar({ editor }: { editor: Editor | null }) {
           </Tooltip>
 
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger asChild type="button">
               <Toggle
+                pressed={editor.isActive("strike")}
                 onPressedChange={() =>
                   editor.chain().focus().toggleStrike().run()
                 }
@@ -82,8 +87,9 @@ export default function MenuBar({ editor }: { editor: Editor | null }) {
             <TooltipContent>StrikeThrough</TooltipContent>
           </Tooltip>
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger asChild type="button">
               <Toggle
+                pressed={editor.isActive("bulletlist")}
                 onPressedChange={() =>
                   editor.chain().focus().toggleBulletList().run()
                 }
@@ -94,8 +100,9 @@ export default function MenuBar({ editor }: { editor: Editor | null }) {
             <TooltipContent>Bullets</TooltipContent>
           </Tooltip>
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger asChild type="button">
               <Toggle
+                pressed={editor.isActive("orderedList")}
                 onPressedChange={() =>
                   editor.chain().focus().toggleOrderedList().run()
                 }
@@ -105,10 +112,12 @@ export default function MenuBar({ editor }: { editor: Editor | null }) {
             </TooltipTrigger>
             <TooltipContent>Ordered list</TooltipContent>
           </Tooltip>
+          <div className="w-px h-6 bg-border"></div>
 
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger asChild type="button">
               <Toggle
+                pressed={editor.isActive("heading", { level: 1 })}
                 onPressedChange={() =>
                   editor.chain().focus().toggleHeading({ level: 1 }).run()
                 }
@@ -119,8 +128,9 @@ export default function MenuBar({ editor }: { editor: Editor | null }) {
             <TooltipContent>Heading 1</TooltipContent>
           </Tooltip>
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger asChild type="button">
               <Toggle
+                pressed={editor.isActive("heading", { level: 2 })}
                 onPressedChange={() =>
                   editor.chain().focus().toggleHeading({ level: 2 }).run()
                 }
@@ -131,8 +141,9 @@ export default function MenuBar({ editor }: { editor: Editor | null }) {
             <TooltipContent>Heading 2</TooltipContent>
           </Tooltip>
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger asChild type="button">
               <Toggle
+                pressed={editor.isActive("heading", { level: 3 })}
                 onPressedChange={() =>
                   editor.chain().focus().toggleHeading({ level: 3 }).run()
                 }
@@ -145,8 +156,9 @@ export default function MenuBar({ editor }: { editor: Editor | null }) {
           <div className="w-px h-6 bg-border"></div>
 
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger asChild type="button">
               <Toggle
+                pressed={editor.isActive({ textAlign: "left" })}
                 onPressedChange={() => editor.commands.toggleTextAlign("left")}
               >
                 <AlignLeft />
@@ -155,8 +167,9 @@ export default function MenuBar({ editor }: { editor: Editor | null }) {
             <TooltipContent>Align left</TooltipContent>
           </Tooltip>
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger asChild type="button">
               <Toggle
+                pressed={editor.isActive({ textAlign: "left" })}
                 onPressedChange={() => editor.commands.setTextAlign("center")}
               >
                 <AlignCenter />
@@ -165,8 +178,9 @@ export default function MenuBar({ editor }: { editor: Editor | null }) {
             <TooltipContent>Align Center</TooltipContent>
           </Tooltip>
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger asChild type="button">
               <Toggle
+                pressed={editor.isActive({ textAlign: "right" })}
                 onPressedChange={() => editor.commands.setTextAlign("right")}
               >
                 <AlignRight />
@@ -175,8 +189,9 @@ export default function MenuBar({ editor }: { editor: Editor | null }) {
             <TooltipContent>Align Right</TooltipContent>
           </Tooltip>
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
               <Toggle
+                pressed={editor.isActive({ textAlign: "justify" })}
                 onPressedChange={() => editor.commands.setTextAlign("justify")}
               >
                 <AlignJustify />
@@ -184,6 +199,12 @@ export default function MenuBar({ editor }: { editor: Editor | null }) {
             </TooltipTrigger>
             <TooltipContent>Justify</TooltipContent>
           </Tooltip>
+
+          <div className="w-px h-6 bg-border">
+            <Button size="sm" variant={"ghost"} type="button">
+              <Undo />
+            </Button>
+          </div>
         </div>
       </TooltipProvider>
     </div>
