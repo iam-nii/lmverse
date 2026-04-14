@@ -43,6 +43,7 @@ import {
 } from "@/components/ui/select";
 import { RichTextEditor } from "@/components/rich-text-editor/Editor";
 import { useState } from "react";
+import Uploader from "@/components/file-uploader/Uploader";
 
 function CourseCreationPage() {
   const { user } = useAuthStore();
@@ -190,35 +191,13 @@ function CourseCreationPage() {
                       <FieldLabel htmlFor="course-description">
                         Course Description
                       </FieldLabel>
-                      {/* <InputGroup>
-                        <InputGroupTextarea
-                          {...field}
-                          id="course-description"
-                          placeholder="A detailed description of the course to be shown when students want to know more about what a course offers"
-                          rows={6}
-                          className="min-h-24 resize-none"
-                          aria-invalid={fieldState.invalid}
-                        />
-                        <InputGroupAddon align="block-end">
-                          <InputGroupText className="tabular-nums">
-                            {field.value.length}/500 characters
-                          </InputGroupText>
-                        </InputGroupAddon>
-                      </InputGroup> */}
                       <RichTextEditor field={field} />
-                      {/* <FieldDescription>
-                        A detailed description of the course to be shown when
-                        students want to know more about what a course offers
-                      </FieldDescription> */}
-                      {/* {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )} */}
                     </Field>
                   )}
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4">
                 <Controller
                   name="fileKey"
                   control={form.control}
@@ -228,12 +207,9 @@ function CourseCreationPage() {
                         <FieldLabel htmlFor="filekey">
                           Thumbnail image
                         </FieldLabel>
-                        <Input
-                          {...field}
-                          id="filekey"
-                          aria-invalid={fieldState.invalid}
-                          placeholder="Thumbnail url"
-                        />
+                        {/*
+                         */}
+                        <Uploader />
                         {fieldState.invalid && (
                           <FieldError errors={[fieldState.error]} />
                         )}
