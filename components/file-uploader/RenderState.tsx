@@ -43,4 +43,4 @@ function RenderErrorState() {
     </div>
   );
 }
-export { RenderEmptyState };
+export { RenderEmptyState, RenderErrorState };
