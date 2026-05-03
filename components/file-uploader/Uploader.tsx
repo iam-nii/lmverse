@@ -62,7 +62,7 @@ function Uploader() {
       }
 
       const { preSignedURL, key } = await presignedResponse.json();
-      await new Promise((resolve, reject) => {
+      await new Promise<void>((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.upload.onprogress = (event) => {
           if (event.lengthComputable) {
@@ -81,8 +81,14 @@ function Uploader() {
               progress: 100,
               key: key,
             }));
+            toast.success("File uploaded successfully");
+            resolve();
+          } else {
+            reject(new Error("Failed to upload file"));
           }
         };
+        xhr.open("PUT", preSignedURL);
+        xhr.send(file);
       });
     } catch {}
   }
