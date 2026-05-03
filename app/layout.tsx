@@ -1,6 +1,7 @@
 import type { PropsWithChildren, FC } from "react";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "sonner";
 
 const RootLayout: FC<PropsWithChildren> = ({ children }) => (
   <html suppressHydrationWarning>
@@ -12,6 +13,7 @@ const RootLayout: FC<PropsWithChildren> = ({ children }) => (
         disableTransitionOnChange
       >
         {children}
+        <Toaster />
       </ThemeProvider>
     </body>
   </html>
