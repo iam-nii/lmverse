@@ -56,6 +56,20 @@ export interface Students {
   students: IStudent[];
 }
 
+export interface IUser {
+  id: string;
+  email: string;
+  full_name: string;
+  phone_number: string;
+  role: AppRole;
+  status: "active" | "blocked" | "deleted" | "pending" | "approved";
+  created_at: Date;
+  updated_at: Date;
+  avatar: string;
+}
+export interface Users {
+  users: IUser[];
+}
 export type AppRole = "admin" | "tutor" | "student" | "pending";
 
 export type AuthState = {

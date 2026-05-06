@@ -84,13 +84,29 @@ function Uploader() {
             toast.success("File uploaded successfully");
             resolve();
           } else {
-            reject(new Error("Failed to upload file"));
+            reject(new Error("Failed to upload file..."));
           }
+
+          xhr.onerror = () => {
+            reject(new Error("Failed to upload file..."));
+          };
+
+          xhr.open("PUT", preSignedURL);
+          xhr.setRequestHeader("Content-Type", file.type);
+          xhr.send(file);
         };
         xhr.open("PUT", preSignedURL);
         xhr.send(file);
       });
-    } catch {}
+    } catch {
+      toast.error("Something went wrong...");
+      setFileState((prev) => ({
+        ...prev,
+        uploading: false,
+        progress: 0,
+        error: true,
+      }));
+    }
   }
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {

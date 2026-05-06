@@ -1,32 +1,31 @@
 import { create } from "zustand";
 import { createClient } from "@/lib/supabase/client";
-import { IStudent, Students } from "@/types/types";
 
-interface IStudentStore {
-  students: Students;
+interface IuserStore {
+  users: users;
   loading: boolean;
   error: string | null;
-  setStudents: (students: Students) => void;
+  setusers: (users: users) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
-  fetchStudents: () => Promise<Students>;
-  approveStudent: (studentId: string) => Promise<void>;
-  rejectStudent: (studentId: string) => Promise<void>;
-  updateStudentStatus: (studentId: string, status: string) => Promise<void>;
-  getPendingStudents: () => IStudent[];
-  getApprovedStudents: () => IStudent[];
+  fetchusers: () => Promise<users>;
+  approveuser: (userId: string) => Promise<void>;
+  rejectuser: (userId: string) => Promise<void>;
+  updateuserStatus: (userId: string, status: string) => Promise<void>;
+  getPendingusers: () => Iuser[];
+  getApprovedusers: () => Iuser[];
 }
 
-export const useStudentStore = create<IStudentStore>((set, get) => ({
-  students: { students: [] },
+export const useuserStore = create<IuserStore>((set, get) => ({
+  users: { users: [] },
   loading: false,
   error: null,
 
-  setStudents: (students: Students) => set({ students }),
+  setusers: (users: users) => set({ users }),
   setLoading: (loading: boolean) => set({ loading }),
   setError: (error: string | null) => set({ error }),
 
-  fetchStudents: async () => {
+  fetchusers: async () => {
     const supabase = createClient();
     set({ loading: true, error: null });
 
@@ -37,22 +36,13 @@ export const useStudentStore = create<IStudentStore>((set, get) => ({
       //   .eq("role", "tutor")
       //   .order("created_at", { ascending: false });
 
-      const { data, error } = await supabase.from("students").select(`*,
-        users(
-        email,
-        full_name,
-        phone_number,
-        role,
-        status,
-        created_at,
-        avatar,
-        updated_at
-        )`);
+      const { data, error } = await supabase.from("users").select(`*`);
+      console.log(data);
 
       if (error) throw error;
-      console.log("Students fetched", data);
+      console.log("users fetched", data);
 
-      const transformedStudents = (data as any[]).map((item) => ({
+      const transformedusers = (data as any[]).map((item) => ({
         id: item.user_id,
         about: item.about,
         email: item.users.email,
@@ -65,16 +55,16 @@ export const useStudentStore = create<IStudentStore>((set, get) => ({
         updated_at: item.users.updated_at,
       }));
 
-      const studentsData: Students = {
-        students: transformedStudents,
+      const usersData: users = {
+        users: transformedusers,
       };
 
       set({
-        students: studentsData,
+        users: usersData,
         loading: false,
       });
 
-      return studentsData;
+      return usersData;
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Failed to fetch tutors";
@@ -83,18 +73,18 @@ export const useStudentStore = create<IStudentStore>((set, get) => ({
     }
   },
 
-  approveStudent: async (studentId: string) => {
+  approveuser: async (userId: string) => {
     const supabase = createClient();
     set({ loading: true, error: null });
 
     try {
       const { error } = await supabase
-        .from("students")
+        .from("users")
         .update({
           status: "approved",
           is_approved: true,
         })
-        .eq("id", studentId);
+        .eq("id", userId);
 
       if (error) throw error;
 
@@ -103,21 +93,21 @@ export const useStudentStore = create<IStudentStore>((set, get) => ({
         .update({
           updated_at: new Date().toISOString(),
         })
-        .eq("user_id", studentId)
-        .eq("role", "student");
+        .eq("user_id", userId)
+        .eq("role", "user");
 
       if (updateError) throw updateError;
 
       // Update local state
-      const currentStudents = get().students.students;
-      const updatedStudents = currentStudents.map((student) =>
-        student.id === studentId
-          ? { ...student, status: "approved", is_approved: true }
-          : student
+      const currentusers = get().users.users;
+      const updatedusers = currentusers.map((user) =>
+        user.id === userId
+          ? { ...user, status: "approved", is_approved: true }
+          : user
       );
 
       set({
-        students: { students: updatedStudents },
+        users: { users: updatedusers },
         loading: false,
       });
     } catch (error) {
@@ -128,18 +118,18 @@ export const useStudentStore = create<IStudentStore>((set, get) => ({
     }
   },
 
-  rejectStudent: async (studentId: string) => {
+  rejectuser: async (userId: string) => {
     const supabase = createClient();
     set({ loading: true, error: null });
 
     try {
       const { error } = await supabase
-        .from("students")
+        .from("users")
         .update({
           status: "rejected",
           is_approved: false,
         })
-        .eq("id", studentId);
+        .eq("id", userId);
 
       if (error) throw error;
 
@@ -148,20 +138,20 @@ export const useStudentStore = create<IStudentStore>((set, get) => ({
         .update({
           updated_at: new Date().toISOString(),
         })
-        .eq("id", studentId);
+        .eq("id", userId);
 
       if (updateError) throw updateError;
 
       // Update local state
-      const currentStudents = get().students.students;
-      const updatedStudents = currentStudents.map((student) =>
-        student.id === studentId
-          ? { ...student, status: "rejected", is_approved: false }
-          : student
+      const currentusers = get().users.users;
+      const updatedusers = currentusers.map((user) =>
+        user.id === userId
+          ? { ...user, status: "rejected", is_approved: false }
+          : user
       );
 
       set({
-        students: { students: updatedStudents },
+        users: { users: updatedusers },
         loading: false,
       });
     } catch (error) {
@@ -172,7 +162,7 @@ export const useStudentStore = create<IStudentStore>((set, get) => ({
     }
   },
 
-  updateStudentStatus: async (studentId: string, status: string) => {
+  updateuserStatus: async (userId: string, status: string) => {
     const supabase = createClient();
     set({ loading: true, error: null });
 
@@ -180,26 +170,24 @@ export const useStudentStore = create<IStudentStore>((set, get) => ({
       const isApproved = status === "approved";
 
       const { error } = await supabase
-        .from("students")
+        .from("users")
         .update({
           status,
           is_approved: isApproved,
           updated_at: new Date().toISOString(),
         })
-        .eq("id", studentId);
+        .eq("id", userId);
 
       if (error) throw error;
 
       // Update local state
-      const currentStudents = get().students.students;
-      const updatedStudents = currentStudents.map((student) =>
-        student.id === studentId
-          ? { ...student, status, is_approved: isApproved }
-          : student
+      const currentusers = get().users.users;
+      const updatedusers = currentusers.map((user) =>
+        user.id === userId ? { ...user, status, is_approved: isApproved } : user
       );
 
       set({
-        students: { students: updatedStudents },
+        users: { users: updatedusers },
         loading: false,
       });
     } catch (error) {
@@ -212,15 +200,11 @@ export const useStudentStore = create<IStudentStore>((set, get) => ({
     }
   },
 
-  getPendingStudents: () => {
-    return get().students.students.filter(
-      (student) => student.status === "pending"
-    );
+  getPendingusers: () => {
+    return get().users.users.filter((user) => user.status === "pending");
   },
 
-  getApprovedStudents: () => {
-    return get().students.students.filter(
-      (student) => student.status === "approved"
-    );
+  getApprovedusers: () => {
+    return get().users.users.filter((user) => user.status === "approved");
   },
 }));
