@@ -36,6 +36,7 @@ export async function signInWithEmail(email: string, password: string) {
     if (error || !data.session) {
       setError(error?.message ?? "Login failed. Please try again.");
       setLoading(false);
+      console.error(error);
       return { error: error?.message ?? "Login failed." };
     }
 

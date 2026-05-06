@@ -58,8 +58,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         icon: IconFolder,
       },
       {
-        title: "Team",
-        url: "#",
+        title: "Users",
+        url: `/dashboard/${userRole}/users`,
         icon: IconUsers,
       },
     ],
