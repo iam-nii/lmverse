@@ -1,70 +1,60 @@
 import { create } from "zustand";
 import { createClient } from "@/lib/supabase/client";
+import { AppRole, IUser, Users } from "@/types/types";
 
-interface IuserStore {
-  users: users;
+interface IUserStore {
+  users: Users;
   loading: boolean;
   error: string | null;
-  setusers: (users: users) => void;
+  setusers: (users: Users) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
-  fetchusers: () => Promise<users>;
-  approveuser: (userId: string) => Promise<void>;
-  rejectuser: (userId: string) => Promise<void>;
-  updateuserStatus: (userId: string, status: string) => Promise<void>;
-  getPendingusers: () => Iuser[];
-  getApprovedusers: () => Iuser[];
+  fetchUsers: () => Promise<Users>;
+  updateUserRole: (userId: string, newRole: AppRole) => Promise<void>;
+  deleteUser: (userId: string) => Promise<void>;
+  updateUserStatus: (userId: string, status: IUser["status"]) => Promise<void>;
+  getPendingusers: () => IUser[];
+  getApprovedusers: () => IUser[];
+  getUsersByRole: (role: AppRole) => IUser[];
+  getDeletedUsers: () => IUser[];
 }
 
-export const useuserStore = create<IuserStore>((set, get) => ({
+export const useUserStore = create<IUserStore>((set, get) => ({
   users: { users: [] },
   loading: false,
   error: null,
 
-  setusers: (users: users) => set({ users }),
-  setLoading: (loading: boolean) => set({ loading }),
-  setError: (error: string | null) => set({ error }),
+  setusers: (users) => set({ users }),
+  setLoading: (loading) => set({ loading }),
+  setError: (error) => set({ error }),
 
-  fetchusers: async () => {
+  fetchUsers: async () => {
     const supabase = createClient();
     set({ loading: true, error: null });
 
     try {
-      // const { data, error } = await supabase
-      //   .from("users")
-      //   .select("*")
-      //   .eq("role", "tutor")
-      //   .order("created_at", { ascending: false });
+      const { data, error } = await supabase
+        .from("users")
+        .select("*")
+        .order("created_at", { ascending: false });
 
-      const { data, error } = await supabase.from("users").select(`*`);
       console.log(data);
 
       if (error) throw error;
       console.log("users fetched", data);
 
-      const transformedusers = (data as any[]).map((item) => ({
-        id: item.user_id,
-        about: item.about,
-        email: item.users.email,
-        full_name: item.users.full_name,
-        phone_number: item.users.phone_number || "",
-        role: item.users.role,
-        status: item.users.status,
-        profile_picture: item.users.avatar || "",
-        created_at: item.users.created_at,
-        updated_at: item.users.updated_at,
-      }));
-
-      const usersData: users = {
-        users: transformedusers,
+      const users: Users = {
+        users: (data || []).map((user) => ({
+          ...user,
+          created_at: new Date(user.created_at),
+          updated_at: new Date(user.updated_at),
+          role: user.role as AppRole,
+        })),
       };
 
-      set({
-        users: usersData,
-        loading: false,
-      });
+      set({ users, loading: false });
 
-      return usersData;
+      return users;
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Failed to fetch tutors";
@@ -73,107 +63,59 @@ export const useuserStore = create<IuserStore>((set, get) => ({
     }
   },
 
-  approveuser: async (userId: string) => {
+  updateUserRole: async (userId: string, newRole: AppRole) => {
     const supabase = createClient();
     set({ loading: true, error: null });
 
     try {
-      const { error } = await supabase
+      //1. Update the public.user table
+      const { error: publicError } = await supabase
         .from("users")
-        .update({
-          status: "approved",
-          is_approved: true,
-        })
+        .update({ role: newRole, updated_at: new Date().toISOString() })
         .eq("id", userId);
 
-      if (error) throw error;
+      if (publicError) throw publicError;
 
-      const { error: updateError } = await supabase
-        .from("users")
-        .update({
-          updated_at: new Date().toISOString(),
-        })
-        .eq("user_id", userId)
-        .eq("role", "user");
+      //2. Update auth.users metadata
+      const { error: authError } = await supabase.auth.admin.updateUserById(
+        userId,
+        {
+          user_metadata: { role: newRole },
+        }
+      );
+      if (authError) throw authError;
 
-      if (updateError) throw updateError;
-
-      // Update local state
-      const currentusers = get().users.users;
-      const updatedusers = currentusers.map((user) =>
+      //3. Update local state
+      const currentUsers = get().users;
+      const updatedUsers = currentUsers.users.map((user) =>
         user.id === userId
-          ? { ...user, status: "approved", is_approved: true }
+          ? { ...user, role: newRole, updated_at: new Date() }
           : user
       );
-
-      set({
-        users: { users: updatedusers },
-        loading: false,
-      });
+      set({ users: { users: updatedUsers }, loading: false });
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : "Failed to approve tutor";
+        error instanceof Error ? error.message : "Failed to update user role";
       set({ error: errorMessage, loading: false });
       throw new Error(errorMessage);
     }
   },
 
-  rejectuser: async (userId: string) => {
-    const supabase = createClient();
-    set({ loading: true, error: null });
-
-    try {
-      const { error } = await supabase
-        .from("users")
-        .update({
-          status: "rejected",
-          is_approved: false,
-        })
-        .eq("id", userId);
-
-      if (error) throw error;
-
-      const { error: updateError } = await supabase
-        .from("users")
-        .update({
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", userId);
-
-      if (updateError) throw updateError;
-
-      // Update local state
-      const currentusers = get().users.users;
-      const updatedusers = currentusers.map((user) =>
-        user.id === userId
-          ? { ...user, status: "rejected", is_approved: false }
-          : user
-      );
-
-      set({
-        users: { users: updatedusers },
-        loading: false,
-      });
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Failed to reject tutor";
-      set({ error: errorMessage, loading: false });
-      throw new Error(errorMessage);
-    }
+  deleteUser: async (userId: string) => {
+    await get().updateUserStatus(userId, "deleted");
   },
 
-  updateuserStatus: async (userId: string, status: string) => {
+  updateUserStatus: async (userId: string, status: IUser["status"]) => {
     const supabase = createClient();
     set({ loading: true, error: null });
 
     try {
-      const isApproved = status === "approved";
+      // const isApproved = status === "approved";
 
       const { error } = await supabase
         .from("users")
         .update({
           status,
-          is_approved: isApproved,
           updated_at: new Date().toISOString(),
         })
         .eq("id", userId);
@@ -181,9 +123,9 @@ export const useuserStore = create<IuserStore>((set, get) => ({
       if (error) throw error;
 
       // Update local state
-      const currentusers = get().users.users;
-      const updatedusers = currentusers.map((user) =>
-        user.id === userId ? { ...user, status, is_approved: isApproved } : user
+      const currentusers = get().users;
+      const updatedusers = currentusers.users.map((user) =>
+        user.id === userId ? { ...user, status, updated_at: new Date() } : user
       );
 
       set({
@@ -192,9 +134,7 @@ export const useuserStore = create<IuserStore>((set, get) => ({
       });
     } catch (error) {
       const errorMessage =
-        error instanceof Error
-          ? error.message
-          : "Failed to update tutor status";
+        error instanceof Error ? error.message : "Failed to update user status";
       set({ error: errorMessage, loading: false });
       throw new Error(errorMessage);
     }
@@ -206,5 +146,13 @@ export const useuserStore = create<IuserStore>((set, get) => ({
 
   getApprovedusers: () => {
     return get().users.users.filter((user) => user.status === "approved");
+  },
+
+  getUsersByRole: (role: AppRole) => {
+    return get().users.users.filter((user) => user.role === role);
+  },
+
+  getDeletedUsers: () => {
+    return get().users.users.filter((user) => user.status === "deleted");
   },
 }));
