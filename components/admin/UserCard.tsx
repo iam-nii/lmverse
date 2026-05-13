@@ -54,7 +54,7 @@ export default function UserCard({
     roleOptions.find((r) => r.value === user.role)?.color || "bg-gray-100";
 
   return (
-    <div className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+    <div className="rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-200">
       {/* Header with avatar */}
       <div className="p-6 pb-4">
         <div className="flex items-center gap-4 mb-4">
@@ -67,7 +67,7 @@ export default function UserCard({
             />
           </div>
           <div className="flex-1">
-            <h3 className="text-lg font-bold text-gray-900">
+            <h3 className="text-lg font-bold">
               {user.full_name}
             </h3>
             <p className="text-sm text-gray-500">{user.email}</p>
@@ -125,7 +125,7 @@ export default function UserCard({
       </div>
 
       {/* Footer with current role indicator */}
-      <div className="bg-gray-50 px-6 py-3 border-t border-gray-100">
+      <div className="px-6 py-3 border-t border-gray-100">
         <div className="flex items-center justify-between">
           <span className="text-xs text-gray-500">Current role:</span>
           <span

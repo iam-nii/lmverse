@@ -16,3 +16,13 @@ export async function updateUserRoleAction(userRole:AppRole, userId:string) {
     return {success:false, error:error}
   }
 }
+
+export async function testAction() {
+  console.log("test action works");
+  return { ok: true };
+}
+
+export async function ping() {
+  console.log("ping action called");
+  return { pong: true };
+}
