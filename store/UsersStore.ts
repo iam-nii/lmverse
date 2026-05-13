@@ -1,8 +1,7 @@
 import { create } from "zustand";
 import { createClient } from "@/lib/supabase/client";
 import { AppRole, IUser, Users } from "@/types/types";
-import { updateUserRoleAction } from "@/app/[locale]/actions/admin/actions";
-
+import { updateUserRoleAction } from "@/app/actions/admin/actions";
 
 interface IUserStore {
   users: Users;
@@ -84,7 +83,6 @@ export const useUserStore = create<IUserStore>((set, get) => ({
       //     user_metadata: { role: newRole },
       //   }
       // );
-      
 
       //Updating local state
       const currentUsers = get().users;
