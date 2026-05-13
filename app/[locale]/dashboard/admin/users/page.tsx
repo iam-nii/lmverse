@@ -1,11 +1,10 @@
 "use client";
-import { testAction, updateUserRoleAction } from "@/app/[locale]/actions/admin/actions";
+
 import UserCard from "@/components/admin/UserCard";
 import { useUserStore } from "@/store/UsersStore";
 import { AppRole } from "@/types/types";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-
 
 function UsersPage() {
   const { users, loading, error, fetchUsers, updateUserRole, getUsersByRole } =
@@ -17,14 +16,35 @@ function UsersPage() {
     fetchUsers();
   }, [fetchUsers]);
 
+  const updateUserRoleAction = async (newRole: string, userId: string) => {
+    const response = await fetch("/api/admin/updateRole", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId,
+        role: newRole,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!data.success) {
+      throw new Error(data.error);
+    }
+    return data;
+  };
+
   const handleRoleChange = async (userId: string, newRole: AppRole) => {
     setUpdatingUserId(userId);
     const updatedUserName = users.users.filter((user) => user.id === userId)[0]
       .full_name;
     try {
+      console.log("Updating user role to", newRole);
 
-      const response = await updateUserRoleAction(newRole,userId)
-      if (response.error) throw response.error;
+      const data = await updateUserRoleAction(newRole, userId);
+      console.log(data);
 
       updateUserRole(userId, newRole);
 

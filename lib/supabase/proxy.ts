@@ -39,7 +39,7 @@ export async function updateSession(
 
   // Check if path is public
   const isPublicRoute = publicRoutes.includes(pathWithoutLocale);
-  console.log(isPublicRoute);
+  console.log("Public route:", isPublicRoute);
   // const isPublic = publicRoutes.some((route) =>
   //   pathWithoutLocale.startsWith(route)
   // );
