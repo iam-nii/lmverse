@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { createClient } from "@/lib/supabase/client";
 import { AppRole, IUser, Users } from "@/types/types";
-import { updateUserRoleAction } from "@/app/api/admin/actions";
+import { updateUserRoleAction } from "@/app/[locale]/actions/admin/actions";
 
 
 interface IUserStore {
@@ -12,7 +12,7 @@ interface IUserStore {
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   fetchUsers: () => Promise<Users>;
-  updateUserRole: (userId: string, newRole: AppRole) => Promise<void>;
+  updateUserRole: (userId: string, newRole: AppRole) => void;
   deleteUser: (userId: string) => Promise<void>;
   updateUserStatus: (userId: string, status: IUser["status"]) => Promise<void>;
   getPendingusers: () => IUser[];
@@ -65,7 +65,7 @@ export const useUserStore = create<IUserStore>((set, get) => ({
     }
   },
 
-  updateUserRole: async (userId: string, newRole: AppRole) => {
+  updateUserRole: (userId: string, newRole: AppRole) => {
     set({ loading: true, error: null });
 
     try {
@@ -84,10 +84,9 @@ export const useUserStore = create<IUserStore>((set, get) => ({
       //     user_metadata: { role: newRole },
       //   }
       // );
-      const response = await updateUserRoleAction(newRole,userId)
-      if (response.error) throw response.error;
+      
 
-      //3. Update local state
+      //Updating local state
       const currentUsers = get().users;
       const updatedUsers = currentUsers.users.map((user) =>
         user.id === userId

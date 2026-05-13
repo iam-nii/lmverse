@@ -1,9 +1,11 @@
 "use client";
+import { testAction, updateUserRoleAction } from "@/app/[locale]/actions/admin/actions";
 import UserCard from "@/components/admin/UserCard";
 import { useUserStore } from "@/store/UsersStore";
 import { AppRole } from "@/types/types";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+
 
 function UsersPage() {
   const { users, loading, error, fetchUsers, updateUserRole, getUsersByRole } =
@@ -20,7 +22,12 @@ function UsersPage() {
     const updatedUserName = users.users.filter((user) => user.id === userId)[0]
       .full_name;
     try {
-      await updateUserRole(userId, newRole);
+
+      const response = await updateUserRoleAction(newRole,userId)
+      if (response.error) throw response.error;
+
+      updateUserRole(userId, newRole);
+
       toast.success(`${updatedUserName}'s role has been successfully updated!`);
     } catch (error) {
       console.error(`Failed to update ${updatedUserName}'s role`, error);
