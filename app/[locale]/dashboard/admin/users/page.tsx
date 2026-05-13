@@ -1,11 +1,7 @@
 "use client";
 import UserCard from "@/components/admin/UserCard";
-import { useAuthStore } from "@/store/AuthStore";
-import { useStudentStore } from "@/store/StudentStore";
-import { useTutorStore } from "@/store/TutorStore";
 import { useUserStore } from "@/store/UsersStore";
 import { AppRole } from "@/types/types";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 

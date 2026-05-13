@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { createClient } from "@/lib/supabase/client";
 import { AppRole, IUser, Users } from "@/types/types";
+import { updateUserRoleAction } from "@/app/api/admin/actions";
+
 
 interface IUserStore {
   users: Users;
@@ -64,26 +66,26 @@ export const useUserStore = create<IUserStore>((set, get) => ({
   },
 
   updateUserRole: async (userId: string, newRole: AppRole) => {
-    const supabase = createClient();
     set({ loading: true, error: null });
 
     try {
       //1. Update the public.user table
-      const { error: publicError } = await supabase
-        .from("users")
-        .update({ role: newRole, updated_at: new Date().toISOString() })
-        .eq("id", userId);
+      // const { error: publicError } = await supabase
+      //   .from("users")
+      //   .update({ role: newRole, updated_at: new Date().toISOString() })
+      //   .eq("id", userId);
 
-      if (publicError) throw publicError;
+      // if (publicError) throw publicError;
 
-      //2. Update auth.users metadata
-      const { error: authError } = await supabase.auth.admin.updateUserById(
-        userId,
-        {
-          user_metadata: { role: newRole },
-        }
-      );
-      if (authError) throw authError;
+      //2. Update auth.users metadata via admin actions
+      // const { error: authError } = await supabase.auth.admin.updateUserById(
+      //   userId,
+      //   {
+      //     user_metadata: { role: newRole },
+      //   }
+      // );
+      const response = await updateUserRoleAction(newRole,userId)
+      if (response.error) throw response.error;
 
       //3. Update local state
       const currentUsers = get().users;
