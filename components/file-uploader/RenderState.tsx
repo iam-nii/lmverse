@@ -18,7 +18,7 @@ function RenderEmptyState({ isDragActive }: { isDragActive: boolean }) {
         Drop our files her or{" "}
         <span className="text-primary font-bold">click to upload</span>
       </p>
-      <Button className="mt-4" type="button">
+      <Button className="mt-4 hover:cursor-pointer" type="button">
         {" "}
         Select a file
       </Button>
