@@ -1,6 +1,7 @@
 "use client";
 
 import UserCard from "@/components/admin/UserCard";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useUserStore } from "@/store/UsersStore";
 import { AppRole } from "@/types/types";
 import { useEffect, useState } from "react";
@@ -63,10 +64,10 @@ function UsersPage() {
 
   if (loading && users.users.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading users...</p>
+          <p className="mt-4">Loading users...</p>
         </div>
       </div>
     );
@@ -88,8 +89,8 @@ function UsersPage() {
   }
 
   return (
-    <>
-      <div className="flex items-center justify-between">
+    <div className="px-14">
+      <div className="flex items-center justify-between ">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold">User management</h1>
@@ -98,21 +99,25 @@ function UsersPage() {
       </div>
       {/* Filters */}
       <div>
-        <div>
-          <label htmlFor="">Filter by Role</label>
-          <select
-            name="userRolesSelect"
-            id="userRolesSelect"
+        <div className="flex items-center gap-4">
+          <label htmlFor="userRoleSelect">Filter by Role:</label>
+          <Select
+          name="userRoleSelect"
             value={filterRole}
-            onChange={(e) => setFilerRole(e.target.value as AppRole | "all")}
-            className="px-3 py-2 rounded-lg focus:ring-2"
+            onValueChange={(e) => setFilerRole(e as AppRole | "all")}
+            
           >
-            <option value="all">All users</option>
-            <option value="admin">Administrators</option>
-            <option value="tutor">Tutors</option>
-            <option value="student">Students</option>
-            <option value="pending">Pending</option>
-          </select>
+            <SelectTrigger className="min-w-30">
+              <SelectValue placeholder="User Role"/>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All users</SelectItem>
+            <SelectItem value="admin">Administrators</SelectItem>
+            <SelectItem value="tutor">Tutors</SelectItem>
+            <SelectItem value="student">Students</SelectItem>
+            <SelectItem value="pending">Pending</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         <div className="flex items-end">
           <div className="text-sm">
@@ -130,7 +135,7 @@ function UsersPage() {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {filteredUsers.map((user) => (
             <UserCard
               key={user.id}
@@ -141,7 +146,7 @@ function UsersPage() {
           ))}
         </div>
       )}
-    </>
+    </div>
   );
 }
 
