@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { createClient } from "@/lib/supabase/client";
 import { AppRole, IUser, Users } from "@/types/types";
-import { updateUserRoleAction } from "@/app/actions/admin/actions";
 
 interface IUserStore {
   users: Users;
