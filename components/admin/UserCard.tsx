@@ -3,8 +3,10 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { AppRole, IUser } from "@/types/types";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+
 import { toast } from "sonner";
 import { useAuthStore } from "@/store/AuthStore";
+import { LoadingSpinner } from "../ui/loading-spinner";
 
 interface UserCardProps {
   user: IUser;
@@ -58,7 +60,7 @@ export default function UserCard({
     roleOptions.find((r) => r.value === user.role)?.color || "bg-gray-100";
 
   return (
-    <div className="rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-200 dark:border-gray-700">
+    <div className="rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-200 dark:border-none bg-card">
       {/* Header with avatar */}
       <div className="p-6 pb-4">
         <div className="flex items-center gap-4 mb-4">
@@ -111,7 +113,8 @@ export default function UserCard({
         </div>
 
         {/* Role selector */}
-        <div className="border-t-[0.5px] border-gray-500 pt-4 flex items-center">
+        <div>
+          <div className="border-t-[0.5px] border-gray-500 pt-4 flex items-center">
           <label className="block min-w-24 text-sm font-medium text-muted-background mb-2">
             User Role
           </label>
@@ -135,9 +138,12 @@ export default function UserCard({
             
           </Select>
           {isChanging && (
-            <p className="text-xs text-blue-600 mt-1">Updating role...</p>
+            <LoadingSpinner size={25}/>
+            // <p className="text-xs text-blue-600 mt-1">Updating role...</p>
           )}
         </div>
+        </div>
+        
       </div>
 
       
