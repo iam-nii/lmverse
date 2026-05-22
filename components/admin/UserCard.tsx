@@ -139,7 +139,6 @@ export default function UserCard({
           </Select>
           {isChanging && (
             <LoadingSpinner size={25}/>
-            // <p className="text-xs text-blue-600 mt-1">Updating role...</p>
           )}
         </div>
         </div>

@@ -3,7 +3,7 @@ import React, { useCallback, useState } from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
 import { Card, CardContent } from "../ui/card";
 import { cn } from "@/lib/utils";
-import { RenderEmptyState } from "./RenderState";
+import { RenderEmptyState, RenderErrorState, RenderSuccessState } from "./RenderState";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
 
@@ -16,6 +16,7 @@ interface IUploadState {
   key?: string;
   isDeleting: boolean;
   error: boolean;
+  success: boolean;
   objectUrl?: string;
 }
 
@@ -28,6 +29,7 @@ function Uploader() {
     isDeleting: false,
     progress: 0,
     uploading: false,
+    success: false,
   });
 
   async function uploadFile(file: File) {
@@ -108,6 +110,19 @@ function Uploader() {
       }));
     }
   }
+
+  async function handleUpload() {
+    if (!fileState.file) {
+      toast.error("No file selected");
+      return;
+    }
+    // await uploadFile(fileState.file);
+    toast.success("File uploaded successfully (mock)");
+  }
+
+
+
+
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
       const file = acceptedFiles[0];
@@ -120,14 +135,18 @@ function Uploader() {
         id: uuidv4(),
         isDeleting: false,
         fileType: "image",
+        success: true,
       });
     }
+    console.log(acceptedFiles);
+
+    //uploadFile
   }, []);
 
   function onFileReject(fileRejection: FileRejection[]) {
     if (!fileRejection.length) {
       toast.error("Nothing caught");
-      // console.log("Nothing caught");
+      console.log("Nothing caught");
       return;
     }
 
@@ -141,13 +160,25 @@ function Uploader() {
 
     if (hasTooManyFiles) {
       toast.error("Too many files selected. Max is 1");
-      // console.log("Too many files selected. Max is 1");
+      setFileState((prev) => ({
+        ...prev,
+        error: true,
+      }));
+      console.log("Too many files selected. Max is 1");
     } else if (hasFileTooLarge) {
       toast.error("One or more files are too big. Max size is 5MB");
-      // console.log("One or more files are too big. Max size is 5MB");
+      setFileState((prev) => ({
+        ...prev,
+        error: true,
+      }));
+      console.log("One or more files are too big. Max size is 5MB");
     } else {
       toast.error("Files were rejected");
-      // console.log("Files were rejected");
+      setFileState((prev) => ({
+        ...prev,
+        error: true,
+      }));
+      console.log("Files were rejected");
     }
   }
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -165,12 +196,14 @@ function Uploader() {
         "relative border-2 border-dashed transition-colors duration-200 ease-in-out w-full h-64",
         isDragActive
           ? "border-primary bg-primary/10 border-solid"
-          : "border-border hover:border-primary"
+          : "border-border hover:border-primary",
+        fileState.error && "border-destructive ",
+        fileState.success && "border-green-500/50 "
       )}
     >
       <CardContent className="justify-center flex items-center h-full w-full">
         <input {...getInputProps()} />
-        <RenderEmptyState isDragActive />
+        {fileState.success ? <RenderSuccessState objectUrl={fileState.objectUrl} uploadFile={handleUpload} /> : fileState.error ? <RenderErrorState /> : <RenderEmptyState isDragActive={isDragActive}/>}
       </CardContent>
     </Card>
   );
