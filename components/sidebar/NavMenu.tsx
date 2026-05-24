@@ -53,7 +53,7 @@ function NavMenu() {
           <NavigationMenuItem className="">
             <NavigationMenuLink asChild className="">
               <Link href={`/${locale}${tNav("home.href")}`} className="">
-                <p className="text-lg text-white">{tNav("home.label")}</p>
+                <p className="text-lg ">{tNav("home.label")}</p>
               </Link>
             </NavigationMenuLink>
           </NavigationMenuItem>

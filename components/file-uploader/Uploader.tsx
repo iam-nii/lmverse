@@ -1,9 +1,14 @@
 "use client";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useEffectEvent, useState } from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
 import { Card, CardContent } from "../ui/card";
 import { cn } from "@/lib/utils";
-import { RenderEmptyState, RenderErrorState, RenderSuccessState } from "./RenderState";
+import {
+  RenderEmptyState,
+  RenderErrorState,
+  RenderSuccessState,
+  RenderUploadingState,
+} from "./RenderState";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
 
@@ -120,29 +125,46 @@ function Uploader() {
     toast.success("File uploaded successfully (mock)");
   }
 
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      if (acceptedFiles.length > 0) {
+        const file = acceptedFiles[0];
 
+        if (fileState.objectUrl && fileState.objectUrl.startsWith("http")) {
+          URL.revokeObjectURL(fileState.objectUrl);
+        }
 
+        setFileState({
+          file: file,
+          uploading: false,
+          progress: 0,
+          objectUrl: URL.createObjectURL(file),
+          error: false,
+          id: uuidv4(),
+          isDeleting: false,
+          fileType: "image",
+          success: true,
+        });
+      }
+      console.log(acceptedFiles);
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    if (acceptedFiles.length > 0) {
-      const file = acceptedFiles[0];
-      setFileState({
-        file: file,
-        uploading: false,
-        progress: 0,
-        objectUrl: URL.createObjectURL(file),
-        error: false,
-        id: uuidv4(),
-        isDeleting: false,
-        fileType: "image",
-        success: true,
-      });
-    }
-    console.log(acceptedFiles);
+      //uploadFile
+    },
+    [fileState.objectUrl]
+  );
 
-    //uploadFile
-  }, []);
+  function handleRemoveFile() {
+    if (fileState.isDeleting || !fileState.objectUrl) return;
 
+    try {
+      setFileState((prev) => ({
+        ...prev,
+        isDeleting: true,
+      }));
+
+      // Route handler for deleting the files.
+    } catch (error) {}
+  }
   function onFileReject(fileRejection: FileRejection[]) {
     if (!fileRejection.length) {
       toast.error("Nothing caught");
@@ -181,6 +203,38 @@ function Uploader() {
       console.log("Files were rejected");
     }
   }
+
+  function renderContent() {
+    if (fileState.error) {
+      return <RenderErrorState />;
+    }
+    if (fileState.uploading) {
+      return (
+        <RenderUploadingState
+          progress={fileState.progress}
+          file={fileState.file as File}
+        />
+      );
+    }
+    if (fileState.objectUrl) {
+      return (
+        <RenderSuccessState
+          objectUrl={fileState.objectUrl}
+          uploadFile={handleUpload}
+        />
+      );
+    }
+    return <RenderEmptyState isDragActive={isDragActive} />;
+  }
+
+  useEffect(() => {
+    return () => {
+      if (fileState.objectUrl && fileState.objectUrl.startsWith("http")) {
+        URL.revokeObjectURL(fileState.objectUrl);
+      }
+    };
+  }, [fileState.objectUrl]);
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: { "image/*": [] },
@@ -189,6 +243,7 @@ function Uploader() {
     maxSize: 5 * 1024 * 1024, //5mb
     onDropRejected: onFileReject,
   });
+
   return (
     <Card
       {...getRootProps()}
@@ -203,7 +258,7 @@ function Uploader() {
     >
       <CardContent className="justify-center flex items-center h-full w-full">
         <input {...getInputProps()} />
-        {fileState.success ? <RenderSuccessState objectUrl={fileState.objectUrl} uploadFile={handleUpload} /> : fileState.error ? <RenderErrorState /> : <RenderEmptyState isDragActive={isDragActive}/>}
+        {renderContent()}
       </CardContent>
     </Card>
   );
