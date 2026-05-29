@@ -1,54 +1,52 @@
-import { env } from "@/lib/env";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
+// app/api/s3/upload/route.ts
+
+import { randomUUID } from "crypto";
 import { NextResponse } from "next/server";
-import { z } from "zod";
-import { v4 as uuidv4 } from "uuid";
+
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { S3 } from "@/lib/S3Client";
 
-export const fileUploadSchema = z.object({
-  fileName: z.string().min(1, { message: "File name is required" }),
-  contentType: z.string().min(1, { message: "Content type is required" }),
-  size: z.number().min(1, { message: "Size is required" }),
-  isImage: z.boolean(),
-});
+import { SelectelS3 } from "@/lib/storage/s3Storage";
 
-export async function POST(request: Request) {
+export async function POST(req: Request) {
   try {
-    const body = await request.json();
-    const validation = fileUploadSchema.safeParse(body);
-    if (!validation.success) {
-      return NextResponse.json(
-        {
-          error: "Invalid request body",
-        },
-        { status: 400 }
-      );
+    const body = await req.json();
+
+    console.log("Body from Client:", body);
+
+    const { fileName, contentType, size } = body;
+
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+
+    if (!allowedTypes.includes(contentType)) {
+      return NextResponse.json({ error: "Invalid file type" }, { status: 400 });
     }
 
-    const { fileName, contentType, size } = validation.data;
-    const uniqueKey = `${uuidv4()}-${fileName}`;
+    if (size > 5 * 1024 * 1024) {
+      return NextResponse.json({ error: "File too large" }, { status: 400 });
+    }
+
+    const extension = fileName.split(".").pop() || "jpg";
+
+    const key = `courses/thumbnails/${randomUUID()}.${extension}`;
 
     const command = new PutObjectCommand({
-      Bucket: env.NEXT_PUBLIC_S3_BUCKET_NAME_IMAGES,
+      Bucket: process.env.SELECTEL_S3_LMVERSE_BUCKET_PUBLIC!,
+      Key: key,
       ContentType: contentType,
-      ContentLength: size,
-      Key: uniqueKey,
     });
 
-    const preSignedURL = await getSignedUrl(S3, command, { expiresIn: 360 }); // URL expires in 6 minutes
+    const url = await getSignedUrl(SelectelS3, command, {
+      expiresIn: 60,
+    });
 
-    const response = {
-      preSignedURL,
-      key: uniqueKey,
-    };
-
-    return NextResponse.json(response);
-  } catch {
+    return NextResponse.json({
+      key,
+      preSignedURL: url,
+    });
+  } catch (error) {
     return NextResponse.json(
-      {
-        error: "Failed to generate presigned URL",
-      },
+      { error: `Internal Server Error ${error}` },
       { status: 500 }
     );
   }

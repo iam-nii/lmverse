@@ -209,7 +209,14 @@ function CourseCreationPage() {
                         </FieldLabel>
                         {/*
                          */}
-                        <Uploader />
+                        <Uploader
+                          value={field.value}
+                          onChange={(key) => {
+                            field.onChange(key);
+
+                            form.trigger("fileKey");
+                          }}
+                        />
                         {fieldState.invalid && (
                           <FieldError errors={[fieldState.error]} />
                         )}
