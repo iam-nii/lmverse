@@ -163,6 +163,7 @@ function Uploader({ value, onChange }: UploaderProps) {
 
   async function handleRemoveFile() {
     if (fileState.isDeleting) return;
+    console.log("Removing file: uploader.tsx");
 
     try {
       setFileState((prev) => ({
@@ -170,18 +171,15 @@ function Uploader({ value, onChange }: UploaderProps) {
         isDeleting: true,
       }));
 
-      /**
-       * Future:
-       *
-       * if (fileState.key) {
-       *   await fetch("/api/s3/delete", {
-       *     method: "DELETE",
-       *     body: JSON.stringify({
-       *       key: fileState.key,
-       *     }),
-       *   });
-       * }
-       */
+      console.log("Sending file key to backend");
+      if (fileState.key) {
+        await fetch("/api/s3/delete", {
+          method: "POST",
+          body: JSON.stringify({
+            fileKey: fileState.key,
+          }),
+        });
+      }
 
       if (fileState.objectUrl && fileState.objectUrl.startsWith("blob:")) {
         URL.revokeObjectURL(fileState.objectUrl);

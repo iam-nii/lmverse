@@ -1,5 +1,11 @@
 import { cn } from "@/lib/utils";
-import { BadgeCheck, CloudUpload, ImageIcon, Trash2 } from "lucide-react";
+import {
+  BadgeCheck,
+  CircleX,
+  CloudUpload,
+  ImageIcon,
+  Trash2,
+} from "lucide-react";
 import { Button } from "../ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { LoadingSpinner } from "../ui/loading-spinner";
@@ -122,7 +128,12 @@ function RenderSuccessState({ objectUrl, onRemove }: RenderSuccessStateProps) {
             delay: 0.2,
             duration: 0.5,
           }}
+          className="relative"
         >
+          <CircleX
+            className="size-10 absolute top-2 right-2 cursor-pointer"
+            onClick={onRemove}
+          />
           <img
             src={objectUrl}
             alt="Uploaded preview"
