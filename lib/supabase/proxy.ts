@@ -65,13 +65,10 @@ export async function updateSession(
     }
   );
 
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser();
+  const { data, error } = await supabase.auth.getClaims();
   // console.log(user)
 
-  const userRole = user?.user_metadata?.role as RoleType | undefined;
+  const userRole = data?.claims.user_metadata?.role as RoleType | undefined;
 
   // --- 1. Redirect "/" to default locale ---
   const rootRedirect = new URL(`/${DEFAULT_LOCALE}`, request.url);
@@ -83,7 +80,7 @@ export async function updateSession(
   }
 
   // 2. Check if user is unauthenticated and is trying to access a dashboard
-  if (!user && pathWithoutLocale.includes("dashboard")) {
+  if (!data?.claims && pathWithoutLocale.includes("dashboard")) {
     console.log("Accessing restricted route, redirecting to login...");
     // Redirect to the login page
     console.log(locale);

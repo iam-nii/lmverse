@@ -36,7 +36,7 @@ export function RichTextEditor({ field }: RichTextEditorProps) {
     editorProps: {
       attributes: {
         class:
-          "w-full border px-2 py-2 border-input rounded-lg border-t-0 overflow-hidden prose max-w-none  dark:bg-input/30 min-h-[150px] focus:outline-none",
+          "w-full text-foreground border px-2 py-2 border-input rounded-lg border-t-0 overflow-hidden prose max-w-none  dark:bg-input/30 min-h-[150px] focus:outline-none",
       },
     },
 
@@ -54,6 +54,7 @@ export function RichTextEditor({ field }: RichTextEditorProps) {
       <MenuBar editor={editor} />
       <EditorContent
         editor={editor}
+        className="[&_p]:text-foreground [&_h1]:text-foreground [&_h2]:text-foreground [&_h3]:text-foreground"
         // className="[&_h1]:text-3xl [&_h1]:font-bold"
       />
     </div>

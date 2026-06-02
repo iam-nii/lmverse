@@ -12,8 +12,6 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    console.log("Body from Client:", body);
-
     const { fileName, contentType, size } = body;
 
     const allowedTypes = ["image/jpeg", "image/png", "image/webp"];

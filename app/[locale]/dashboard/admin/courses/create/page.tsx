@@ -42,12 +42,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { RichTextEditor } from "@/components/rich-text-editor/Editor";
-import { useState } from "react";
+// import { useState } from "react";
 import Uploader from "@/components/file-uploader/Uploader";
 
 function CourseCreationPage() {
   const { user } = useAuthStore();
-  const [post, setPost] = useState("");
+  // const [post, setPost] = useState("");
 
   const form = useForm<courseSchemaType>({
     resolver: zodResolver(courseSchema),
@@ -62,14 +62,29 @@ function CourseCreationPage() {
       status: "draft", // Provide a default enum value
     }, // This ensures type safety
   });
-  function onSubmit(data: courseSchemaType) {
-    // Do something with the form values.
+  async function onSubmit(data: courseSchemaType) {
     console.log(data);
+    const response = await fetch("/api/upload-course", {
+      method: "POST",
+      body: JSON.stringify({
+        description: data.description,
+        file_key: data.fileKey,
+        level: data.level,
+        price: data.price,
+        slug: data.slug,
+        small_description: data.smallDescription,
+        status: data.status,
+        title: data.title,
+      }),
+    });
+    console.log(response);
+
+    // Do something with the form values.
   }
-  const onRichTextEditorChange = (content: string) => {
-    setPost(content);
-    console.log(content);
-  };
+  // const onRichTextEditorChange = (content: string) => {
+  //   setPost(content);
+  //   console.log(content);
+  // };
   return (
     <>
       <div className="flex flex-row items-center gap-4">
@@ -236,6 +251,9 @@ function CourseCreationPage() {
                           id="price"
                           aria-invalid={fieldState.invalid}
                           placeholder="0.00 ₽"
+                          onChange={(e) =>
+                            field.onChange(Number(e.target.value))
+                          }
                         />
                         {fieldState.invalid && (
                           <FieldError errors={[fieldState.error]} />
