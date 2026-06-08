@@ -37,7 +37,7 @@ export async function POST(request: Request) {
     console.log("Body from Client:", body);
 
     const supabase = await createClient();
-    const { data: userData } = await supabase.auth.getClaims();
+    const { data: userData } = await supabase.auth.getUser();
     console.log(userData);
     return;
 
