@@ -34,12 +34,24 @@ export async function POST(request: Request) {
       );
     }
 
-    console.log("Body from Client:", body);
+    console.log("Claims");
 
     const supabase = await createClient();
-    const { data: userData } = await supabase.auth.getUser();
-    console.log(userData);
-    return;
+    const { data: claimsData } = await supabase.auth.getClaims();
+    const creator_id = claimsData?.claims.sub;
+
+    const { data: levelData, error: getLevelError } = await supabase
+      .from("levels")
+      .select("id")
+      .eq("name", level)
+      .single();
+
+    const level_id = levelData?.id;
+    if (getLevelError)
+      return NextResponse.json(
+        { success: false, error: getLevelError },
+        { status: 400 }
+      );
 
     const { data, error } = await supabase
       .from("courses")
@@ -57,7 +69,11 @@ export async function POST(request: Request) {
         },
       ])
       .select();
-    if (error) throw error;
+    if (error)
+      return NextResponse.json(
+        { success: false, error: error },
+        { status: 500 }
+      );
 
     return NextResponse.json({ message: data }, { status: 200 });
   } catch (error: unknown) {
