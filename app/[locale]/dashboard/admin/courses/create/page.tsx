@@ -228,7 +228,6 @@ function CourseCreationPage() {
                           value={field.value}
                           onChange={(key) => {
                             field.onChange(key);
-
                             form.trigger("fileKey");
                           }}
                         />

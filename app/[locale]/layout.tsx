@@ -7,6 +7,7 @@ import { routing } from "@/i18n/routing";
 import { setRequestLocale, getMessages } from "next-intl/server";
 import { Locale } from "@/types/types";
 import { AuthProvider } from "@/providers/AuthProvider";
+import { Providers } from "@/providers/providers";
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -59,7 +60,9 @@ export default async function LocaleLayout({ children, params }: Props) {
       suppressHydrationWarning
     >
       <NextIntlClientProvider messages={messages}>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <Providers>{children}</Providers>
+        </AuthProvider>
       </NextIntlClientProvider>
     </div>
   );

@@ -63,7 +63,7 @@ export const useUserStore = create<IUserStore>((set, get) => ({
     }
   },
 
-  updateUserRole: (userId: string, newRole: AppRole) => {
+  updateUserRole: async (userId: string, newRole: AppRole) => {
     set({ loading: true, error: null });
 
     try {

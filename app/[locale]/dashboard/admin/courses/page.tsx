@@ -1,24 +1,10 @@
-"use client";
-import { buttonVariants } from "@/components/ui/button";
-import { useAuthStore } from "@/store/AuthStore";
-import Link from "next/link";
+import CoursesGrid from "@/app/[locale]/dashboard/admin/courses/_components/CoursesGrid";
 
 function CoursesPage() {
-  const { user } = useAuthStore();
-  const userRole = user?.user_metadata.role;
   return (
-    <>
-      <div className="flex items-center justify-between">
-        <h1 className="font-bold text-2xl">Available courses</h1>
-        <Link
-          href={`/dashboard/${userRole}/courses/create`}
-          className={buttonVariants()}
-        >
-          Create course
-        </Link>
-      </div>
-      <div></div>
-    </>
+    <div>
+      <CoursesGrid />
+    </div>
   );
 }
 

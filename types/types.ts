@@ -95,3 +95,22 @@ export type FormValues = {
   slug: string;
   status: string;
 };
+
+export interface ICourse {
+  id: string;
+  user_id?: User["id"];
+  level_id?: string;
+  title?: string;
+  description?: string;
+  status?: string;
+  file_key?: string;
+  price?: number;
+  small_description?: string;
+  slug?: string;
+  created_at?: Date;
+  updated_at?: Date;
+}
+
+export interface Courses {
+  courses: ICourse[];
+}
