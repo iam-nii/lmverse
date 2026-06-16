@@ -1,3 +1,4 @@
+"use client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,6 +11,8 @@ import {
 } from "@/components/ui/card";
 import { ICourse } from "@/types/types";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 type CourseCardType = {
   course: ICourse;
@@ -17,19 +20,43 @@ type CourseCardType = {
 
 function CourseCard(course: CourseCardType) {
   console.log(course);
+  const [imageURL, setImageURL] = useState<string | null>(null);
   // Fetch the image from the s3 bucket and display it.
+  // const imageURL = `${process.env.SELECTEL_S3_ENDPOINT}/${course.course.file_key}`;
   //TODO
   //1. Create a get route to fetch image links by providing the file key
+  useEffect(() => {
+    const getImageURL = async () => {
+      const imageURLResponse = await fetch("/api/s3/get-image", {
+        method: "POST",
+        body: JSON.stringify({
+          fileKey: course.course.file_key,
+        }),
+      });
+      const data = await imageURLResponse.json();
+      if (!data.success) {
+        toast.error(data.error);
+      }
+      console.log(data);
+      setImageURL(data.data);
+    };
+    getImageURL();
+  }, []);
+
   return (
     <>
       <Card className="relative mx-auto w-full max-w-sm pt-0">
         <div className="absolute inset-0 z-30 aspect-video bg-black/35" />
-        <Image
-          src={course!.course!.file_key!}
-          alt={course!.course!.title!}
-          width={10}
-          height={10}
-        />
+        {imageURL && (
+          <div className="relative h-48 w-full">
+            <Image
+              src={imageURL}
+              alt={course.course.title!}
+              fill
+              className="object-cover"
+            />
+          </div>
+        )}
         <CardHeader>
           <CardAction>
             <Badge variant="secondary">{course.course.status}</Badge>

@@ -22,7 +22,7 @@ import { background } from "@/constants/images";
 
 const nunito = Nunito({ subsets: ["latin"], variable: "--font-nunito" });
 
-export default function Home() {
+export default function LandingPage() {
   const t = useTranslations("home");
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedMessage, setSelectedMessage] = useState<string | undefined>();
