@@ -5,6 +5,6 @@ import { env } from "./env";
 
 export const S3 = new S3Client({
   region: "auto",
-  endpoint: env.AWS_ENDPOINT_URL_S3,
+  endpoint: env.SELECTEL_S3_ENDPOINT,
   forcePathStyle: false,
 });

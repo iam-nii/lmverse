@@ -11,6 +11,6 @@ export const env = createEnv({
   client: {
     NEXT_PUBLIC_S3_BUCKET_NAME_IMAGES: z.string().min(1),
   },
-  clientPrefix: "NEXT_PUBLIC_", // <-- REQUIRED
+  clientPrefix: "NEXT_PUBLIC_",
   runtimeEnv: process.env,
 });
