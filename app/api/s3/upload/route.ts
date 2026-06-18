@@ -31,7 +31,7 @@ export async function POST(req: Request) {
     const key = `courses/thumbnails/${randomUUID()}.${extension}`;
 
     const command = new PutObjectCommand({
-      Bucket: process.env.SELECTEL_BUCKET!,
+      Bucket: process.env.SELECTEL_S3_LMVERSE_BUCKET_PUBLIC!,
       Key: key,
       ContentType: contentType,
     });
