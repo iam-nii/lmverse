@@ -1,4 +1,5 @@
 import {create} from "zustand";
+import {persist, createJSONStorage} from 'zustand/middleware'
 
 interface Lesson{
     title: string,
@@ -12,26 +13,34 @@ interface Lesson{
 }
 interface Module{
     id: number,
+    order:number,
     title: string,
     lessons?: string[]
 }
 
 interface CourseContent {
     modules: Module[] | [];
+    setModules: (modules: Module[]) => void;
     lessons: Lesson[]| [];
     isLoading: boolean;
     addModule:(title: string, id: number) => void;
-    // add lesson
     addLesson: (lesson: Lesson)=> void;
     updateModule: (id:number, title: string)=>void;
     addLessonToModule: (module_id:number, lesson_id: string) => void;
 }
 
-export const useCourseContentStore = create<CourseContent>((set,get)=>({
+export const useCourseContentStore = create<CourseContent>()(persist((set)=>({
     modules: [],
     lessons: [],
     isLoading: false,
-    addModule: (newtitle, newId) => set((state)=>({modules:[...state.modules, {id:newId,title:newtitle, lessons:[]}]})),
+    setModules: (modules) =>
+    set(() => ({
+        modules: modules.map((module, index) => ({
+        ...module,
+        order: index,
+        })),
+    })),
+    addModule: (newtitle, newId) => set((state)=>({modules:[...state.modules, {id:newId,title:newtitle,order: state.modules.length + 1, lessons:[]}]})),
     updateModule: (module_id, module_title)=>set((state)=>({modules: state.modules.map((module)=>
     module.id === module_id ? {...module, title:module_title} : module
     )})),
@@ -48,4 +57,6 @@ export const useCourseContentStore = create<CourseContent>((set,get)=>({
         })
     }))
 
+}),{
+    name:'course-content-storage',
 }))
