@@ -1,5 +1,5 @@
 "use client";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -13,9 +13,7 @@ import {
   courseStatus,
   levels,
 } from "@/lib/zodSchemas";
-import { useAuthStore } from "@/store/AuthStore";
-import { ArrowLeft, PlusIcon, SparkleIcon } from "lucide-react";
-import Link from "next/link";
+import { ChevronRight, PlusIcon, SparkleIcon } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -42,11 +40,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { RichTextEditor } from "@/components/rich-text-editor/Editor";
-// import { useState } from "react";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator, } from "@/components/ui/breadcrumb";
 import Uploader from "@/components/file-uploader/Uploader";
+import { v4 as uuidv4 } from "uuid";
+import { redirect } from "next/navigation";
+
 
 function CourseCreationPage() {
-  const { user } = useAuthStore();
+
+  //TODO
+  //  Check if user is qualified to be on this page
   // const [post, setPost] = useState("");
 
   const form = useForm<courseSchemaType>({
@@ -63,38 +66,42 @@ function CourseCreationPage() {
     }, // This ensures type safety
   });
   async function onSubmit(data: courseSchemaType) {
-    console.log(data);
-    const response = await fetch("/api/upload-course", {
-      method: "POST",
-      body: JSON.stringify({
-        description: data.description,
-        file_key: data.fileKey,
-        level: data.level,
-        price: data.price,
-        slug: data.slug,
-        small_description: data.smallDescription,
-        status: data.status,
-        title: data.title,
-      }),
-    });
-    console.log(response);
+    console.log(data)
+    // console.log(data);
+    // const response = await fetch("/api/upload-course", {
+    //   method: "POST",
+    //   body: JSON.stringify({
+    //     description: data.description,
+    //     file_key: data.fileKey,
+    //     level: data.level,
+    //     price: data.price,
+    //     slug: data.slug,
+    //     small_description: data.smallDescription,
+    //     status: data.status,
+    //     title: data.title,
+    //   }),
+    // });
+    // console.log(response);
 
-    // Do something with the form values.
+    // FOR TESTING  
+    const randomCourseId = uuidv4();
+    console.log([data, randomCourseId])
+    redirect(`/dashboard/courses/create/${randomCourseId}/builder?course=${data.slug}`)    
+
   }
-  // const onRichTextEditorChange = (content: string) => {
-  //   setPost(content);
-  //   console.log(content);
-  // };
   return (
     <>
       <div className="flex flex-row items-center gap-4">
-        <Link
-          href={`/dashboard/${user?.user_metadata.role}/courses`}
-          className={buttonVariants({ variant: "outline", size: "icon" })}
-        >
-          <ArrowLeft className="size-4" />
-        </Link>
-        <h1 className="text-4xl font-bold">Создать курс</h1>
+        <Breadcrumb >
+        <BreadcrumbList >
+        <BreadcrumbItem>
+        <BreadcrumbLink  href={`/dashboard/courses`} className="text-2xl">Courses</BreadcrumbLink>
+        </BreadcrumbItem>
+        <ChevronRight />
+        <BreadcrumbItem className="text-2xl">Создать курс</BreadcrumbItem>
+
+        </BreadcrumbList>
+        </Breadcrumb>
       </div>
       <Card>
         <CardHeader>
@@ -330,7 +337,7 @@ function CourseCreationPage() {
               </div>
             </FieldGroup>
 
-            <Button type="submit">
+            <Button type="submit" className="cursor-pointer">
               Create course <PlusIcon size={16} className="ml-1" />
             </Button>
           </form>

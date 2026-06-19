@@ -279,6 +279,7 @@ function Uploader({ value, onChange }: UploaderProps) {
     multiple: false,
     maxSize: 5 * 1024 * 1024,
     onDropRejected: onFileReject,
+    disabled: fileState.uploading 
   });
 
   return (

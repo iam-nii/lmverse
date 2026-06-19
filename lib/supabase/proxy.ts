@@ -44,31 +44,34 @@ export async function updateSession(
   //   pathWithoutLocale.startsWith(route)
   // );
 
-  // Create Supabase client for server-side auth
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll();
+  try {
+    
+    // Create Supabase client for server-side auth
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll();
+          },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value }) =>
+              request.cookies.set(name, value)
+            );
+            cookiesToSet.forEach(({ name, value, options }) =>
+              supabaseResponse.cookies.set(name, value, options)
+            );
+          },
         },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value)
-          );
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
-          );
-        },
-      },
-    }
-  );
+      }
+    );
+    const { data, error } = await supabase.auth.getClaims();
+    const userRole = data?.claims.user_metadata?.role as RoleType | undefined;
+  
 
-  const { data, error } = await supabase.auth.getClaims();
   // console.log(user)
 
-  const userRole = data?.claims.user_metadata?.role as RoleType | undefined;
 
   // --- 1. Redirect "/" to default locale ---
   const rootRedirect = new URL(`/${DEFAULT_LOCALE}`, request.url);
@@ -100,6 +103,15 @@ export async function updateSession(
         new URL(`/${locale}${config.home}`, request.url)
       );
     }
+  }
+  } catch (error) {
+    console.error(error);
+    return NextResponse.next({
+      request: {
+        headers: request.headers,
+      },
+    });
+    
   }
 
   return supabaseResponse;

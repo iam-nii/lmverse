@@ -1,7 +1,7 @@
 import createMiddleware from "next-intl/middleware";
 import { routing } from "./i18n/routing";
 import { updateSession } from "@/lib/supabase/proxy";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const intlMiddleWare = createMiddleware(routing);
 
@@ -10,7 +10,18 @@ export default async function proxy(request: NextRequest) {
   const response = intlMiddleWare(request);
 
   //Then update Supabase session
-  return await updateSession(request, response);
+  try {
+    
+    return await updateSession(request, response);
+  } catch (error) {
+    console.log(error)
+    return NextResponse.next({
+      request: {
+        headers: request.headers,
+      },
+    });
+    
+  }
 }
 
 export const config = {

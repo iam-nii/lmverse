@@ -35,7 +35,99 @@ import LocaleSwitcher from "../LocaleSwitcher";
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useAuthStore();
   const userRole = user?.user_metadata?.role;
-  const data = {
+  const studentSideBarData = {navMain: [
+      {
+        title: "Dashboard",
+        url: `/dashboard/${userRole}`,
+        icon: IconDashboard,
+      },
+      {
+        title: "My Courses",
+        url: `/dashboard/my-courses`,
+        icon: IconListDetails,
+      },
+      {
+        title: "Available Courses",
+        url: "#",
+        icon: IconChartBar,
+      },
+      {
+        title: "Tutors",
+        url: "#",
+        icon: IconFolder,
+      },
+      {
+        title: "Online lessons",
+        url: `#`,
+        icon: IconUsers,
+      },
+    ],
+    navClouds: [
+      {
+        title: "Capture",
+        icon: IconCamera,
+        isActive: true,
+        url: "#",
+        items: [
+          {
+            title: "Active Proposals",
+            url: "#",
+          },
+          {
+            title: "Archived",
+            url: "#",
+          },
+        ],
+      },
+      {
+        title: "Proposal",
+        icon: IconFileDescription,
+        url: "#",
+        items: [
+          {
+            title: "Active Proposals",
+            url: "#",
+          },
+          {
+            title: "Archived",
+            url: "#",
+          },
+        ],
+      },
+      {
+        title: "Prompts",
+        icon: IconFileAi,
+        url: "#",
+        items: [
+          {
+            title: "Active Proposals",
+            url: "#",
+          },
+          {
+            title: "Archived",
+            url: "#",
+          },
+        ],
+      },
+    ],
+    navSecondary: [
+      {
+        title: "Settings",
+        url: "#",
+        icon: IconSettings,
+      },
+      {
+        title: "Get Help",
+        url: "#",
+        icon: IconHelp,
+      },
+      {
+        title: "Search",
+        url: "#",
+        icon: IconSearch,
+      },
+    ],}
+  const adminSideBarData = {
     navMain: [
       {
         title: "Dashboard",
@@ -44,7 +136,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       },
       {
         title: "Courses",
-        url: `/dashboard/${userRole}/courses`,
+        url: `/dashboard/courses`,
         icon: IconListDetails,
       },
       {
@@ -59,7 +151,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       },
       {
         title: "Users",
-        url: `/dashboard/${userRole}/users`,
+        url: `/dashboard/users`,
         icon: IconUsers,
       },
     ],
@@ -128,7 +220,102 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         icon: IconSearch,
       },
     ],
-  };
+  }
+  const tutorSideBarData = {
+    navMain: [
+      {
+        title: "Dashboard",
+        url: `/dashboard`,
+        icon: IconDashboard,
+      },
+      {
+        title: "Courses",
+        url: `/dashboard/courses`,
+        icon: IconListDetails,
+      },
+      {
+        title: "Analytics",
+        url: "#",
+        icon: IconChartBar,
+      },
+      {
+        title: "Projects",
+        url: "#",
+        icon: IconFolder,
+      },
+      {
+        title: "Students",
+        url: `/dashboard/users`,
+        icon: IconUsers,
+      },
+    ],
+    navClouds: [
+      {
+        title: "Capture",
+        icon: IconCamera,
+        isActive: true,
+        url: "#",
+        items: [
+          {
+            title: "Active Proposals",
+            url: "#",
+          },
+          {
+            title: "Archived",
+            url: "#",
+          },
+        ],
+      },
+      {
+        title: "Proposal",
+        icon: IconFileDescription,
+        url: "#",
+        items: [
+          {
+            title: "Active Proposals",
+            url: "#",
+          },
+          {
+            title: "Archived",
+            url: "#",
+          },
+        ],
+      },
+      {
+        title: "Prompts",
+        icon: IconFileAi,
+        url: "#",
+        items: [
+          {
+            title: "Active Proposals",
+            url: "#",
+          },
+          {
+            title: "Archived",
+            url: "#",
+          },
+        ],
+      },
+    ],
+    navSecondary: [
+      {
+        title: "Settings",
+        url: "#",
+        icon: IconSettings,
+      },
+      {
+        title: "Get Help",
+        url: "#",
+        icon: IconHelp,
+      },
+      {
+        title: "Search",
+        url: "#",
+        icon: IconSearch,
+      },
+    ],
+  }
+  const data = userRole === "admin" ? adminSideBarData : (userRole === "tutor" ? tutorSideBarData : studentSideBarData);
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
