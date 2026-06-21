@@ -9,6 +9,7 @@ import {
   CardDescription,
   CardFooter,
 } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ICourse } from "@/types/types";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -48,16 +49,16 @@ function CourseCard(course: CourseCardType) {
       <Card className="relative mx-auto w-full max-w-sm pt-0">
         <div className="absolute inset-0 z-30 aspect-video bg-black/35" />
         {imageURL && (
-          <div className="relative h-48 w-full">
+          <div className="relative aspect-video w-full">
             <Image
               src={imageURL}
               alt={course.course.title!}
               fill
-              className="object-cover"
+              className="relative z-20 aspect-video w-full object-cover brightness-60 grayscale dark:brightness-40"
             />
           </div>
         )}
-        <CardHeader>
+        <CardHeader className="pt-0">
           <CardAction>
             <Badge variant="secondary">{course.course.status}</Badge>
           </CardAction>

@@ -9,7 +9,7 @@ function CoursesGrid() {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-3 gap-2">
         {Array.from({ length: 6 }).map((_, index) => (
           <Card key={index} className="w-full max-w-xs">
             <CardHeader>

@@ -31,6 +31,10 @@ import Advanced from "@/public/language_levels/toWEBP/advanced.webp";
 import Backgound2 from "@/public/backgrounds/background2.png";
 import Backgound3 from "@/public/backgrounds/background3.png";
 
+// Material types
+import WordDoc from "@/public/wordImg.webp";
+import PdfDoc from "@/public/pdfImg.webp";
+
 export {
   logo,
   DefaultAvatar,
@@ -57,4 +61,6 @@ export {
   TechnicalEnglish,
   InternationalExams,
   RussianExams,
+  WordDoc,
+  PdfDoc,
 };
