@@ -63,8 +63,6 @@ function DocumentUploader({
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       if (acceptedFiles.length > 0 && canUpload) {
-        // console.log(acceptedFiles[0].type);
-
         setFiles((previousFiles) => [
           ...previousFiles,
           ...acceptedFiles.map((file) => {
