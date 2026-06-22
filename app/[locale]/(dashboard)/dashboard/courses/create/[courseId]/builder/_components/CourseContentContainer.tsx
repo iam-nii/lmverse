@@ -4,22 +4,18 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { useCourseContentStore } from "@/store/courses/CourseContentStore";
 import { Reorder } from "framer-motion";
-import { CirclePlus, GripVertical, ListPlus } from "lucide-react";
+import { GripVertical} from "lucide-react";
 import LessonForm from "./LessonForm";
 
-export default function ModulesContainer() {
+export default function CourseContentContainer() {
   const { modules, lessons, setModules } = useCourseContentStore();
 
   return (
     <div className="mt-8 md:max-w-[45vw]">
+
+      {/* Displaying the available modules */}
       <Reorder.Group
         axis="y"
         values={modules}

@@ -1,35 +1,8 @@
+import { CourseContent } from "@/types/courseContent/types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-interface Lesson {
-  id: string;
-  title: string;
-  description: string;
-  video_url: string;
-  video_share_url: string;
-  content: string;
-  files: string[];
-  order: number;
-  module_id: number;
-}
-interface Module {
-  id: number;
-  order: number;
-  title: string;
-  lessons?: string[]; // lesson title?
-}
 
-interface CourseContent {
-  modules: Module[] | [];
-  setModules: (modules: Module[]) => void;
-  lessons: Lesson[] | [];
-  isLoading: boolean;
-  addModule: (title: string, id: number) => void;
-  addLesson: (lesson: Lesson) => void;
-  updateModule: (id: number, title: string) => void;
-  addLessonToModule: (module_id: number, lesson_id: string) => void;
-  removeModules: () => void;
-}
 
 export const useCourseContentStore = create<CourseContent>()(
   persist(

@@ -5,13 +5,11 @@ import StarterKit from "@tiptap/starter-kit";
 import MenuBar from "./MenuBar";
 import TextAlign from "@tiptap/extension-text-align";
 import Highlight from "@tiptap/extension-highlight";
-import { ControllerRenderProps, FieldValues } from "react-hook-form";
-import { FormValues } from "@/types/types";
-
 interface RichTextEditorProps {
   field:any;
+  initialText: string
 }
-export function RichTextEditor({ field }: RichTextEditorProps) {
+export function RichTextEditor({ field, initialText }: RichTextEditorProps) {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -46,7 +44,7 @@ export function RichTextEditor({ field }: RichTextEditorProps) {
     },
     content: field.value
       ? JSON.parse(field.value)
-      : "<p>Course Description</p>",
+      : `<p>${initialText}</p>`,
   });
 
   return (

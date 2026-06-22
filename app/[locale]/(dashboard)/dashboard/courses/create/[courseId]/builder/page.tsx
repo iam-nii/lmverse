@@ -9,7 +9,8 @@ import {
 } from "@/components/ui/breadcrumb"
 import { useSearchParams } from "next/navigation"
 import ModuleForm from "./_components/ModuleForm"
-import ModulesContainer from "./_components/ModulesContainer"
+import CourseContentContainer from "./_components/CourseContentContainer"
+import ContentForm from "./_components/ContentForm"
 
 export default function CourseContentPage(){
        const searchParams = useSearchParams()
@@ -34,8 +35,8 @@ export default function CourseContentPage(){
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
-    <ModuleForm/>
-    <ModulesContainer/>
+    <ContentForm/>
+    <CourseContentContainer/>
     </div>
     )
     

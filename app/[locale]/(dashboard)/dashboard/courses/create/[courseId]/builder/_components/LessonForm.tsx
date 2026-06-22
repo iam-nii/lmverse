@@ -1,5 +1,6 @@
 "use client";
 import DocumentUploader from "@/components/file-uploader/MaterialUploader";
+import { RichTextEditor } from "@/components/rich-text-editor/Editor";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -17,16 +18,6 @@ import { Label } from "@/components/ui/label";
 import { useCourseContentStore } from "@/store/courses/CourseContentStore";
 import { CircleQuestionMark } from "lucide-react";
 
-// type lessonType = {
-//     title: string,
-//     description: string,
-//     video_url: string,
-//     video_share_url: string,
-//     content: string,
-//     files: string[],
-//     order:number,
-//     module_id:number
-// }
 export default function LessonForm() {
   const { addModule, modules } = useCourseContentStore();
 
@@ -35,14 +26,14 @@ export default function LessonForm() {
     if (module_title) addModule(module_title.toString(), modules.length + 1);
   };
   return (
-    <div className=" flex flex-col gap-8 justify-items-center">
+    <div className="flex flex-col gap-8 justify-items-center">
       <Dialog>
         <DialogTrigger asChild>
           <Button variant="outline" size={"sm"} className="self-start">
             Create a new Lesson
           </Button>
         </DialogTrigger>
-        <DialogContent className="w-[50vw]">
+        <DialogContent className="max-w-[90vw] min-w-fit">
           <form action={handleAddLesson} className="flex flex-col gap-4">
             <DialogHeader>
               <DialogTitle>Create a new Lesson</DialogTitle>
@@ -75,7 +66,8 @@ export default function LessonForm() {
               </Field>
               <Field>
                 <Label htmlFor="content">Lesson content</Label>
-                <Input id="content" name="content" />
+                {/* <Input id="content" name="content" /> */}
+                <RichTextEditor field={"content"} initialText="Course Content"/>
               </Field>
               <Field>
                 <Label htmlFor="content">Lesson files</Label>
