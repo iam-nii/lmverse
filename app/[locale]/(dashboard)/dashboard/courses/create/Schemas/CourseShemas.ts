@@ -19,7 +19,7 @@ export const lessonFormSchema = z.object({
     video_url: z.url().optional(),
     vidoe_share_url: z.url().optional(),
     content: z.string(),
-    fileKey: z.array(z.instanceof(File)).optional(),
+    fileKey: z.array(z.string()).optional(),
 })
 
 export type lessonFormSchemaType = z.infer<typeof lessonFormSchema>;

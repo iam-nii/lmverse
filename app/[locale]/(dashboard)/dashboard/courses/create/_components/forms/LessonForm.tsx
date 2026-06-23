@@ -25,6 +25,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import Link from "next/link";
+import { Lesson } from "@/types/courseContent/types";
 
 export default function LessonForm() {
   const { addLesson } = useCourseContentStore();
@@ -42,9 +43,19 @@ export default function LessonForm() {
       fileKey: [],
     }
   })
-  const handleAddLesson = () => {
+  const handleAddLesson = (data:lessonFormSchemaType ) => {
 
-
+    const lesson:Lesson = {
+      id: uuidv4(),
+      title: data.title,
+      description: data.description,
+      content: data.content,
+      video_url: data.video_url || "",
+      video_share_url: data.vidoe_share_url || "",
+      module_id: data.module_id,
+      files: data.fileKey
+    }
+    addLesson(data.module_id,lesson)
   };
   return (
     <div className="flex flex-col gap-8 justify-items-center">
@@ -214,9 +225,12 @@ export default function LessonForm() {
 
                           <DocumentUploader
                             path="courses/materials"
-                            onChange={(key)=> {
-                              field.onChange(key);
-                              lessonForm.trigger("fileKey")
+                            onChange={(key) => {
+                              const currentKeys = field.value ?? [];
+
+                              field.onChange([...currentKeys, key]);
+
+                              lessonForm.trigger("fileKey");
                             }}
                             fileType="docs"
                             maxFiles={2}
@@ -252,7 +266,7 @@ export default function LessonForm() {
         </div>
         <div className="flex gap-2 justify-end">
           <Button variant="destructive" type="reset" className="cursor-pointer">Clear</Button>
-          <Button type="button" className="cursor-pointer" onClick={handleAddLesson}>Add Lesson <PlusIcon /></Button>
+          <Button type="button" className="cursor-pointer">Add Lesson <PlusIcon /></Button>
         </div>
 
       </form>

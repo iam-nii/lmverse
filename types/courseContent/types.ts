@@ -1,13 +1,13 @@
 export interface Lesson {
   id: string;
   title: string;
-  description: string;
+  description?: string;
   video_url: string;
   video_share_url: string;
   content: string;
-  files: string[];
-  order: number;
-  module_id: number;
+  files?: string[];
+  order?: number;
+  module_id: string;
 }
 export interface Module {
   id: string;

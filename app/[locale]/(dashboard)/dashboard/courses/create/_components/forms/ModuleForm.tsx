@@ -13,27 +13,10 @@ import {
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
-import Link from "next/link";
 import { useCourseContentStore } from "../../store/CourseContentStore";
 import { useState } from "react";
 import CourseContentContainer from "../CourseContentContainer";
 
-// type lessonType = {
-//     title: string,
-//     description: string,
-//     video_url: string,
-//     video_share_url: string,
-//     content: string,
-//     files: string[],
-//     order:number,
-//     module_id:number
-// }
-// type moduleType = {
-//     id: number,
-//     title: string,
-//     lessons?: lessonType[] | []
-// }
 export default function ModuleForm() {
   const [moduleTitle, setModuleTitle] = useState<string>("")
   const { addModule } = useCourseContentStore();  
