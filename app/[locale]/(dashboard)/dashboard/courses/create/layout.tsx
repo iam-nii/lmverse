@@ -1,6 +1,6 @@
 'use client';
 
-import { ContentFormProvider } from "./ContentFormContext";
+import { ContentFormProvider } from "./[courseId]/builder/ContentFormContext";
 
 
 export default function FormLayout({
@@ -10,7 +10,9 @@ export default function FormLayout({
 }) {
   return (
     <ContentFormProvider>
+      <div className="px-10">
       {children}
+      </div>
     </ContentFormProvider>
   );
 }
