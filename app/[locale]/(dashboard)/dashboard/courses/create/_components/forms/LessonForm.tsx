@@ -9,7 +9,7 @@ import { useCourseContentStore } from "@/app/[locale]/(dashboard)/dashboard/cour
 import { CircleQuestionMark, PlusIcon } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 import { Controller, useForm } from "react-hook-form";
-import { lessonFormSchema, lessonFormSchemaType } from "./Schemas/CourseShemas";
+import { lessonFormSchema, lessonFormSchemaType } from "../../Schemas/CourseShemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Tooltip,
@@ -42,7 +42,7 @@ export default function LessonForm() {
       fileKey: [],
     }
   })
-  const handleAddLesson = (formData: lessonFormSchemaType) => {
+  const handleAddLesson = () => {
 
 
   };
@@ -252,7 +252,7 @@ export default function LessonForm() {
         </div>
         <div className="flex gap-2 justify-end">
           <Button variant="destructive" type="reset" className="cursor-pointer">Clear</Button>
-          <Button type="button" className="cursor-pointer">Add Lesson <PlusIcon /></Button>
+          <Button type="button" className="cursor-pointer" onClick={handleAddLesson}>Add Lesson <PlusIcon /></Button>
         </div>
 
       </form>

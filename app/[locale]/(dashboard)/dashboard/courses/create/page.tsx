@@ -1,4 +1,4 @@
-import CreateForm from "./CreateForm";
+import CreateForm from "./_components/forms/CreateForm";
 
 function CourseCreationPage() {
 

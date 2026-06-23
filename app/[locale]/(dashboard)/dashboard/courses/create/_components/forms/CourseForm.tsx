@@ -39,7 +39,7 @@ import { redirect } from "next/navigation";
 import { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SparkleIcon } from "lucide-react";
-import { courseSchema, courseSchemaType } from "./Schemas/CourseShemas";
+import { courseSchema, courseSchemaType } from "../../Schemas/CourseShemas";
 import { courseStatus, levels } from "@/types/courseContent/types";
 const initialValues = {
   title: "",

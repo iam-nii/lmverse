@@ -15,9 +15,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 import Link from "next/link";
-import { useCourseContentStore } from "./store/CourseContentStore";
+import { useCourseContentStore } from "../../store/CourseContentStore";
 import { useState } from "react";
-import CourseContentContainer from "./_components/CourseContentContainer";
+import CourseContentContainer from "../CourseContentContainer";
 
 // type lessonType = {
 //     title: string,
@@ -61,7 +61,7 @@ export default function ModuleForm() {
             </Field>
             <DialogFooter>
               <DialogClose asChild>
-                <Button variant="outline">Cancel</Button>
+                <Button variant="outline">Close</Button>
               </DialogClose>
               <Button onClick={()=> addModule(moduleTitle)}>Add Module</Button>
             </DialogFooter>

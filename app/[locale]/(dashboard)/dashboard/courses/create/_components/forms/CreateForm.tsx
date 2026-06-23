@@ -16,12 +16,13 @@ import LessonForm from "./LessonForm"
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { PlusIcon } from "lucide-react"
+import SubmitCourse from "../SubmitForm"
 
 const steps = [
   { title: "Add Course Details", page: <CourseForm /> },
   { title: "Add Modules to your course", page: <ModuleForm /> },
   { title: "Add Lessons to your course modules", page: <LessonForm /> },
-  { title: "Done" },
+  { title: "Done", page: <SubmitCourse/>},
 ]
 
 export default function CreateForm() {
