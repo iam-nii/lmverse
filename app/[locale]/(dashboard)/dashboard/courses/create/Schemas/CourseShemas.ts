@@ -1,14 +1,31 @@
-import { z } from "zod";
+import { courseStatus, levels } from "@/types/courseContent/types";
+import {z} from "zod"
+// interface Lesson {
+//   id: string;
+//   title: string;
+//   description: string;
+//   video_url: string;
+//   video_share_url: string;
+//   content: string;
+//   files: string[];
+//   order: number;
+//   module_id: number;
+// }
 
-export const levels = [
-  "Starter",
-  "Elementary",
-  "Intermediate",
-  "Upper Intermediate",
-  "Advanced",
-  "Advanced C2",
-];
-export const courseStatus = ["draft", "published", "archived"];
+export const lessonFormSchema = z.object({
+    title: z.string(),
+    module_id: z.string(),
+    description: z.string().optional(),
+    video_url: z.url().optional(),
+    vidoe_share_url: z.url().optional(),
+    content: z.string(),
+    fileKey: z.array(z.instanceof(File)).optional(),
+})
+
+export type lessonFormSchemaType = z.infer<typeof lessonFormSchema>;
+
+
+
 export const courseSchema = z.object({
   title: z
     .string()

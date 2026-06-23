@@ -7,9 +7,10 @@ import TextAlign from "@tiptap/extension-text-align";
 import Highlight from "@tiptap/extension-highlight";
 interface RichTextEditorProps {
   field:any;
-  initialText: string
+  initialText: string;
+  className?: string;
 }
-export function RichTextEditor({ field, initialText }: RichTextEditorProps) {
+export function RichTextEditor({ field, initialText, className }: RichTextEditorProps) {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -52,7 +53,7 @@ export function RichTextEditor({ field, initialText }: RichTextEditorProps) {
       <MenuBar editor={editor} />
       <EditorContent
         editor={editor}
-        className="[&_p]:text-foreground [&_h1]:text-foreground [&_h2]:text-foreground [&_h3]:text-foreground"
+        className={`[&_p]:text-foreground [&_h1]:text-foreground [&_h2]:text-foreground [&_h3]:text-foreground ${className}`}
         // className="[&_h1]:text-3xl [&_h1]:font-bold"
       />
     </div>

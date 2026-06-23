@@ -1,12 +1,4 @@
-"use client";
-
-
-import { ChevronRight} from "lucide-react";
-
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, } from "@/components/ui/breadcrumb";
 import CreateForm from "./CreateForm";
-
-
 
 function CourseCreationPage() {
 

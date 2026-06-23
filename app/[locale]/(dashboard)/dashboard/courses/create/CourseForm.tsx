@@ -37,14 +37,10 @@ import Uploader from "@/components/file-uploader/Uploader";
 import { v4 as uuidv4 } from "uuid";
 import { redirect } from "next/navigation";
 import { useEffect } from "react";
-import {
-  courseSchema,
-  courseSchemaType,
-  courseStatus,
-  levels,
-} from "@/lib/zodSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PlusIcon, SparkleIcon } from "lucide-react";
+import { SparkleIcon } from "lucide-react";
+import { courseSchema, courseSchemaType } from "./Schemas/CourseShemas";
+import { courseStatus, levels } from "@/types/courseContent/types";
 const initialValues = {
   title: "",
   description: "",
@@ -237,10 +233,8 @@ export default function CourseForm (){
                         <FieldLabel htmlFor="filekey">
                           Thumbnail image
                         </FieldLabel>
-                        {/*
-                         */}
                         <Uploader
-                          value={field.value}
+                        path="courses/thumbnails"
                           onChange={(key) => {
                             field.onChange(key);
                             form.trigger("fileKey");
@@ -326,7 +320,7 @@ export default function CourseForm (){
                             <SelectValue placeholder="Status" />
                             <SelectContent>
                               <SelectGroup>
-                                {courseStatus.map((s, index) => (
+                                {courseStatus.map((s: string, index: number) => (
                                   <SelectItem key={index} value={s}>
                                     {s}
                                   </SelectItem>
@@ -345,9 +339,9 @@ export default function CourseForm (){
               </div>
             </FieldGroup>
 
-            <Button type="submit" className="cursor-pointer">
+            {/* <Button type="submit" className="cursor-pointer">
               Create course <PlusIcon size={16} className="ml-1" />
-            </Button>
+            </Button> */}
           </form>
         </CardContent>
       </Card>

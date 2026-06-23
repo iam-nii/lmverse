@@ -9,8 +9,10 @@ import { PdfDoc, WordDoc } from "@/constants/images";
 import Image from "next/image";
 
 type DocumentUploaderTypes = {
+  path: string;
   maxFiles: number;
   maxSize: number;
+  onChange: (file: string) => void;
   fileType: "docs" | "images" | "videos";
 };
 const ACCEPTED_FILE_TYPES = {
@@ -28,9 +30,11 @@ const ACCEPTED_FILE_TYPES = {
 } as const;
 
 function DocumentUploader({
+  path,
   maxFiles,
   maxSize,
   fileType,
+  onChange
 }: DocumentUploaderTypes) {
   const [files, setFiles] = useState<
     Array<{
@@ -41,59 +45,197 @@ function DocumentUploader({
       key?: string; // The key of the file in the storage
       isDeleting: boolean;
       error: boolean;
+      success?: boolean;
       objectURL?: string; // The object URL of the file
     }>
   >([]);
-  const [canUpload, setCanUpload] = useState(true);
-  const disableUpload = useEffectEvent(() => {
-    setCanUpload(false);
-  });
+
+  const canUpload = files.length < maxFiles;
 
   useEffect(() => {
-    if (files.length == maxFiles) {
-      disableUpload();
-    }
-    return;
-  }, [files, maxFiles]);
+    return () => {
+      files.forEach((file) => {
+        if (
+          file.objectURL?.startsWith("blob:")
+        ) {
+          URL.revokeObjectURL(file.objectURL);
+        }
+      });
+    };
+  }, []);
+  const updateFile = (
+    fileId: string,
+    updates: Partial<(typeof files)[number]>
+  ) => {
+    setFiles((prev) =>
+      prev.map((f) =>
+        f.id === fileId
+          ? { ...f, ...updates }
+          : f
+      )
+    );
+  };
 
-  function uploadFile(file: File) {
-    // console.log(file);
+  async function uploadFile(fileId: string, file: File) {
+    updateFile(fileId, {
+      uploading: true,
+      progress: 0,
+      error: false,
+    });
+
+    try {
+      const presignedResponse = await fetch("/api/s3/upload", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fileName: file.name,
+          contentType: file.type,
+          size: file.size,
+          isImage: true,
+          path
+        }),
+      });
+      console.log(presignedResponse);
+
+      if (!presignedResponse.ok) {
+        throw new Error("Failed to get presigned URL");
+      }
+
+      const { preSignedURL, key } = await presignedResponse.json();
+
+      await new Promise<void>((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+
+        xhr.upload.onprogress = (event) => {
+          if (event.lengthComputable) {
+            const percentageCompleted = (event.loaded / event.total) * 100;
+
+            setFiles((prev) => ({
+              ...prev,
+              progress: Math.round(percentageCompleted),
+            }));
+          }
+        };
+
+        xhr.onload = () => {
+          if (xhr.status === 200 || xhr.status === 204) {
+            resolve();
+          } else {
+            reject(new Error(`Upload failed with status ${xhr.status}`));
+          }
+        };
+
+        xhr.onerror = () => {
+          reject(new Error("Network error during upload"));
+        };
+
+        xhr.open("PUT", preSignedURL);
+
+        xhr.setRequestHeader("Content-Type", file.type);
+
+        xhr.send(file);
+      });
+
+      updateFile(fileId, {
+        uploading: false,
+        progress: 100,
+        key
+      })
+
+      onChange(key);
+
+      toast.success("File uploaded successfully");
+    } catch (error) {
+      console.error(error);
+
+
+      updateFile(fileId, {
+        uploading: false,
+        progress: 0,
+        error: true,
+        success: false
+      })
+
+      toast.error("Failed to upload file");
+    }
   }
 
+  async function removeFile(fileId: string) {
+    const file = files.find((file) => file.id === fileId);
+    if (file && file.isDeleting) return;
+    try {
+      setFiles((prev) => prev.map((f) => f.id === file?.id ? { ...f, isDeleting: true } : f))
+
+      console.log("Sending file key to backend");
+      if (file?.key) {
+        await fetch("/api/s3/delete", {
+          method: "POST",
+          body: JSON.stringify({
+            fileKey: file?.key,
+          }),
+        });
+      }
+
+      setFiles((prev) => {
+        if (file?.objectURL?.startsWith("blob:")) {
+          URL.revokeObjectURL(file.objectURL)
+        }
+        return prev.filter((f) => f.id !== file?.id)
+      })
+    } catch (error) {
+      setFiles((prev) =>
+        prev.map((f) =>
+          f.id === fileId
+            ? { ...f, isDeleting: false }
+            : f
+        )
+      );
+
+    }
+
+
+  }
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       if (acceptedFiles.length > 0 && canUpload) {
+
+        const uploadFiles = acceptedFiles.map((file) => {
+          let objectURL: string;
+          if (file.type === "application/pdf") {
+            objectURL = PdfDoc.src;
+          } else if (
+            file.type ===
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          ) {
+            objectURL = WordDoc.src;
+          } else {
+            objectURL = URL.createObjectURL(file);
+          }
+          return {
+            id: uuidv4(),
+            file: file,
+            uploading: false,
+            progress: 0,
+            isDeleting: false,
+            error: false,
+            objectURL,
+          };
+
+        })
         setFiles((previousFiles) => [
           ...previousFiles,
-          ...acceptedFiles.map((file) => {
-            let objectURL: string;
-
-            if (file.type === "application/pdf") {
-              objectURL = PdfDoc.src;
-            } else if (
-              file.type ===
-              "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-            ) {
-              objectURL = WordDoc.src;
-            } else {
-              objectURL = URL.createObjectURL(file);
-            }
-            return {
-              id: uuidv4(),
-              file: file,
-              uploading: false,
-              progress: 0,
-              isDeleting: false,
-              error: false,
-              objectURL,
-            };
-          }),
+          ...uploadFiles,
         ]);
+
+        uploadFiles.forEach((item) => {
+          uploadFile(item.id, item.file)
+        })
       } else {
         toast.error(`You can only upload ${maxFiles} files`);
       }
 
-      acceptedFiles.forEach(uploadFile);
     },
     [canUpload, maxFiles]
   );

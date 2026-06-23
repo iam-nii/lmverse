@@ -10,16 +10,22 @@ export interface Lesson {
   module_id: number;
 }
 export interface Module {
-  id: number;
+  id: string;
   order: number;
   title: string;
-  lessons?: Lesson[];
+  lessons: Lesson[];
 }
 export interface courseContext {
-  module_id: number;
-  module_order: number;
-  module_title: string;
-  module_lessons?: Lesson[]; // lesson title?
+  course_id: string;
+  course_title: string;
+  course_slug: string;
+  course_short_description: string;
+  course_description: string;
+  course_file_key: string;
+  course_price: number;
+  course_level: string;
+  course_status: string;
+  course_modules: Module[]
 }
 export const levels = [
   "Starter",
@@ -30,6 +36,7 @@ export const levels = [
   "Advanced C2",
 ];
 export interface Course {
+  id: string;
   title: string;
   description: string;
   fileKey: string;
@@ -40,6 +47,7 @@ export interface Course {
   status: string;
   modules: Module[]
 }
+export const courseStatus = ["draft", "published", "archived"];
 
 export interface CourseContent {
   modules: Module[] | [];

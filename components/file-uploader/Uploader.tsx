@@ -27,11 +27,11 @@ interface IUploadState {
 }
 
 type UploaderProps = {
-  value?: string;
+  path: string
   onChange: (key: string) => void;
 };
 
-function Uploader({ value, onChange }: UploaderProps) {
+function Uploader({path, onChange }: UploaderProps) {
   const [fileState, setFileState] = useState<IUploadState>({
     error: false,
     file: null,
@@ -63,6 +63,7 @@ function Uploader({ value, onChange }: UploaderProps) {
           contentType: file.type,
           size: file.size,
           isImage: true,
+          path
         }),
       });
       console.log(presignedResponse);

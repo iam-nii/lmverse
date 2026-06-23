@@ -1,6 +1,5 @@
 'use client';
 
-import { ContentFormProvider } from "./[courseId]/builder/ContentFormContext";
 
 
 export default function FormLayout({
@@ -9,10 +8,8 @@ export default function FormLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ContentFormProvider>
-      <div className="px-10">
+    <div className="px-10">
       {children}
       </div>
-    </ContentFormProvider>
   );
 }

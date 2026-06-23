@@ -12,7 +12,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const { fileName, contentType, size } = body;
+    const { fileName, contentType, size,path } = body;
 
     const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
 
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
 
     const extension = fileName.split(".").pop() || "jpg";
 
-    const key = `courses/thumbnails/${randomUUID()}.${extension}`;
+    const key = `${path}/${randomUUID()}.${extension}`;
 
     const command = new PutObjectCommand({
       Bucket: process.env.SELECTEL_S3_LMVERSE_BUCKET_PUBLIC!,

@@ -13,9 +13,11 @@ import {
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useCourseContentStore } from "@/store/courses/CourseContentStore";
-import { useCourseContentContext } from "../ContentFormContext";
+
 import Link from "next/link";
+import { useCourseContentStore } from "./store/CourseContentStore";
+import { useState } from "react";
+import CourseContentContainer from "./_components/CourseContentContainer";
 
 // type lessonType = {
 //     title: string,
@@ -33,13 +35,9 @@ import Link from "next/link";
 //     lessons?: lessonType[] | []
 // }
 export default function ModuleForm() {
-  // const { addModule, modules } = useCourseContentStore();
-  const {formData, updateFormData} = useCourseContentContext();
+  const [moduleTitle, setModuleTitle] = useState<string>("")
+  const { addModule } = useCourseContentStore();  
 
-  // const handleAddModule = (formData: FormData) => {
-  //   const module_title = formData.get("module_title");
-  //   if (module_title) addModule(module_title.toString(), modules.length + 1);
-  // };
   return (
     <div className="mt-8 flex flex-col gap-8 justify-items-center">
       <Dialog>
@@ -49,9 +47,7 @@ export default function ModuleForm() {
           </Button>
         </DialogTrigger>
         <DialogContent>
-          {/* <form action={handleAddModule} className="flex flex-col gap-4"> */}
-          <form className="flex flex-col gap-4">
-            <DialogHeader>
+          <DialogHeader>
               <DialogTitle>Create a new module</DialogTitle>
               <DialogDescription>
                 Modules help structure your course into logical sections. Each
@@ -61,17 +57,17 @@ export default function ModuleForm() {
             </DialogHeader>
             <Field>
               <Label htmlFor="module-title"> Module title</Label>
-              <Input id="module-title" name="module_title" value={formData.module_title} onChange={(e)=>updateFormData({module_title: e.target.value})}/>
+              <Input id="module-title" name="module_title" onChange={(e) => setModuleTitle(e.target.value)} value={moduleTitle}/>
             </Field>
             <DialogFooter>
               <DialogClose asChild>
                 <Button variant="outline">Cancel</Button>
               </DialogClose>
-              <Link href="/LessonForm">Next</Link>
+              <Button onClick={()=> addModule(moduleTitle)}>Add Module</Button>
             </DialogFooter>
-          </form>
         </DialogContent>
       </Dialog>
+      <CourseContentContainer/>
     </div>
   );
 }
