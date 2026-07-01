@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Stepper,
@@ -9,37 +9,37 @@ import {
   StepperPanel,
   StepperTitle,
   StepperTrigger,
-} from "@/components/reui/stepper"
-import CourseForm from "./CourseForm"
-import ModuleForm from "./ModuleForm"
-import LessonForm from "./LessonForm"
-import { useEffect, useState } from "react"
-import { Button } from "@/components/ui/button"
-import { PlusIcon } from "lucide-react"
-import SubmitCourse from "../SubmitForm"
+} from "@/components/reui/stepper";
+import CourseForm from "./CourseForm";
+import ModuleForm from "./ModuleForm";
+import LessonForm from "./LessonForm";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { PlusIcon } from "lucide-react";
+import SubmitCourse from "../SubmitForm";
 
 const steps = [
   { title: "Add Course Details", page: <CourseForm /> },
   { title: "Add Modules to your course", page: <ModuleForm /> },
   { title: "Add Lessons to your course modules", page: <LessonForm /> },
-  { title: "Done", page: <SubmitCourse/>},
-]
+  { title: "Done", page: <SubmitCourse /> },
+];
 
 export default function CreateForm() {
-
-
   const [currentStep, setCurrentStep] = useState(1);
 
   useEffect(() => {
-    console.log("CreateForm component rendered")
-  }, [])
+    console.log("CreateForm component rendered");
+  }, []);
 
-  const handleCreateCourse = async() => {
-
-  }
+  const handleCreateCourse = async () => {};
   return (
     <section className="w-full">
-      <Stepper value={currentStep} onValueChange={(value) => setCurrentStep(value)} className="space-y-8">
+      <Stepper
+        value={currentStep}
+        onValueChange={(value) => setCurrentStep(value)}
+        className="space-y-8"
+      >
         <StepperNav className="mb-10 gap-5">
           {steps.map((step, index) => (
             <StepperItem
@@ -61,32 +61,30 @@ export default function CreateForm() {
 
         <StepperPanel className="text-sm flex flex-col items-end">
           {steps.map((step, index) => (
-            <StepperContent
-              key={index}
-              value={index + 1}
-            >
+            <StepperContent key={index} value={index + 1}>
               {step.page}
             </StepperContent>
           ))}
           <div className="flex items-center justify-end gap-2.5 mt-4 cursor-pointer">
-            {
-              currentStep !== steps.length ? (
-                <Button
-                  variant="outline"
-                  onClick={() => setCurrentStep((prev) => prev + 1)}
-                >
-                  Next
-
-                </Button>
-              ) : (
-                <Button type="submit" className="cursor-pointer" onClick={handleCreateCourse}>
-                  Create course <PlusIcon size={16} className="ml-1" />
-                </Button>
-              )
-            }
+            {currentStep !== steps.length ? (
+              <Button
+                variant="outline"
+                onClick={() => setCurrentStep((prev) => prev + 1)}
+              >
+                Next
+              </Button>
+            ) : (
+              <Button
+                type="submit"
+                className="cursor-pointer"
+                onClick={handleCreateCourse}
+              >
+                Create course <PlusIcon size={16} className="ml-1" />
+              </Button>
+            )}
           </div>
         </StepperPanel>
       </Stepper>
     </section>
-  )
+  );
 }

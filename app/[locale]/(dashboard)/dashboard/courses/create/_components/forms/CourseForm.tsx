@@ -36,11 +36,12 @@ import Uploader from "@/components/file-uploader/Uploader";
 
 import { v4 as uuidv4 } from "uuid";
 import { redirect } from "next/navigation";
-import { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SparkleIcon } from "lucide-react";
+import { Bookmark, SparkleIcon } from "lucide-react";
 import { courseSchema, courseSchemaType } from "../../Schemas/CourseShemas";
 import { courseStatus, levels } from "@/types/courseContent/types";
+import { useCourseContentStore } from "../../store/CourseContentStore";
+import { useEffect } from "react";
 const initialValues = {
   title: "",
   description: "",
@@ -52,34 +53,49 @@ const initialValues = {
   status: "draft",
 };
 
-export default function CourseForm (){
-
-    // On page load, check if there is some data already in the local storage and load it into the fields
+export default function CourseForm() {
+  const { updateCourse, course } = useCourseContentStore();
   useEffect(() => {
-    const stored = localStorage.getItem("course-details");
-    if (stored) {
-      const parsed = JSON.parse(stored)
-      form.reset({
-        title: parsed.title || '',
-        description: parsed.description || '',
-        fileKey: parsed.fileKey || '',
-        price: parsed.price || 0,
-        level: parsed.level || 'Beginner',
-        smallDescription: parsed.smallDescription || '',
-        slug: parsed.slug || '',
-        status: parsed.status || 'draft',
-      })
-    }
-  }, [])
-     const form = useForm<courseSchemaType>({
-    resolver: zodResolver(courseSchema),
-    defaultValues: initialValues // This ensures type safety
-  });
+    console.log(course);
+  }, [course]);
 
-    async function onSubmit(data: courseSchemaType) {
+  const form = useForm<courseSchemaType>({
+    resolver: zodResolver(courseSchema),
+    defaultValues: initialValues, // This ensures type safety
+  });
+  // On page load, check if there is some data already in the store and load it into the fields
+  useEffect(() => {
+    // const stored = localStorage.getItem("course-details");
+    if (course) {
+      // const parsed = JSON.parse(stored)
+      form.reset({
+        title: course.course_title || "",
+        description: course.course_description || "",
+        fileKey: course.course_file_key || "",
+        price: course.course_price || 0,
+        level: course.course_level || "Beginner",
+        smallDescription: course.course_short_description || "",
+        slug: course.course_slug || "",
+        status: course.course_status || "draft",
+      });
+    }
+  }, []);
+
+  async function onSubmit(data: courseSchemaType) {
     // console.log(data)
     // Store data in local storage temporarily
-    localStorage.setItem('course-details', JSON.stringify(data))
+    // localStorage.setItem("course-details", JSON.stringify(data));
+
+    updateCourse({
+      course_title: data.title,
+      course_description: data.description,
+      course_file_key: data.fileKey,
+      course_level: data.level,
+      course_price: data.price,
+      course_slug: data.slug,
+      course_short_description: data.smallDescription,
+      course_status: data.status,
+    });
     // console.log(data);
     // const response = await fetch("/api/upload-course", {
     //   method: "POST",
@@ -96,254 +112,250 @@ export default function CourseForm (){
     // });
     // console.log(response);
 
-    // FOR TESTING  
-    const randomCourseId = uuidv4();
-    console.log([data, randomCourseId])
-    redirect(`/dashboard/courses/create/${randomCourseId}/builder?course=${data.slug}`)
-
+    // FOR TESTING
+    // const randomCourseId = uuidv4();
+    // console.log([data, randomCourseId]);
+    // redirect(
+    //   `/dashboard/courses/create/${randomCourseId}/builder?course=${data.slug}`
+    // );
   }
-    return (
-        <Card>
-        <CardHeader>
-          <CardTitle>Basic Information</CardTitle>
-          <CardDescription>
-            Provide basic information about the course
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FieldGroup>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Controller
-                  name="title"
-                  control={form.control}
-                  render={({ field, fieldState }) => (
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Basic Information</CardTitle>
+        <CardDescription>
+          Provide basic information about the course
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <FieldGroup>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Controller
+                name="title"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="course-title">Course Title</FieldLabel>
+                    <Input
+                      {...field}
+                      id="course-title"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Course title"
+                      autoComplete="off"
+                      value={field.value}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="slug"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <div className="flex items-end gap-4">
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor="course-title">
-                        Course Title
-                      </FieldLabel>
+                      <FieldLabel htmlFor="course-slug">Slug Title</FieldLabel>
                       <Input
                         {...field}
-                        id="course-title"
+                        id="course-clug"
                         aria-invalid={fieldState.invalid}
-                        placeholder="Course title"
+                        placeholder="Slug"
                         autoComplete="off"
-                        value={field.value}
                       />
                       {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
                       )}
                     </Field>
-                  )}
-                />
-                <Controller
-                  name="slug"
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <div className="flex items-end gap-4">
-                      <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="course-slug">
-                          Slug Title
-                        </FieldLabel>
-                        <Input
-                          {...field}
-                          id="course-clug"
-                          aria-invalid={fieldState.invalid}
-                          placeholder="Slug"
-                          autoComplete="off"
-                        />
-                        {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
-                        )}
-                      </Field>
-                      <Button
-                        type="button"
-                        className="cursor-pointer"
-                        onClick={() => {
-                          const titleValue = form.getValues("title");
-                          const slug = slugify(titleValue);
-                          form.setValue("slug", slug);
-                        }}
-                      >
-                        Generate slug
-                        <SparkleIcon size={16} className="ml-1" />
-                      </Button>
-                    </div>
-                  )}
-                />
-              </div>
-              <div className="grid grid-cols-1 gap-4">
-                <Controller
-                  name="smallDescription"
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor="short-description">
-                        Short Description
-                      </FieldLabel>
-                      <InputGroup>
-                        <InputGroupTextarea
-                          {...field}
-                          id="short-description"
-                          placeholder="A short description about the course to be shown on course cards"
-                          rows={6}
-                          className="min-h-24 "
-                          aria-invalid={fieldState.invalid}
-                        />
-                        <InputGroupAddon align="block-end">
-                          <InputGroupText className="tabular-nums">
-                            {field.value.length}/200 characters
-                          </InputGroupText>
-                        </InputGroupAddon>
-                      </InputGroup>
-                      <FieldDescription>
-                        A short description about the course to be shown on
-                        course cards.
-                      </FieldDescription>
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
-                />
-                <Controller
-                  name="description"
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor="course-description">
-                        Course Description
-                      </FieldLabel>
-                      <RichTextEditor field={field}  initialText="Course Description"/>
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
-                />
-              </div>
+                    <Button
+                      type="button"
+                      className="cursor-pointer"
+                      onClick={() => {
+                        const titleValue = form.getValues("title");
+                        const slug = slugify(titleValue);
+                        form.setValue("slug", slug);
+                      }}
+                    >
+                      Generate slug
+                      <SparkleIcon size={16} className="ml-1" />
+                    </Button>
+                  </div>
+                )}
+              />
+            </div>
+            <div className="grid grid-cols-1 gap-4">
+              <Controller
+                name="smallDescription"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="short-description">
+                      Short Description
+                    </FieldLabel>
+                    <InputGroup>
+                      <InputGroupTextarea
+                        {...field}
+                        id="short-description"
+                        placeholder="A short description about the course to be shown on course cards"
+                        rows={6}
+                        className="min-h-24 "
+                        aria-invalid={fieldState.invalid}
+                      />
+                      <InputGroupAddon align="block-end">
+                        <InputGroupText className="tabular-nums">
+                          {field.value.length}/200 characters
+                        </InputGroupText>
+                      </InputGroupAddon>
+                    </InputGroup>
+                    <FieldDescription>
+                      A short description about the course to be shown on course
+                      cards.
+                    </FieldDescription>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="description"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="course-description">
+                      Course Description
+                    </FieldLabel>
+                    <RichTextEditor
+                      field={field}
+                      initialText="Course Description"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+            </div>
 
-              <div className="grid grid-cols-1 gap-4">
-                <Controller
-                  name="fileKey"
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <div className="flex items-end gap-4">
-                      <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="filekey">
-                          Thumbnail image
-                        </FieldLabel>
-                        <Uploader
+            <div className="grid grid-cols-1 gap-4">
+              <Controller
+                name="fileKey"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <div className="flex items-end gap-4">
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor="filekey">Thumbnail image</FieldLabel>
+                      <Uploader
                         path="courses/thumbnails"
-                          onChange={(key) => {
-                            field.onChange(key);
-                            form.trigger("fileKey");
-                          }}
-                        />
-                        {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
-                        )}
-                      </Field>
-                    </div>
-                  )}
-                />
-                <Controller
-                  name="price"
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <div className="flex items-end gap-4">
-                      <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="price">Price in rubles</FieldLabel>
-                        <Input
-                          {...field}
-                          id="price"
-                          aria-invalid={fieldState.invalid}
-                          placeholder="0.00 ₽"
-                          onChange={(e) =>
-                            field.onChange(Number(e.target.value))
-                          }
-                        />
-                        {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
-                        )}
-                      </Field>
-                    </div>
-                  )}
-                />
-              </div>
+                        onChange={(key) => {
+                          field.onChange(key);
+                          form.trigger("fileKey");
+                        }}
+                      />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  </div>
+                )}
+              />
+              <Controller
+                name="price"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <div className="flex items-end gap-4">
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor="price">Price in rubles</FieldLabel>
+                      <Input
+                        {...field}
+                        id="price"
+                        aria-invalid={fieldState.invalid}
+                        placeholder="0.00 ₽"
+                        onChange={(e) => field.onChange(Number(e.target.value))}
+                      />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  </div>
+                )}
+              />
+            </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Controller
-                  name="level"
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <div className="flex items-end gap-4">
-                      <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="level">Course level</FieldLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="level" />
-                            <SelectContent>
-                              <SelectGroup>
-                                {levels.map((level, index) => (
-                                  <SelectItem key={index} value={level}>
-                                    {level}
-                                  </SelectItem>
-                                ))}
-                              </SelectGroup>
-                            </SelectContent>
-                          </SelectTrigger>
-                        </Select>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Controller
+                name="level"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <div className="flex items-end gap-4">
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor="level">Course level</FieldLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="level" />
+                          <SelectContent>
+                            <SelectGroup>
+                              {levels.map((level, index) => (
+                                <SelectItem key={index} value={level}>
+                                  {level}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </SelectTrigger>
+                      </Select>
 
-                        {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
-                        )}
-                      </Field>
-                    </div>
-                  )}
-                />
-                <Controller
-                  name="status"
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <div className="flex items-end gap-4">
-                      <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="status">Course status</FieldLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Status" />
-                            <SelectContent>
-                              <SelectGroup>
-                                {courseStatus.map((s: string, index: number) => (
-                                  <SelectItem key={index} value={s}>
-                                    {s}
-                                  </SelectItem>
-                                ))}
-                              </SelectGroup>
-                            </SelectContent>
-                          </SelectTrigger>
-                        </Select>
-                        {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
-                        )}
-                      </Field>
-                    </div>
-                  )}
-                />
-              </div>
-            </FieldGroup>
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  </div>
+                )}
+              />
+              <Controller
+                name="status"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <div className="flex items-end gap-4">
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor="status">Course status</FieldLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Status" />
+                          <SelectContent>
+                            <SelectGroup>
+                              {courseStatus.map((s: string, index: number) => (
+                                <SelectItem key={index} value={s}>
+                                  {s}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </SelectTrigger>
+                      </Select>
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  </div>
+                )}
+              />
+            </div>
+          </FieldGroup>
 
-            {/* <Button type="submit" className="cursor-pointer">
-              Create course <PlusIcon size={16} className="ml-1" />
-            </Button> */}
-          </form>
-        </CardContent>
-      </Card>
-    )
+          <Button type="submit" className="cursor-pointer">
+            Save course <Bookmark size={16} className="ml-1" />
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
+  );
 }
