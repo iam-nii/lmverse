@@ -297,7 +297,7 @@ export default function LessonForm() {
           <Button variant="destructive" type="reset" className="cursor-pointer">
             Clear
           </Button>
-          <Button type="button" className="cursor-pointer">
+          <Button type="submit" className="cursor-pointer">
             Add Lesson <PlusIcon />
           </Button>
         </div>

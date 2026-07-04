@@ -35,13 +35,12 @@ import {
 import Uploader from "@/components/file-uploader/Uploader";
 
 import { v4 as uuidv4 } from "uuid";
-import { redirect } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Bookmark, SparkleIcon } from "lucide-react";
+import { Bookmark, Check, Loader2, SparkleIcon } from "lucide-react";
 import { courseSchema, courseSchemaType } from "../../Schemas/CourseShemas";
 import { courseStatus, levels } from "@/types/courseContent/types";
 import { useCourseContentStore } from "../../store/CourseContentStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 const initialValues = {
   title: "",
   description: "",
@@ -55,17 +54,12 @@ const initialValues = {
 
 export default function CourseForm() {
   const { updateCourse, course } = useCourseContentStore();
+  const [isLoading, setIsLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
   useEffect(() => {
     console.log(course);
-  }, [course]);
-
-  const form = useForm<courseSchemaType>({
-    resolver: zodResolver(courseSchema),
-    defaultValues: initialValues, // This ensures type safety
-  });
-  // On page load, check if there is some data already in the store and load it into the fields
-  useEffect(() => {
-    // const stored = localStorage.getItem("course-details");
+    // On page load, check if there is some data already in the store and load it into the fields
     if (course) {
       // const parsed = JSON.parse(stored)
       form.reset({
@@ -79,23 +73,35 @@ export default function CourseForm() {
         status: course.course_status || "draft",
       });
     }
-  }, []);
+  }, [course]);
+
+  const form = useForm<courseSchemaType>({
+    resolver: zodResolver(courseSchema),
+    defaultValues: initialValues, // This ensures type safety
+  });
 
   async function onSubmit(data: courseSchemaType) {
     // console.log(data)
     // Store data in local storage temporarily
     // localStorage.setItem("course-details", JSON.stringify(data));
-
-    updateCourse({
-      course_title: data.title,
-      course_description: data.description,
-      course_file_key: data.fileKey,
-      course_level: data.level,
-      course_price: data.price,
-      course_slug: data.slug,
-      course_short_description: data.smallDescription,
-      course_status: data.status,
-    });
+    setIsLoading(true);
+    try {
+      updateCourse({
+        course_title: data.title,
+        course_description: data.description,
+        course_file_key: data.fileKey,
+        course_level: data.level,
+        course_price: data.price,
+        course_slug: data.slug,
+        course_short_description: data.smallDescription,
+        course_status: data.status,
+      });
+      setSuccess(true);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
     // console.log(data);
     // const response = await fetch("/api/upload-course", {
     //   method: "POST",
@@ -227,10 +233,7 @@ export default function CourseForm() {
                     <FieldLabel htmlFor="course-description">
                       Course Description
                     </FieldLabel>
-                    <RichTextEditor
-                      field={field}
-                      initialText="Course Description"
-                    />
+                    <RichTextEditor field={field} initialText={field.value} />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}
@@ -352,7 +355,21 @@ export default function CourseForm() {
           </FieldGroup>
 
           <Button type="submit" className="cursor-pointer">
-            Save course <Bookmark size={16} className="ml-1" />
+            {isLoading ? (
+              <Loader2 size={16} className="ml-1 animate-spin" />
+            ) : (
+              <>
+                {success ? (
+                  <>
+                    Saved <Check size={16} className="ml-1" />
+                  </>
+                ) : (
+                  <>
+                    Save course <Bookmark size={16} className="ml-1" />
+                  </>
+                )}
+              </>
+            )}
           </Button>
         </form>
       </CardContent>

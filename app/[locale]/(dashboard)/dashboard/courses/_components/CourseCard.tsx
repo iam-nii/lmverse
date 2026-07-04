@@ -1,4 +1,5 @@
 "use client";
+import GetImage from "@/components/course/GetImage";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -49,14 +50,10 @@ function CourseCard(course: CourseCardType) {
       <Card className="relative mx-auto w-full max-w-sm pt-0">
         <div className="absolute inset-0 z-30 aspect-video bg-black/35" />
         {imageURL && (
-          <div className="relative aspect-video w-full">
-            <Image
-              src={imageURL}
-              alt={course.course.title!}
-              fill
-              className="relative z-20 aspect-video w-full object-cover brightness-60 grayscale dark:brightness-40"
-            />
-          </div>
+          <GetImage
+            course_title={course.course.title!}
+            course_file_key={course.course.file_key!}
+          />
         )}
         <CardHeader className="pt-0">
           <CardAction>

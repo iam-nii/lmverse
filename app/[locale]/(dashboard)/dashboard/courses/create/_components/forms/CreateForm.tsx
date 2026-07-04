@@ -22,7 +22,7 @@ const steps = [
   { title: "Add Course Details", page: <CourseForm /> },
   { title: "Add Modules to your course", page: <ModuleForm /> },
   { title: "Add Lessons to your course modules", page: <LessonForm /> },
-  { title: "Done", page: <SubmitCourse /> },
+  { title: "Review & Publish", page: <SubmitCourse /> },
 ];
 
 export default function CreateForm() {
@@ -66,20 +66,12 @@ export default function CreateForm() {
             </StepperContent>
           ))}
           <div className="flex items-center justify-end gap-2.5 mt-4 cursor-pointer">
-            {currentStep !== steps.length ? (
+            {currentStep !== steps.length && (
               <Button
                 variant="outline"
                 onClick={() => setCurrentStep((prev) => prev + 1)}
               >
                 Next
-              </Button>
-            ) : (
-              <Button
-                type="submit"
-                className="cursor-pointer"
-                onClick={handleCreateCourse}
-              >
-                Create course <PlusIcon size={16} className="ml-1" />
               </Button>
             )}
           </div>

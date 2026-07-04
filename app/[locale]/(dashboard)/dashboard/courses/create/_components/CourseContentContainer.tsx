@@ -6,16 +6,20 @@ import {
 } from "@/components/ui/accordion";
 import { useCourseContentStore } from "@/app/[locale]/(dashboard)/dashboard/courses/create/store/CourseContentStore";
 import { Reorder } from "framer-motion";
-import { GripVertical } from "lucide-react";
+import { NotebookPen, Layers } from "lucide-react";
 
 export default function CourseContentContainer() {
-  const modules = useCourseContentStore((state) => state.course.course_modules ?? []);
+  const modules = useCourseContentStore(
+    (state) => state.course.course_modules ?? []
+  );
   const { reorderModules } = useCourseContentStore();
   // const lessons = useCourseContentStore((state) => state.course.course_modules?.flatMap((module) => module.lessons) ?? [])
 
   return (
-    <div className="mt-8 md:max-w-[45vw]">
-
+    <div className=" md:max-w-[45vw]">
+      <h1 className="text-sm italic font-semibold">
+        Drag and drop to reorder modules
+      </h1>
       {/* Displaying the available modules */}
       <Reorder.Group
         axis="y"
@@ -34,21 +38,24 @@ export default function CourseContentContainer() {
               <Reorder.Item value={module}>
                 <AccordionTrigger className="w-full">
                   <div className="flex items-center gap-2 w-full">
-                    <GripVertical />
+                    <Layers size={20} />
                     {module.title}
                   </div>
                 </AccordionTrigger>
                 <AccordionContent className="pl-8">
                   {/* Display course lesson titles */}
-                  {
-                   (module.lessons?.length ?? 0) > 0 ?(
-                    module.lessons.map((lesson)=>(
-                      <p key={lesson.id}>{lesson.title}</p>
+                  {(module.lessons?.length ?? 0) > 0 ? (
+                    module.lessons.map((lesson) => (
+                      <div key={lesson.id} className="flex items-center gap-2">
+                        <NotebookPen size={16} />
+                        {lesson.title}
+                      </div>
                     ))
-                   ) : (
-                    <p className="text-muted-foreground italic">No lessons available in this module</p>
-                   )
-                  }
+                  ) : (
+                    <p className="text-muted-foreground italic">
+                      No lessons available in this module
+                    </p>
+                  )}
                 </AccordionContent>
               </Reorder.Item>
             </AccordionItem>
