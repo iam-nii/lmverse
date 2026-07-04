@@ -114,3 +114,17 @@ export interface ICourse {
 export interface Courses {
   courses: ICourse[];
 }
+
+export const ACCEPTED_FILE_TYPES = {
+  images: {
+    "image/*": [],
+  },
+  docs: {
+    "application/pdf": [],
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+      [], // .docx
+  },
+  videos: {
+    "video/*": [],
+  },
+} as const;

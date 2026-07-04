@@ -256,6 +256,7 @@ export default function CourseForm() {
                           field.onChange(key);
                           form.trigger("fileKey");
                         }}
+                        fileType="images"
                       />
                       {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />

@@ -1,12 +1,13 @@
-import { useCallback, useEffect, useEffectEvent, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
 import { cn } from "@/lib/utils";
 import { Card, CardContent } from "../ui/card";
-import { Folder, FolderOpen, Plus } from "lucide-react";
+import { Folder, FolderOpen, Plus, X } from "lucide-react";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
 import { PdfDoc, WordDoc } from "@/constants/images";
 import Image from "next/image";
+import { ACCEPTED_FILE_TYPES } from "@/types/types";
 
 type DocumentUploaderTypes = {
   path: string;
@@ -15,26 +16,13 @@ type DocumentUploaderTypes = {
   onChange: (file: string) => void;
   fileType: "docs" | "images" | "videos";
 };
-const ACCEPTED_FILE_TYPES = {
-  images: {
-    "image/*": [],
-  },
-  docs: {
-    "application/pdf": [],
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-      [], // .docx
-  },
-  videos: {
-    "video/*": [],
-  },
-} as const;
 
 function DocumentUploader({
   path,
   maxFiles,
   maxSize,
   fileType,
-  onChange
+  onChange,
 }: DocumentUploaderTypes) {
   const [files, setFiles] = useState<
     Array<{
@@ -55,9 +43,7 @@ function DocumentUploader({
   useEffect(() => {
     return () => {
       files.forEach((file) => {
-        if (
-          file.objectURL?.startsWith("blob:")
-        ) {
+        if (file.objectURL?.startsWith("blob:")) {
           URL.revokeObjectURL(file.objectURL);
         }
       });
@@ -68,11 +54,7 @@ function DocumentUploader({
     updates: Partial<(typeof files)[number]>
   ) => {
     setFiles((prev) =>
-      prev.map((f) =>
-        f.id === fileId
-          ? { ...f, ...updates }
-          : f
-      )
+      prev.map((f) => (f.id === fileId ? { ...f, ...updates } : f))
     );
   };
 
@@ -94,7 +76,8 @@ function DocumentUploader({
           contentType: file.type,
           size: file.size,
           isImage: true,
-          path
+          path,
+          allowedTypes: ACCEPTED_FILE_TYPES[fileType],
         }),
       });
       console.log(presignedResponse);
@@ -112,10 +95,13 @@ function DocumentUploader({
           if (event.lengthComputable) {
             const percentageCompleted = (event.loaded / event.total) * 100;
 
-            setFiles((prev) => ({
-              ...prev,
-              progress: Math.round(percentageCompleted),
-            }));
+            setFiles((prev) =>
+              prev.map((file) =>
+                file.id === fileId
+                  ? { ...file, process: Math.round(percentageCompleted) }
+                  : file
+              )
+            );
           }
         };
 
@@ -141,8 +127,8 @@ function DocumentUploader({
       updateFile(fileId, {
         uploading: false,
         progress: 100,
-        key
-      })
+        key,
+      });
 
       onChange(key);
 
@@ -150,15 +136,17 @@ function DocumentUploader({
     } catch (error) {
       console.error(error);
 
-
       updateFile(fileId, {
         uploading: false,
         progress: 0,
         error: true,
-        success: false
-      })
-
-      toast.error("Failed to upload file");
+        success: false,
+      });
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Failed to upload file");
+      }
     }
   }
 
@@ -166,12 +154,17 @@ function DocumentUploader({
     const file = files.find((file) => file.id === fileId);
     if (file && file.isDeleting) return;
     try {
-      setFiles((prev) => prev.map((f) => f.id === file?.id ? { ...f, isDeleting: true } : f))
+      setFiles((prev) =>
+        prev.map((f) => (f.id === file?.id ? { ...f, isDeleting: true } : f))
+      );
 
       console.log("Sending file key to backend");
       if (file?.key) {
         await fetch("/api/s3/delete", {
           method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify({
             fileKey: file?.key,
           }),
@@ -180,27 +173,19 @@ function DocumentUploader({
 
       setFiles((prev) => {
         if (file?.objectURL?.startsWith("blob:")) {
-          URL.revokeObjectURL(file.objectURL)
+          URL.revokeObjectURL(file.objectURL);
         }
-        return prev.filter((f) => f.id !== file?.id)
-      })
+        return prev.filter((f) => f.id !== file?.id);
+      });
     } catch (error) {
       setFiles((prev) =>
-        prev.map((f) =>
-          f.id === fileId
-            ? { ...f, isDeleting: false }
-            : f
-        )
+        prev.map((f) => (f.id === fileId ? { ...f, isDeleting: false } : f))
       );
-
     }
-
-
   }
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       if (acceptedFiles.length > 0 && canUpload) {
-
         const uploadFiles = acceptedFiles.map((file) => {
           let objectURL: string;
           if (file.type === "application/pdf") {
@@ -222,20 +207,15 @@ function DocumentUploader({
             error: false,
             objectURL,
           };
-
-        })
-        setFiles((previousFiles) => [
-          ...previousFiles,
-          ...uploadFiles,
-        ]);
+        });
+        setFiles((previousFiles) => [...previousFiles, ...uploadFiles]);
 
         uploadFiles.forEach((item) => {
-          uploadFile(item.id, item.file)
-        })
+          uploadFile(item.id, item.file);
+        });
       } else {
         toast.error(`You can only upload ${maxFiles} files`);
       }
-
     },
     [canUpload, maxFiles]
   );
@@ -316,12 +296,19 @@ function DocumentUploader({
         {files.map((file) => (
           <div key={file.id} className="flex flex-col items-center ">
             {file.objectURL && (
-              <Image
-                src={file.objectURL}
-                alt={file.file.name}
-                width={200}
-                height={300}
-              />
+              <div className="relative">
+                <Image
+                  src={file.objectURL}
+                  alt={file.file.name}
+                  width={200}
+                  height={300}
+                />
+                <X
+                  onClick={() => removeFile(file.id)}
+                  className="absolute top-0 right-0 cursor-pointer"
+                  size={20}
+                />
+              </div>
             )}
             <p className="text-xl overflow-hidden text-ellipsis w-full">
               {file.file.name}
