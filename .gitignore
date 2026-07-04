@@ -48,3 +48,7 @@ next-env.d.ts
 BLAST/
 # Agent configuration
 .agent/
+*.m4b
+*.exe
+*.mp4
+*.mov
