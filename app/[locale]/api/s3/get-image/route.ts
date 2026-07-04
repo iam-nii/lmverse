@@ -1,7 +1,4 @@
 import { NextResponse } from "next/server";
-import { GetObjectCommand } from "@aws-sdk/client-s3";
-import { SelectelS3 } from "@/lib/storage/s3Storage";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 export async function POST(req: Request) {
   try {

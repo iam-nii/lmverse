@@ -1,6 +1,4 @@
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import { toast } from "sonner";
 
 function GetImage({
   course_title,
@@ -9,34 +7,20 @@ function GetImage({
   course_title: string;
   course_file_key: string;
 }) {
-  const [imageURL, setImageURL] = useState<string | undefined>(undefined);
-  useEffect(() => {
-    const getImageURL = async () => {
-      const imageURLResponse = await fetch("/api/s3/get-image", {
-        method: "POST",
-        body: JSON.stringify({
-          fileKey: course_file_key,
-        }),
-      });
-      const data = await imageURLResponse.json();
-      if (!data.success) {
-        toast.error(data.error);
-      }
-      console.log(data);
-      setImageURL(data.data);
-    };
-    getImageURL();
-  }, []);
+  const imageURL = `${process.env.NEXT_PUBLIC_SELECTEL_COURSE_IMAGES_MAIN_DOMAIN}/${course_file_key}`;
+
   return (
     <div className="relative aspect-video w-full">
-      {imageURL && (
-        <Image
-          src={imageURL || ""}
-          alt={course_title}
-          fill
-          className="relative z-20 aspect-video w-full object-cover"
-        />
-      )}
+      <Image
+        src={imageURL}
+        alt={course_title}
+        fill
+        className="relative z-20 aspect-video w-full object-cover"
+        onError={() => {
+          // Handle broken images gracefully
+          console.warn(`Failed to load image: ${imageURL}`);
+        }}
+      />
     </div>
   );
 }
