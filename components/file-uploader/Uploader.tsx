@@ -12,6 +12,7 @@ import {
 } from "./RenderState";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
+import { ACCEPTED_FILE_TYPES } from "@/types/types";
 
 interface IUploadState {
   id: string | null;
@@ -27,11 +28,12 @@ interface IUploadState {
 }
 
 type UploaderProps = {
-  path: string
+  path: string;
   onChange: (key: string) => void;
+  fileType: "images" | "docs" | "videos";
 };
 
-function Uploader({path, onChange }: UploaderProps) {
+function Uploader({ path, onChange, fileType }: UploaderProps) {
   const [fileState, setFileState] = useState<IUploadState>({
     error: false,
     file: null,
@@ -51,6 +53,7 @@ function Uploader({path, onChange }: UploaderProps) {
       error: false,
       success: false,
     }));
+    // const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
 
     try {
       const presignedResponse = await fetch("/api/s3/upload", {
@@ -63,7 +66,8 @@ function Uploader({path, onChange }: UploaderProps) {
           contentType: file.type,
           size: file.size,
           isImage: true,
-          path
+          path,
+          allowedTypes: ACCEPTED_FILE_TYPES[fileType],
         }),
       });
       console.log(presignedResponse);
@@ -280,7 +284,7 @@ function Uploader({path, onChange }: UploaderProps) {
     multiple: false,
     maxSize: 5 * 1024 * 1024,
     onDropRejected: onFileReject,
-    disabled: fileState.uploading 
+    disabled: fileState.uploading,
   });
 
   return (

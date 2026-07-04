@@ -12,11 +12,13 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const { fileName, contentType, size,path } = body;
+    const { fileName, contentType, size, path, allowedTypes } = body;
 
-    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+    // const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
 
-    if (!allowedTypes.includes(contentType)) {
+    if (!Object.keys(allowedTypes).includes(contentType)) {
+      console.log("Allowed Types:", allowedTypes);
+      console.log("Content Type:", contentType);
       return NextResponse.json({ error: "Invalid file type" }, { status: 400 });
     }
 
