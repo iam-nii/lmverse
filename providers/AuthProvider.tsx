@@ -2,7 +2,7 @@
 // Syncing zustand with supabase
 import { ReactNode, useEffect } from "react";
 import { useAuthStore } from "@/store/AuthStore";
-// import { createclient } from "@/lib/supabase/client"
+import { createClient } from "@/lib/supabase/client";
 
 interface Props {
     children: ReactNode
@@ -27,7 +27,7 @@ export function AuthProvider({ children }: Props) {
         let mounted = true;
         async function getInitialSession() {
             try {
-                const { data: { session }, error, } = await supabase.auth.getSession();
+                const { data: { session }, error, } = await supabase!.auth.getSession();
 
                 if (error) {
                     console.error(
