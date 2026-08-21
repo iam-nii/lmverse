@@ -6,12 +6,12 @@ import {
     DialogTitle,
     DialogDescription,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+
 import Image from "next/image";
 import { logo } from "@/constants/images";
 import { soure_gummy } from "@/constants/fonts";
-import { ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
+import BookConsultationButton from "./BookConsultationButton";
 
 type Props = {
     open: boolean;
@@ -197,13 +197,8 @@ export default function BookConsultationModal({ open, onClose, initialMessage }:
                     </label>
 
                     {/* Submit */}
-                    <Button
-                        type="submit"
-                        disabled={!agreed}
-                        className="w-full bg-secondary hover:bg-secondary/90 text-white rounded-full font-semibold text-sm py-3 flex items-center justify-center gap-1 disabled:opacity-50"
-                    >
-                        {t("form.submit")} <ChevronRight className="w-4 h-4" />
-                    </Button>
+                    <BookConsultationButton agreed={agreed}/>
+                    
                 </form>
             </DialogContent>
         </Dialog>
