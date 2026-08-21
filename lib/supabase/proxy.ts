@@ -1,10 +1,8 @@
 import { createServerClient } from "@supabase/ssr";
-import { routerServerGlobal } from "next/dist/server/lib/router-utils/router-server-context";
 import { NextResponse, type NextRequest } from "next/server";
 
 const DEFAULT_LOCALE = "en";
 
-// Role configuration
 const roleConfig = {
   admin: {
     home: "/dashboard/admin",
@@ -18,11 +16,10 @@ const roleConfig = {
     home: "/dashboard/student",
     forbidden: ["student", "admin", "login", "signup"],
   },
-};
+} as const;
 
-type RoleType = "admin" | "tutor" | "student";
+type RoleType = keyof typeof roleConfig;
 
-// Public routes accessible without login
 const publicRoutes = ["/login", "/signup", "/"];
 
 export async function updateSession(
@@ -31,88 +28,184 @@ export async function updateSession(
 ) {
   const supabaseResponse = response;
 
-  // Extract locale and path without locale
-  const [, localeSegment, ...segments] = request.nextUrl.pathname.split("/");
-  const pathWithoutLocale = "/" + segments.join("/"); // Path ignoring locale
-  const locale = localeSegment ?? DEFAULT_LOCALE;
-  console.log("pathwithoutlocale:", pathWithoutLocale);
+  /*
+   * ----------------------------------------
+   * Route / locale information
+   * ----------------------------------------
+   */
 
-  // Check if path is public
+  const [, localeSegment, ...segments] =
+    request.nextUrl.pathname.split("/");
+
+  const pathWithoutLocale = "/" + segments.join("/");
+  const locale = localeSegment || DEFAULT_LOCALE;
+
   const isPublicRoute = publicRoutes.includes(pathWithoutLocale);
-  console.log("Public route:", isPublicRoute);
-  // const isPublic = publicRoutes.some((route) =>
-  //   pathWithoutLocale.startsWith(route)
-  // );
+
+  /*
+   * ----------------------------------------
+   * Supabase configuration
+   * ----------------------------------------
+   */
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+
+  const supabaseKey =
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ??
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  /*
+   * If Supabase isn't configured correctly,
+   * don't crash the entire application.
+   *
+   * next-intl has already created a valid response,
+   * so return that response.
+   */
+  if (!supabaseUrl || !supabaseKey) {
+    console.error(
+      "[Supabase] Missing NEXT_PUBLIC_SUPABASE_URL or Supabase key."
+    );
+
+    /*
+     * Don't allow protected pages without Supabase.
+     */
+    if (pathWithoutLocale.startsWith("/dashboard")) {
+      return NextResponse.redirect(
+        new URL(`/${locale}/login`, request.url)
+      );
+    }
+
+    return supabaseResponse;
+  }
+
+  /*
+   * ----------------------------------------
+   * Supabase
+   * ----------------------------------------
+   */
 
   try {
-    
-    // Create Supabase client for server-side auth
     const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      supabaseUrl,
+      supabaseKey,
       {
         cookies: {
           getAll() {
             return request.cookies.getAll();
           },
+
           setAll(cookiesToSet) {
-            cookiesToSet.forEach(({ name, value }) =>
-              request.cookies.set(name, value)
-            );
-            cookiesToSet.forEach(({ name, value, options }) =>
-              supabaseResponse.cookies.set(name, value, options)
-            );
+            cookiesToSet.forEach(({ name, value }) => {
+              request.cookies.set(name, value);
+            });
+
+            cookiesToSet.forEach(({ name, value, options }) => {
+              supabaseResponse.cookies.set(
+                name,
+                value,
+                options
+              );
+            });
           },
         },
       }
     );
+
+    /*
+     * getClaims() verifies the authenticated user.
+     */
     const { data, error } = await supabase.auth.getClaims();
-    const userRole = data?.claims.user_metadata?.role as RoleType | undefined;
-  
 
-  // console.log(user)
-
-
-  // --- 1. Redirect "/" to default locale ---
-  const rootRedirect = new URL(`/${DEFAULT_LOCALE}`, request.url);
-  if (
-    request.nextUrl.pathname === "/" &&
-    request.nextUrl.pathname !== rootRedirect.pathname
-  ) {
-    return NextResponse.redirect(rootRedirect.toString());
-  }
-
-  // 2. Check if user is unauthenticated and is trying to access a dashboard
-  if (!data?.claims && pathWithoutLocale.includes("dashboard")) {
-    console.log("Accessing restricted route, redirecting to login...");
-    // Redirect to the login page
-    console.log(locale);
-    return NextResponse.redirect(new URL(`/${locale}/login`, request.url));
-  }
-
-  // 3. Check if a user is trying to access a restricted page
-  if (userRole && userRole in roleConfig) {
-    const config = roleConfig[userRole];
-    const pathSegments = pathWithoutLocale.split("/").filter(Boolean);
-    const hasForbiddenSegment = config.forbidden.some((keyword) =>
-      pathSegments.includes(keyword)
-    );
-
-    if (hasForbiddenSegment) {
-      return NextResponse.redirect(
-        new URL(`/${locale}${config.home}`, request.url)
+    if (error) {
+      console.error(
+        "[Supabase] getClaims failed:",
+        error.message
       );
     }
-  }
-  } catch (error) {
-    console.error(error);
-    return NextResponse.next({
-      request: {
-        headers: request.headers,
-      },
-    });
-    
-  }
 
-  return supabaseResponse;
+    const userRole =
+      data?.claims?.user_metadata?.role as RoleType | undefined;
+
+    /*
+     * ----------------------------------------
+     * Root redirect
+     * ----------------------------------------
+     */
+
+    if (request.nextUrl.pathname === "/") {
+      return NextResponse.redirect(
+        new URL(`/${DEFAULT_LOCALE}`, request.url)
+      );
+    }
+
+    /*
+     * ----------------------------------------
+     * Protected dashboard
+     * ----------------------------------------
+     */
+
+    const isDashboardRoute =
+      pathWithoutLocale.startsWith("/dashboard");
+
+    if (!data?.claims && isDashboardRoute) {
+      return NextResponse.redirect(
+        new URL(`/${locale}/login`, request.url)
+      );
+    }
+
+    /*
+     * ----------------------------------------
+     * Role-based routing
+     * ----------------------------------------
+     */
+
+    if (userRole && userRole in roleConfig) {
+      const config = roleConfig[userRole];
+
+      const pathSegments = pathWithoutLocale
+        .split("/")
+        .filter(Boolean);
+
+      const hasForbiddenSegment =
+        config.forbidden.some((keyword) =>
+          pathSegments.includes(keyword)
+        );
+
+      if (hasForbiddenSegment) {
+        return NextResponse.redirect(
+          new URL(`/${locale}${config.home}`, request.url)
+        );
+      }
+    }
+
+    /*
+     * Everything is fine.
+     */
+    return supabaseResponse;
+  } catch (error) {
+    /*
+     * ----------------------------------------
+     * Supabase failure
+     * ----------------------------------------
+     */
+
+    console.error(
+      "[Supabase] Middleware error:",
+      error
+    );
+
+    /*
+     * IMPORTANT:
+     *
+     * Do not create a new NextResponse here.
+     * Return the response produced by next-intl.
+     */
+    if (pathWithoutLocale.startsWith("/dashboard")) {
+      return NextResponse.redirect(
+        new URL(`/${locale}/login`, request.url)
+      );
+    }
+
+    return supabaseResponse;
+  }
 }

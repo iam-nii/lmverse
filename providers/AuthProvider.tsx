@@ -1,28 +1,71 @@
 "use client"
 // Syncing zustand with supabase
 import { ReactNode, useEffect } from "react";
-import { createClient } from "@/lib/supabase/client";
 import { useAuthStore } from "@/store/AuthStore";
+// import { createclient } from "@/lib/supabase/client"
 
-interface Props{
+interface Props {
     children: ReactNode
 }
 
-export function AuthProvider({children}:Props){
-    const setSession = useAuthStore((state)=>state.setSession);
-    const supabase = createClient();
+export function AuthProvider({ children }: Props) {
+    const setSession = useAuthStore((state) => state.setSession);
 
-    useEffect(()=>{
-        supabase.auth.getSession().then(({data})=>{
-            setSession(data.session);
-        })
-        const {data: listener} = supabase.auth.onAuthStateChange((event, session)=>{
-            setSession(session)
-        })
-        
-        return ()=> listener.subscription.unsubscribe();
-        
-    },[])
+    useEffect(() => {
+        const supabase = createClient();
+
+        // Supabase isn't configured.
+        // Don't crash the entire application.
+        if (!supabase) {
+            console.error(
+                "[AuthProvider] Supabase is not configured"
+            )
+            setSession(null);
+            return;
+        }
+
+        let mounted = true;
+        async function getInitialSession() {
+            try {
+                const { data: { session }, error, } = await supabase.auth.getSession();
+
+                if (error) {
+                    console.error(
+                        "[AuthProvider] Failed to get session:",
+                        error
+                    );
+
+                    return;
+                }
+
+                if (mounted) {
+                    setSession(session);
+                }
+
+            } catch (error) {
+                console.error(
+                    "[AuthProvider] Unexpected session error:",
+                    error
+                );
+            }
+        }
+        getInitialSession();
+
+        const {
+            data: { subscription },
+        } = supabase.auth.onAuthStateChange(
+            (_event, session) => {
+                if (mounted) {
+                    setSession(session);
+                }
+            }
+        );
+
+        return () => {
+            mounted = false;
+            subscription.unsubscribe();
+        };
+    }, [setSession]);
 
     return children;
 }

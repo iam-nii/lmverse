@@ -6,20 +6,15 @@ import { NextRequest, NextResponse } from "next/server";
 const intlMiddleWare = createMiddleware(routing);
 
 export default async function proxy(request: NextRequest) {
-  // Run next-intl first
-  const response = intlMiddleWare(request);
+  //1. Run next-intl first
+  const intlResponse = intlMiddleWare(request);
 
-  //Then update Supabase session
-  try {
-    
-    return await updateSession(request, response);
+  //2. Run Supabase session handling
+  try {    
+    return await updateSession(request, intlResponse);
   } catch (error) {
-    console.log(error)
-    return NextResponse.next({
-      request: {
-        headers: request.headers,
-      },
-    });
+    console.log("[Proxy] Supabase middleware faild:", error);
+    return intlResponse;
     
   }
 }
