@@ -1,52 +1,52 @@
 "use server";
 
-import { createTelegramNotification } from "@/lib/notifications/telegram";
 import { createClient } from "@/lib/supabase/server";
+import { createTelegramNotification } from "@/lib/notifications/telegram";
 
-export async function sendTestTelegramMessage({
-  email,
-  message,
-}: {
-  email: string;
-  message: string;
-}) {
-  console.log("🚀 SERVER ACTION CALLED");
+export async function sendTestTelegramMessage(
+  _prevState: {
+    success: boolean;
+    error?: string;
+  },
+  formData: FormData
+) {
+  console.log("🚀 sendTestTelegramMessage called");
 
-  if (!email || !message) {
+  const firstName = formData.get("firstName")?.toString() ?? "";
+  const lastName = formData.get("lastName")?.toString() ?? "";
+  const phone = formData.get("phone")?.toString() ?? "";
+  const email = formData.get("email")?.toString() ?? "";
+  const comments = formData.get("comments")?.toString() ?? "";
+
+  if (!firstName || !lastName || !phone || !email) {
     return {
       success: false,
-      error: "Email and message are required.",
+      error: "Please fill in all required fields.",
     };
   }
 
   try {
     const supabase = await createClient();
 
-    // 1. Authenticate the user
-    console.log("🔐 Checking authentication...");
+    const { data } = await supabase.auth.getClaims();
 
-    const { data, error } = await supabase.auth.getClaims();
+    const userId = data?.claims?.sub;
 
-    if (error || !data?.claims) {
-      console.log("❌ Unauthorized");
+    const telegramMessage = `
+📩 New consultation request
 
-      return {
-        success: false,
-        error: "Unauthorized",
-      };
-    }
+👤 Name: ${firstName} ${lastName}
+📞 Phone: ${phone}
+📧 Email: ${email}
 
-    const userId = data.claims.sub;
-
-    console.log("✅ Authenticated:", userId);
-
-    // 2. Create and send Telegram notification
-    console.log("📨 Creating Telegram notification...");
+💬 Message:
+${comments || "No additional comments"}
+`.trim();
 
     await createTelegramNotification({
       eventType: "consultation_request",
-      message: `New consultation request from ${email}:\n\n${message}`,
-      userId,
+      message: telegramMessage,
+      userId: userId,
     });
 
     console.log("✅ Telegram notification created");
@@ -58,11 +58,12 @@ export async function sendTestTelegramMessage({
   } catch (error) {
     console.error("❌ Telegram notification failed:", error);
 
-    console.log("✅ SERVER ACTION FINISHED");
-
     return {
-      success: true,
-      error: undefined,
+      success: false,
+      error:
+        error instanceof Error
+          ? error.message
+          : "Failed to send consultation request.",
     };
   }
 }

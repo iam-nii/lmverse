@@ -125,7 +125,7 @@
     },
     "messages": {
       "levelConsultation": "I would like to book a consultation for the {level} level.",
-      "genericRequest": "I would like to {message}."
+      "genericRequest": "I would like to book a consultation for {message}."
     }
   },
   "auth": {
