@@ -131,7 +131,7 @@
     },
     "messages": {
       "levelConsultation": "Я хотел бы записаться на консультацию по уровню {level}.",
-      "genericRequest": "Я хотел бы {message}."
+      "genericRequest": "Я хотел бы записаться на консультацию по уровню {message}."
     }
   },
   "auth": {
