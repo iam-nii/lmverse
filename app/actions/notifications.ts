@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import { supabaseAdmin } from "@/lib/supabase/admin";
 import { createTelegramNotification } from "@/lib/notifications/telegram";
 
 export async function sendTestTelegramMessage(
@@ -26,11 +26,9 @@ export async function sendTestTelegramMessage(
   }
 
   try {
-    const supabase = await createClient();
+    const { data } = await supabaseAdmin.auth.getClaims();
 
-    const { data } = await supabase.auth.getClaims();
-
-    const userId = data?.claims?.sub;
+    const userId = data?.claims?.sub ?? null;
 
     const telegramMessage = `
 📩 New consultation request
@@ -46,7 +44,7 @@ ${comments || "No additional comments"}
     await createTelegramNotification({
       eventType: "consultation_request",
       message: telegramMessage,
-      userId: userId,
+      userId: userId ?? undefined,
     });
 
     console.log("✅ Telegram notification created");
