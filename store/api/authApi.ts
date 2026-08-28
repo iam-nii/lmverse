@@ -23,6 +23,10 @@ export async function signInWithEmail(email: string, password: string) {
     setError(null);
     console.log("[AuthAPI] Initiating signInWithPassword for:", email);
 
+    if (!supabase) {
+      throw new Error("Supabase client is not initialized.");
+    }
+
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -109,6 +113,10 @@ export async function signUpWithEmail({
   setError(null);
   console.log(role);
 
+  if (!supabase) {
+    throw new Error("Supabase client is not initialized.");
+  }
+
   const { error } = await supabase.auth.signUp({
     email,
     password,
@@ -140,6 +148,10 @@ export async function sendPasswordResetEmail(email: string) {
   setLoading(true);
   setError(null);
 
+  if (!supabase) {
+    throw new Error("Supabase client is not initialized.");
+  }
+
   // The reset link will land on /password-reset (Supabase appends tokens automatically)
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: `${window.location.origin}/api/auth/callback?next=/password-reset`,
@@ -163,6 +175,10 @@ export async function updatePassword(newPassword: string) {
   setLoading(true);
   setError(null);
 
+  if (!supabase) {
+    throw new Error("Supabase client is not initialized.");
+  }
+
   const { error } = await supabase.auth.updateUser({ password: newPassword });
 
   setLoading(false);
@@ -178,6 +194,11 @@ export async function updatePassword(newPassword: string) {
 // ── Sign Out ───────────────────────────────────────────────────────────────
 export async function signOut() {
   const supabase = createSupabaseBrowserClient();
+
+  if (!supabase) {
+    throw new Error("Supabase client is not initialized.");
+  }
+
   useAuthStore.getState().setLoading(true);
   await supabase.auth.signOut();
   useAuthStore.getState().logout();
@@ -186,8 +207,13 @@ export async function signOut() {
 }
 
 // ── Auth State Listener (call once at app root) ───────────────────────────
-export const setupAuthListener = () => {
+export const setupAuthListener = async () => {
   const supabase = createSupabaseBrowserClient();
+
+  if (!supabase) {
+    throw new Error("Supabase client is not initialized.");
+  }
+
   const {
     data: { subscription },
   } = supabase.auth.onAuthStateChange(async (event: string, session) => {

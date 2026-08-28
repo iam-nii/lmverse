@@ -120,12 +120,12 @@
         "label": "Comments",
         "placeholder": "Any additional information"
       },
-      "consent": "By clicking the \\",
+      "consent": "By clicking the 'Submit' button, I consent to the processing of my personal data in accordance with Federal Law No. 152-FZ 'On Personal Data' on the terms and for the purposes specified in the Consent to the processing of personal data",
       "submit": "Send"
     },
     "messages": {
       "levelConsultation": "I would like to book a consultation for the {level} level.",
-      "genericRequest": "I would like to {message}."
+      "genericRequest": "I would like to book a consultation for {message}."
     }
   },
   "auth": {

@@ -38,6 +38,10 @@ export const useTutorStore = create<TutorStore>((set, get) => ({
       //   .eq("role", "tutor")
       //   .order("created_at", { ascending: false });
 
+      if (!supabase) {
+        throw new Error("Supabase client is not initialized.");
+      }
+
       const { data, error } = await supabase.from("tutors").select(`*,
         users(
         email,
@@ -93,6 +97,10 @@ export const useTutorStore = create<TutorStore>((set, get) => ({
     set({ loading: true, error: null });
 
     try {
+      if (!supabase) {
+        throw new Error("Supabase client is not initialized.");
+      }
+
       const { error } = await supabase
         .from("tutors")
         .update({
@@ -138,6 +146,10 @@ export const useTutorStore = create<TutorStore>((set, get) => ({
     set({ loading: true, error: null });
 
     try {
+      if (!supabase) {
+        throw new Error("Supabase client is not initialized.");
+      }
+
       const { error } = await supabase
         .from("tutors")
         .update({
@@ -185,6 +197,10 @@ export const useTutorStore = create<TutorStore>((set, get) => ({
     try {
       const isApproved = status === "approved";
 
+      if (!supabase) {
+        throw new Error("Supabase client is not initialized.");
+      }
+
       const { error } = await supabase
         .from("tutors")
         .update({
@@ -229,6 +245,10 @@ export const useTutorStore = create<TutorStore>((set, get) => ({
 
 const getURL = async () => {
   const supabase = createClient();
+
+  if (!supabase) {
+    throw new Error("Supabase client is not initialized.");
+  }
   const { data, error } = await supabase.storage
     .from("Users_Avatars")
     .createSignedUrl("user_default.png", 60 * 60);
