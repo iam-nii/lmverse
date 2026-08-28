@@ -5,25 +5,22 @@ import Link from "next/link";
 import { Mail, Check, AlertCircle, Loader2 } from "lucide-react";
 import { EyeToggleIcon } from "@/components/ui/animated-state-icons";
 import { useTranslations, useLocale } from "next-intl";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { userSignInType } from "@/types/userTypes";
 import { signInWithEmail } from "@/store/api/authApi";
 import { useAuthStore } from "@/store/AuthStore";
-
+import { toast } from "sonner";
 export default function Login() {
   const locale = useLocale();
   const t = useTranslations("auth.login");
   const router = useRouter();
-  // const { user } = useAuthStore();
+  const searchParams = useSearchParams();
 
-  // useEffect(() => {
-  //   if (user) {
-  //     console.log(user);
-  //     const userRole = user.user_metadata.role;
-  //     console.log(userRole);
-  //     router.push(`/${locale}/dashboard/${userRole}`);
-  //   }
-  // }, [user]);
+  useEffect(() => {
+    if (searchParams.get("error") === "network") {
+      toast.error("Network error");
+    }
+  }, [searchParams]);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

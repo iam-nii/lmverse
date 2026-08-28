@@ -5,22 +5,32 @@ import { AnimatePresence } from "framer-motion";
 import { CourseReview } from "./CoursePreview";
 import { courseContext } from "@/types/courseContent/types";
 import { CourseSuccess } from "./CourseSuccess";
-
+import { toast } from "sonner";
+import { createCourse } from "@/lib/actions/course/create";
+import { useCourseContentStore } from "../store/CourseContentStore";
 type Step = "review" | "success";
 
-export function PublishCourse({ course }: { course: courseContext }) {
+export function PublishCourse() {
+  const { course } = useCourseContentStore();
   const [step, setStep] = useState<Step>("review");
   const [confirmed, setConfirmed] = useState(false);
   const [publishing, setPublishing] = useState(false);
 
-  function handlePublish() {
+  async function handlePublish() {
     if (!confirmed) return;
     setPublishing(true);
-    // Simulate the publish request before transitioning to the success state.
-    window.setTimeout(() => {
-      setPublishing(false);
+
+    try {
+      await createCourse(course as courseContext);
       setStep("success");
-    }, 900);
+      toast.success("Course Created Successfully");
+    } catch (error) {
+      toast.error("Failed to Create course", {
+        description:
+          error instanceof Error ? error.message : JSON.stringify(error),
+      });
+    }
+    setPublishing(false);
   }
 
   return (
@@ -40,7 +50,6 @@ export function PublishCourse({ course }: { course: courseContext }) {
         ) : (
           <CourseSuccess
             key="success"
-            course={course}
             onViewCourse={() => {
               /* navigate to the published course */
             }}

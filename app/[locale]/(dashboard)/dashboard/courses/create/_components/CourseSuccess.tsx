@@ -1,16 +1,11 @@
-"use client";
-
 import { motion } from "framer-motion";
 import { ArrowRight, LayoutDashboard } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-
-import type { courseContext } from "@/types/courseContent/types";
 import { Confetti } from "./Confetti";
 import { AnimatedCheck } from "./AnimatedCheck";
-
+import { useCourseContentStore } from "../store/CourseContentStore";
 type CourseSuccessProps = {
-  course: courseContext;
   onViewCourse: () => void;
   onGoToDashboard: () => void;
 };
@@ -32,10 +27,10 @@ const item = {
 };
 
 export function CourseSuccess({
-  course,
   onViewCourse,
   onGoToDashboard,
 }: CourseSuccessProps) {
+  const { course } = useCourseContentStore();
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.98 }}

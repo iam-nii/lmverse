@@ -37,6 +37,10 @@ export const useStudentStore = create<IStudentStore>((set, get) => ({
       //   .eq("role", "tutor")
       //   .order("created_at", { ascending: false });
 
+      if (!supabase) {
+        throw new Error("Supabase client is not initialized.");
+      }
+
       const { data, error } = await supabase.from("students").select(`*,
         users(
         email,
@@ -88,6 +92,10 @@ export const useStudentStore = create<IStudentStore>((set, get) => ({
     set({ loading: true, error: null });
 
     try {
+      if (!supabase) {
+        throw new Error("Supabase client is not initialized.");
+      }
+
       const { error } = await supabase
         .from("students")
         .update({
@@ -133,6 +141,10 @@ export const useStudentStore = create<IStudentStore>((set, get) => ({
     set({ loading: true, error: null });
 
     try {
+      if (!supabase) {
+        throw new Error("Supabase client is not initialized.");
+      }
+
       const { error } = await supabase
         .from("students")
         .update({
@@ -178,6 +190,10 @@ export const useStudentStore = create<IStudentStore>((set, get) => ({
 
     try {
       const isApproved = status === "approved";
+
+      if (!supabase) {
+        throw new Error("Supabase client is not initialized.");
+      }
 
       const { error } = await supabase
         .from("students")

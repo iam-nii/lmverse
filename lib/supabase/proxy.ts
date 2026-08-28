@@ -34,13 +34,12 @@ export async function updateSession(
    * ----------------------------------------
    */
 
-  const [, localeSegment, ...segments] =
-    request.nextUrl.pathname.split("/");
+  const [, localeSegment, ...segments] = request.nextUrl.pathname.split("/");
 
   const pathWithoutLocale = "/" + segments.join("/");
   const locale = localeSegment || DEFAULT_LOCALE;
 
-  const isPublicRoute = publicRoutes.includes(pathWithoutLocale);
+  // const isPublicRoute = publicRoutes.includes(pathWithoutLocale);
 
   /*
    * ----------------------------------------
@@ -70,9 +69,7 @@ export async function updateSession(
      * Don't allow protected pages without Supabase.
      */
     if (pathWithoutLocale.startsWith("/dashboard")) {
-      return NextResponse.redirect(
-        new URL(`/${locale}/login`, request.url)
-      );
+      return NextResponse.redirect(new URL(`/${locale}/login`, request.url));
     }
 
     return supabaseResponse;
@@ -85,31 +82,23 @@ export async function updateSession(
    */
 
   try {
-    const supabase = createServerClient(
-      supabaseUrl,
-      supabaseKey,
-      {
-        cookies: {
-          getAll() {
-            return request.cookies.getAll();
-          },
-
-          setAll(cookiesToSet) {
-            cookiesToSet.forEach(({ name, value }) => {
-              request.cookies.set(name, value);
-            });
-
-            cookiesToSet.forEach(({ name, value, options }) => {
-              supabaseResponse.cookies.set(
-                name,
-                value,
-                options
-              );
-            });
-          },
+    const supabase = createServerClient(supabaseUrl, supabaseKey, {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll();
         },
-      }
-    );
+
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value }) => {
+            request.cookies.set(name, value);
+          });
+
+          cookiesToSet.forEach(({ name, value, options }) => {
+            supabaseResponse.cookies.set(name, value, options);
+          });
+        },
+      },
+    });
 
     /*
      * getClaims() verifies the authenticated user.
@@ -117,14 +106,10 @@ export async function updateSession(
     const { data, error } = await supabase.auth.getClaims();
 
     if (error) {
-      console.error(
-        "[Supabase] getClaims failed:",
-        error.message
-      );
+      console.error("[Supabase] getClaims failed:", error.message);
     }
 
-    const userRole =
-      data?.claims?.user_metadata?.role as RoleType | undefined;
+    const userRole = data?.claims?.user_metadata?.role as RoleType | undefined;
 
     /*
      * ----------------------------------------
@@ -133,9 +118,7 @@ export async function updateSession(
      */
 
     if (request.nextUrl.pathname === "/") {
-      return NextResponse.redirect(
-        new URL(`/${DEFAULT_LOCALE}`, request.url)
-      );
+      return NextResponse.redirect(new URL(`/${DEFAULT_LOCALE}`, request.url));
     }
 
     /*
@@ -144,13 +127,10 @@ export async function updateSession(
      * ----------------------------------------
      */
 
-    const isDashboardRoute =
-      pathWithoutLocale.startsWith("/dashboard");
+    const isDashboardRoute = pathWithoutLocale.startsWith("/dashboard");
 
     if (!data?.claims && isDashboardRoute) {
-      return NextResponse.redirect(
-        new URL(`/${locale}/login`, request.url)
-      );
+      return NextResponse.redirect(new URL(`/${locale}/login`, request.url));
     }
 
     /*
@@ -162,14 +142,11 @@ export async function updateSession(
     if (userRole && userRole in roleConfig) {
       const config = roleConfig[userRole];
 
-      const pathSegments = pathWithoutLocale
-        .split("/")
-        .filter(Boolean);
+      const pathSegments = pathWithoutLocale.split("/").filter(Boolean);
 
-      const hasForbiddenSegment =
-        config.forbidden.some((keyword) =>
-          pathSegments.includes(keyword)
-        );
+      const hasForbiddenSegment = config.forbidden.some((keyword) =>
+        pathSegments.includes(keyword)
+      );
 
       if (hasForbiddenSegment) {
         return NextResponse.redirect(
@@ -189,10 +166,7 @@ export async function updateSession(
      * ----------------------------------------
      */
 
-    console.error(
-      "[Supabase] Middleware error:",
-      error
-    );
+    console.error("[Supabase] Middleware error:", error);
 
     /*
      * IMPORTANT:
@@ -201,9 +175,7 @@ export async function updateSession(
      * Return the response produced by next-intl.
      */
     if (pathWithoutLocale.startsWith("/dashboard")) {
-      return NextResponse.redirect(
-        new URL(`/${locale}/login`, request.url)
-      );
+      return NextResponse.redirect(new URL(`/${locale}/login`, request.url));
     }
 
     return supabaseResponse;

@@ -1,6 +1,3 @@
-"use client";
-
-import Image from "next/image";
 import { motion } from "framer-motion";
 import {
   ArrowLeft,
@@ -11,16 +8,14 @@ import {
   Link2,
   Loader2,
   PlayCircle,
-  Sparkles,
   Video,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { courseContext } from "@/types/courseContent/types";
-import { formatPrice, resolveThumbnail, summarizeCourse } from "@/lib/course";
+import { formatPrice, summarizeCourse } from "@/lib/course";
 import { useCourseContentStore } from "../store/CourseContentStore";
-import { useEffect, useEffectEvent, useState } from "react";
 import GetImage from "@/components/course/GetImage";
 
 const resourceIcons = {
@@ -45,18 +40,11 @@ export function CourseReview({
   publishing,
 }: CourseReviewProps) {
   const { course } = useCourseContentStore();
+  const modules = useCourseContentStore(
+    (state) => state.course.course_modules ?? []
+  );
   const { totalModules, totalLessons, estimatedDuration, resources } =
     summarizeCourse(course as courseContext);
-  const [imageURL, setImageURL] = useState<string | undefined>(undefined);
-
-  const image = useEffectEvent((fileKey: string) => {
-    setImageURL(`${process.env.SELECTEL_S3_ENDPOINT}/${fileKey}`);
-  });
-  useEffect(() => {
-    if (course.course_file_key) {
-      image(course.course_file_key);
-    }
-  }, [course.course_file_key]);
 
   const stats = [
     { icon: Layers, label: "Modules", value: totalModules },
@@ -132,7 +120,29 @@ export function CourseReview({
             </div>
           ))}
         </div>
+        {/* Modules and lessons */}
+        <div className="border-t border-border px-5 py-4 sm:px-6">
+          <span className="mb-3 block text-xs font-medium text-muted-foreground">
+            Modules and lessons · {modules.length}
+          </span>
+          <div className="flex flex-col gap-2">
+            {modules.map((module) => (
+              <div key={module.id} className="flex items-center gap-2">
+                <div className="flex items-center gap-2">
+                  <Layers size={16} />
 
+                  <span>{module.title}</span>
+                </div>
+                <span className="text-xs text-muted-foreground">
+                  {module.lessons?.length}{" "}
+                  {module.lessons?.length > 1 || module.lessons?.length === 0
+                    ? "lessons"
+                    : "lesson"}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
         {/* Resources */}
         {resources.length > 0 && (
           <div className="border-t border-border px-5 py-4 sm:px-6">
@@ -165,84 +175,171 @@ export function CourseReview({
       </div>
 
       {/* Confirmation */}
-      <div className="mt-6 rounded-2xl border border-border bg-secondary/40 p-5">
-        <p className="text-sm leading-relaxed text-foreground">
-          You&apos;re all set. Ready to make{" "}
-          <span className="font-semibold">{course.course_title}</span> available
-          to your learners?
-        </p>
-
-        <label
-          className={cn(
-            "mt-4 flex cursor-pointer select-none items-start gap-3 rounded-xl border p-3.5 transition-colors",
-            confirmed
-              ? "border-success/40 bg-success-muted/60"
-              : "border-border bg-card hover:bg-muted/60"
-          )}
-        >
-          <span
-            role="checkbox"
-            aria-checked={confirmed}
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === " " || e.key === "Enter") {
+      {course.course_status === "draft" ? (
+        <div className="mt-6 flex flex-col gap-4 rounded-2xl border border-border bg-secondary/40 p-5">
+          <p className="text-sm leading-relaxed text-foreground">
+            You&apos;re all set. You can edit and publish your course anytime by
+            changing the status to{" "}
+            <span className="font-semibold">published</span>. Your course will
+            be available to your learners after publishing.
+          </p>
+          <label
+            className={cn(
+              "mt-4 flex cursor-pointer select-none items-start gap-3 rounded-xl border p-3.5 transition-colors",
+              confirmed
+                ? "border-success/40 bg-success-muted/60"
+                : "border-border bg-card hover:bg-muted/60"
+            )}
+          >
+            <span
+              role="checkbox"
+              aria-checked={confirmed}
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === " " || e.key === "Enter") {
+                  e.preventDefault();
+                  onConfirmedChange(!confirmed);
+                }
+              }}
+              onClick={(e) => {
                 e.preventDefault();
                 onConfirmedChange(!confirmed);
-              }
-            }}
-            onClick={(e) => {
-              e.preventDefault();
-              onConfirmedChange(!confirmed);
-            }}
-            className={cn(
-              "mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-[6px] border transition-all outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
-              confirmed
-                ? "border-success bg-success text-success-foreground"
-                : "border-border bg-background"
-            )}
-          >
-            <motion.span
-              initial={false}
-              animate={{ scale: confirmed ? 1 : 0, opacity: confirmed ? 1 : 0 }}
-              transition={{ type: "spring", stiffness: 500, damping: 25 }}
+              }}
+              className={cn(
+                "mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-[6px] border transition-all outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+                confirmed
+                  ? "border-success bg-success text-success-foreground"
+                  : "border-border bg-background"
+              )}
             >
-              <Check className="size-3.5" strokeWidth={3} />
-            </motion.span>
-          </span>
-          <span className="text-sm leading-relaxed text-foreground">
-            I have reviewed my course and I&apos;m ready to publish it.
-          </span>
-        </label>
+              <motion.span
+                initial={false}
+                animate={{
+                  scale: confirmed ? 1 : 0,
+                  opacity: confirmed ? 1 : 0,
+                }}
+                transition={{ type: "spring", stiffness: 500, damping: 25 }}
+              >
+                <Check className="size-3.5" strokeWidth={3} />
+              </motion.span>
+            </span>
+            <span className="text-sm leading-relaxed text-foreground">
+              I have reviewed my course and I&apos;m ready to save it.
+            </span>
+          </label>
 
-        {/* Actions */}
-        <div className="mt-5 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-end">
-          <Button
-            variant="outline"
-            size="lg"
-            onClick={onBack}
-            disabled={publishing}
-            className="h-11 px-5"
-          >
-            <ArrowLeft className="size-4" />
-            Back
-          </Button>
-          <Button
-            size="lg"
-            onClick={onPublish}
-            disabled={!confirmed || publishing}
-            className="h-11 px-6"
-          >
-            {publishing ? (
-              <>
-                <Loader2 className="size-4 animate-spin" />
-                Publishing…
-              </>
-            ) : (
-              "Publish Course"
-            )}
-          </Button>
+          {/* Actions */}
+          <div className="mt-5 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-end">
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={onBack}
+              disabled={publishing}
+              className="h-11 px-5"
+            >
+              <ArrowLeft className="size-4" />
+              Back
+            </Button>
+            <Button
+              size="lg"
+              onClick={onPublish}
+              disabled={!confirmed || publishing}
+              className="h-11 px-6"
+            >
+              {publishing ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" />
+                  Saving…
+                </>
+              ) : (
+                "Save Course"
+              )}
+            </Button>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="mt-6 rounded-2xl border border-border bg-secondary/40 p-5">
+          <p className="text-sm leading-relaxed text-foreground">
+            You&apos;re all set. Ready to make{" "}
+            <span className="font-semibold">{course.course_title}</span>{" "}
+            available to your learners?
+          </p>
+
+          <label
+            className={cn(
+              "mt-4 flex cursor-pointer select-none items-start gap-3 rounded-xl border p-3.5 transition-colors",
+              confirmed
+                ? "border-success/40 bg-success-muted/60"
+                : "border-border bg-card hover:bg-muted/60"
+            )}
+          >
+            <span
+              role="checkbox"
+              aria-checked={confirmed}
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === " " || e.key === "Enter") {
+                  e.preventDefault();
+                  onConfirmedChange(!confirmed);
+                }
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+                onConfirmedChange(!confirmed);
+              }}
+              className={cn(
+                "mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-[6px] border transition-all outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+                confirmed
+                  ? "border-success bg-success text-success-foreground"
+                  : "border-border bg-background"
+              )}
+            >
+              <motion.span
+                initial={false}
+                animate={{
+                  scale: confirmed ? 1 : 0,
+                  opacity: confirmed ? 1 : 0,
+                }}
+                transition={{ type: "spring", stiffness: 500, damping: 25 }}
+              >
+                <Check className="size-3.5" strokeWidth={3} />
+              </motion.span>
+            </span>
+            <span className="text-sm leading-relaxed text-foreground">
+              I have reviewed my course and I&apos;m ready to publish it.
+            </span>
+          </label>
+
+          {/* Actions */}
+          <div className="mt-5 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-end">
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={onBack}
+              disabled={publishing}
+              className="h-11 px-5"
+            >
+              <ArrowLeft className="size-4" />
+              Back
+            </Button>
+            <Button
+              size="lg"
+              onClick={onPublish}
+              disabled={!confirmed || publishing}
+              className="h-11 px-6"
+            >
+              {publishing ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" />
+                  Publishing…
+                </>
+              ) : (
+                "Publish Course"
+              )}
+            </Button>
+          </div>
+        </div>
+      )}
     </motion.div>
   );
 }

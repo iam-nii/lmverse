@@ -33,6 +33,10 @@ export const useUserStore = create<IUserStore>((set, get) => ({
     set({ loading: true, error: null });
 
     try {
+      if (!supabase) {
+        throw new Error("Supabase client is not initialized.");
+      }
+
       const { data, error } = await supabase
         .from("users")
         .select("*")
@@ -109,6 +113,10 @@ export const useUserStore = create<IUserStore>((set, get) => ({
 
     try {
       // const isApproved = status === "approved";
+
+      if (!supabase) {
+        throw new Error("Supabase client is not initialized.");
+      }
 
       const { error } = await supabase
         .from("users")
