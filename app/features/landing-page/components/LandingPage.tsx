@@ -64,17 +64,17 @@ export default function LandingPage() {
               </p>
               <p className="text-sm font-semibold mb-3">{t("hero.trusted")}</p>
               <div className="flex items-center gap-6 mb-6">
-                <div>
+                {/* <div>
                   <span className="text-3xl font-bold">1000+</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-3xl font-bold">4.8</span>
                   <span className="text-yellow-400 text-xl">★★★★★</span>
-                </div>
+                </div> */}
               </div>
               <Button
                 onClick={() => openModal(t("hero.cta1"))}
-                className="hover:bg-primary/90 text-white rounded-full px-8 font-semibold cursor-pointer"
+                className="hover:bg-primary/90 rounded-s px-8 font-semibold cursor-pointer"
               >
                 {t("hero.cta1")}
               </Button>

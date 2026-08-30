@@ -115,7 +115,7 @@ function NavMenu() {
           </Button>
         </Link>
         <Link href={`/${locale}/signup`}>
-          <Button className="bg-blue-500 cursor-pointer hover:bg-blue-400 border-border border  rounded-full">
+          <Button className=" cursor-pointer bg-secondary text-accent-foreground border-border border  rounded-full">
             {tButtons("register")}
           </Button>
         </Link>

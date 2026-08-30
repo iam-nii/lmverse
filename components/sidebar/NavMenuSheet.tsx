@@ -77,7 +77,7 @@ function NavMenuSheet() {
           </button>
         </SheetTrigger>
 
-        <SheetContent side="right" className="w-72 flex flex-col">
+        <SheetContent side="right" className="flex flex-col">
           <SheetHeader className="text-left pb-4 border-b border-border">
             <SheetTitle className="text-lg font-bold">Lmverse</SheetTitle>
           </SheetHeader>
@@ -116,15 +116,15 @@ function NavMenuSheet() {
           </div>
 
           {/* Bottom actions */}
-          <div className="mt-auto border-t border-border pt-4 flex flex-col gap-3">
+          <div className="border-t border-border pt-4 flex flex-col gap-3 pb-40 pr-10 pl-2">
             <LocaleSwitcher />
-            <Link href={`/${locale}/login`} className="w-full" onClick={close}>
-              <Button className="w-full bg-primary hover:bg-primary/90 text-white rounded-full font-semibold">
+            <Link href={`/${locale}/login`} onClick={close}>
+              <Button className="w-full bg-primary hover:bg-primary/90 text-white rounded-ss font-semibold">
                 {tButtons("signIn")}
               </Button>
             </Link>
-            <Link href={`/${locale}/signup`} className="w-full" onClick={close}>
-              <Button className="w-full bg-secondary hover:bg-secondary/90 text-white rounded-full font-semibold">
+            <Link href={`/${locale}/signup`} onClick={close}>
+              <Button className="w-full bg-secondary hover:bg-secondary/90 text-white rounded-s font-semibold">
                 {tButtons("register")}
               </Button>
             </Link>

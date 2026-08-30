@@ -50,7 +50,7 @@ export default function Features() {
 
   return (
     <>
-      <div className="p-5 w-full md:hidden bg-transparent">
+      <div className="p-8 w-full md:hidden bg-transparent">
         <Carousel
           plugins={[plugin.current]}
           className="sm:max-w-xs"
@@ -67,7 +67,7 @@ export default function Features() {
                   icon={feature.icon}
                   title={feature.number}
                   description={feature.title}
-                  descriptionStyle="uppercase"
+                  descriptionStyle="h-[30px] text-center text-[13px]"
                 />
               </CarouselItem>
             ))}
@@ -94,7 +94,7 @@ export default function Features() {
             >
               <Image src={feature.icon} alt={feature.title} />
               <p className="text-lg font-bold mt-2">{feature.number}</p>
-              <h3 className="text-sm text-gray-500 uppercase text-center mt-1">
+              <h3 className="text-[9px] uppercase text-center mt-1">
                 {feature.title}
               </h3>
             </motion.div>

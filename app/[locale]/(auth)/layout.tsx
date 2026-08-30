@@ -40,18 +40,20 @@ export default function AuthLayout({
         <div className="w-full lg:w-5/12 relative p-4 pb-0 lg:p-4 lg:pr-2 flex flex-col h-[40vh] sm:h-[45vh] lg:h-auto order-1">
           {/* Mobile Logo Only (Hidden on Desktop) */}
           <div className="flex lg:hidden items-center space-x-2 mb-4 px-2">
-            <Image
-              src={logo}
-              alt="Lmverse Logo"
-              width={32}
-              height={32}
-              className="w-8 h-8 object-contain"
-            />
-            <span
-              className={`text-xl font-bold text-slate-800 dark:text-white ${nunito.className}`}
-            >
-              Lmverse
-            </span>
+            <Link href={`/${locale}`}>
+              <Image
+                src={logo}
+                alt="Lmverse Logo"
+                width={32}
+                height={32}
+                className="w-8 h-8 object-contain"
+              />
+              <span
+                className={`text-xl font-bold text-slate-800 dark:text-white ${nunito.className}`}
+              >
+                Lmverse
+              </span>
+            </Link>
           </div>
 
           {/* Inner rounded container for the image */}
